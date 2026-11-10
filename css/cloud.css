@@ -1,0 +1,64 @@
+/* bash-electro · oblak: prijava, chat, admin (koristi tokene iz glavne aplikacije) */
+#acct{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cl-auth{max-width:440px;margin:4vh auto 0}
+.cl-form{display:flex;flex-direction:column;gap:6px}
+.cl-form label{margin:6px 0 0}
+.cl-form .btn{margin-top:10px}
+.cl-link{align-self:center;margin-top:4px!important}
+.cl-err{margin:8px 0 0;padding:9px 12px;border-radius:calc(var(--r) - 3px);border:1px solid var(--er);background:color-mix(in srgb,var(--er) 12%,transparent);color:var(--fg);font-size:13px}
+.cl-or{display:flex;align-items:center;gap:10px;color:var(--mu);font-size:12px;margin:16px 0}
+.cl-or::before,.cl-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.cl-google{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px}
+.cl-google svg{width:20px;height:20px}
+.cl-note{text-align:center;font-size:12px;margin:14px 8px}
+.cl-gate{max-width:520px;margin:6vh auto 0;text-align:center}
+.cl-ic{width:56px;height:56px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:color-mix(in srgb,var(--ac) 20%,transparent);color:var(--act)}
+.cl-ic.er{background:color-mix(in srgb,var(--er) 18%,transparent);color:var(--er)}
+.cl-me{display:flex;gap:14px;align-items:center}
+.cl-me small{display:block}
+.cl-av{width:58px;height:58px;flex:none;border-radius:50%;display:grid;place-items:center;font:600 20px var(--fd);color:var(--on);background:var(--ac);overflow:hidden}
+.cl-av img{width:100%;height:100%;object-fit:cover}
+
+/* chat */
+.cl-chat{display:grid;grid-template-columns:260px minmax(0,1fr);gap:var(--pad);height:calc(100dvh - 56px - 68px - 28px - var(--bn) - env(safe-area-inset-bottom,0px));min-height:440px}
+@media(min-width:1000px){.cl-chat{height:calc(100dvh - 108px);min-height:520px}}
+.cl-side{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto}
+.cl-chs{display:flex;flex-direction:column;gap:4px}
+.cl-ch{all:unset;cursor:pointer;display:block;padding:9px 12px;border-radius:var(--r);border:1px solid transparent;-webkit-tap-highlight-color:transparent}
+.cl-ch b{display:block;font-size:14px}.cl-ch small{display:block;font-size:11px;color:var(--mu)}
+.cl-ch:hover{background:var(--inp)}
+.cl-ch.on{background:var(--inp);border-color:var(--line2);box-shadow:inset 3px 0 0 var(--ac)}
+.cl-join{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+.cl-join small{font-size:11px;line-height:1.4}
+.cl-box{display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
+.cl-bh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px var(--pad);border-bottom:1px solid var(--line)}
+.cl-bh small{display:block;font-size:12px}
+#clnews:not(:empty){padding:8px var(--pad) 0}
+.cl-news{border:1px solid var(--line2);border-radius:var(--r);padding:8px 12px;margin-bottom:8px;background:color-mix(in srgb,var(--ac) 9%,transparent);font-size:13px}
+.cl-news p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.cl-news .btn{margin-top:8px}
+.cl-log{flex:1;min-height:0;overflow-y:auto;padding:12px var(--pad);display:flex;flex-direction:column;gap:2px;overscroll-behavior:contain}
+.cl-msg{display:flex;flex-direction:column;align-items:flex-start;max-width:min(78%,560px);margin-top:10px}
+.cl-msg.cont{margin-top:2px}
+.cl-msg.me{align-self:flex-end;align-items:flex-end}
+.cl-mh{display:flex;gap:8px;align-items:baseline;font-size:12px;margin:0 4px 3px}
+.cl-mh span{color:var(--mu);font-family:var(--fm);font-size:11px}
+.cl-bub{position:relative;padding:8px 12px;border-radius:16px;background:var(--inp);border:1px solid var(--line)}
+.cl-msg.me .cl-bub{background:color-mix(in srgb,var(--ac) 22%,var(--panel2));border-color:var(--line2)}
+.cl-bub p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.cl-tools{display:none;gap:4px;margin-top:6px}
+.cl-bub:hover .cl-tools,.cl-bub:focus-within .cl-tools{display:flex}
+@media(hover:none){.cl-tools{display:flex}}
+.cl-tools button{all:unset;cursor:pointer;font-size:11px;padding:2px 8px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);color:var(--mu)}
+.cl-tools button:hover{color:var(--er);border-color:var(--er)}
+.cl-in{display:flex;gap:8px;align-items:flex-end;padding:10px var(--pad);border-top:1px solid var(--line)}
+.cl-in textarea{min-height:42px;max-height:140px;resize:none;border-radius:20px;padding:10px 14px}
+.cl-in .btn{border-radius:50%;width:44px;height:44px;min-height:44px;padding:0;flex:none;font-size:16px}
+@media(max-width:799px){
+  .cl-chat{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .cl-side{flex-direction:column;padding:10px;gap:8px;overflow:visible}
+  .cl-chs{flex-direction:row;overflow-x:auto;scrollbar-width:none}.cl-chs::-webkit-scrollbar{display:none}
+  .cl-ch{flex:none;padding:6px 12px}.cl-ch small{display:none}
+  .cl-join{border:0;padding:0;margin:0}.cl-join label,.cl-join small{display:none}
+  .cl-msg{max-width:88%}
+}

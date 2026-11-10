@@ -1,0 +1,114 @@
+rules_version = '2';
+// bash-electro · Firestore sigurnosna pravila
+// Objava: Firebase konzola → Firestore Database → Rules (zalijepi i Publish)
+//         ili: firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function me() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function isAdmin() { return signedIn() && get(me()).data.get('role', 'user') == 'admin'; }
+    function notBanned() { return signedIn() && exists(me()) && get(me()).data.get('banned', false) == false; }
+    function str(v, min, max) { return v is string && v.size() >= min && v.size() <= max; }
+    function onlyChanged(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    // ---------- korisnici ----------
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'email', 'photo', 'role', 'banned', 'createdAt'])
+        && str(request.resource.data.name, 1, 40)
+        && request.resource.data.email == request.auth.token.get('email', null)
+        && (request.resource.data.photo == null || str(request.resource.data.photo, 0, 600))
+        && request.resource.data.role == 'user'
+        && request.resource.data.banned == false
+        && request.resource.data.createdAt == request.time;
+      // korisnik mijenja samo ime/sliku; admin samo ulogu i ban (ne sebi)
+      allow update: if (signedIn() && request.auth.uid == uid
+            && onlyChanged(['name', 'photo']) && str(request.resource.data.name, 1, 40))
+        || (isAdmin() && request.auth.uid != uid
+            && onlyChanged(['role', 'banned'])
+            && request.resource.data.role in ['user', 'admin']
+            && request.resource.data.banned is bool);
+      allow delete: if false;
+
+      // ---------- projekti (samo vlasnik) ----------
+      match /projects/{pid} {
+        allow read, delete: if signedIn() && request.auth.uid == uid;
+        allow create, update: if signedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['name', 'data', 'size', 'createdAt', 'updatedAt'])
+          && str(request.resource.data.name, 0, 120)
+          && request.resource.data.data is string
+          && request.resource.data.data.size() < 1000000
+          && request.resource.data.size is int
+          && request.resource.data.updatedAt == request.time;
+      }
+    }
+
+    // ---------- chat ----------
+    // channels/global/messages = globalni chat; channels/{šifra}/messages = kanal sa šifrom.
+    // Kanali se ne mogu izlistati – ulazi se samo poznatom šifrom.
+    match /channels/{code} {
+      allow get: if signedIn();
+      allow list: if isAdmin();
+      allow create: if notBanned()
+        && code.matches('^[A-Za-z0-9]{4,16}$') && code.lower() != 'global'
+        && request.resource.data.keys().hasOnly(['createdBy', 'createdAt'])
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time;
+      allow update: if false;
+      allow delete: if isAdmin();
+
+      function chanOk() { return code == 'global' || exists(/databases/$(database)/documents/channels/$(code)); }
+
+      match /messages/{mid} {
+        allow read: if notBanned() && chanOk();
+        allow create: if notBanned() && chanOk()
+          && request.resource.data.keys().hasOnly(['uid', 'name', 'text', 'ts'])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.name == get(me()).data.name
+          && str(request.resource.data.text, 1, 1000)
+          && request.resource.data.ts == request.time;
+        allow update: if false;
+        allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      }
+    }
+
+    // ---------- objave admina ----------
+    match /news/{id} {
+      allow read: if true;
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['title', 'text', 'by', 'ts'])
+        && str(request.resource.data.title, 1, 100)
+        && str(request.resource.data.text, 1, 1500)
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.ts == request.time;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // ---------- kontakt forma ----------
+    // Svako (i bez prijave) može poslati poruku; čitaju je samo admini.
+    match /contact/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['ref', 'n', 'e', 'ph', 't', 'm', 'sum', 'uid', 'read', 'ts'])
+        && str(request.resource.data.ref, 1, 40)
+        && str(request.resource.data.n, 2, 80)
+        && str(request.resource.data.e, 5, 120) && request.resource.data.e.matches('^[^@ ]+@[^@ ]+[.][^@ ]{2,}$')
+        && str(request.resource.data.ph, 0, 30)
+        && str(request.resource.data.t, 1, 60)
+        && str(request.resource.data.m, 10, 2000)
+        && str(request.resource.data.sum, 0, 600)
+        && request.resource.data.read == false
+        && request.resource.data.ts == request.time
+        && (request.resource.data.uid == null || (signedIn() && request.resource.data.uid == request.auth.uid));
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin() && onlyChanged(['read']) && request.resource.data.read is bool;
+    }
+
+    // sve ostalo zabranjeno
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

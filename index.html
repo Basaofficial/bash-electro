@@ -1,16 +1,17 @@
-<!doctype html><html><head><meta charset=utf8><link rel="manifest" href="manifest.webmanifest">
+<!doctype html><html lang="bs"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>bash-electro</title>
+<meta name="description" content="Planer elektro instalacija i Verteilera za njemačko tržište">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
-<script>
-/* Samostalna verzija: zamjena za spremanje datoteka izvan Claude-a */
-if(!window.claude){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const u=URL.createObjectURL(data instanceof Blob?data:new Blob([data]));const a=document.createElement('a');a.href=u;a.download=filename||'download';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}}:null}}
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-</script>
-<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>bash-electro</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="css/cloud.css">
+<script>if('serviceWorker' in navigator&&!window.Capacitor)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
 /* bash-electro v3. Tokens: bare :root = AMOLED, [data-theme=light], [data-theme=glass]; auto follows the OS. */
@@ -251,12 +252,142 @@ svg.diag .dv{cursor:pointer}svg.diag .dv:hover rect{stroke:var(--ac);stroke-widt
 input[type=color]{width:44px;height:30px;padding:0;border:1px solid var(--line);border-radius:8px;background:none}
 @media(max-width:899px){.p5{grid-template-columns:minmax(0,1fr)}.p5cat{position:absolute;left:6px;right:6px;bottom:6px;height:58%;z-index:9;display:none;box-shadow:0 -14px 40px rgba(0,0,0,.55)}.p5.cato .p5cat{display:flex}.p5x{display:inline-flex}.p5only{display:inline-flex}.p5grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:899px){.pv .tbar.t1{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pv .tbar.t1::-webkit-scrollbar{display:none}.pv .tbar.t1>*{flex:none}}
+
+/* ===== v4: animacije, video, crtač 5D ===== */
+@keyframes vin{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+#view.vin>*{animation:vin .42s cubic-bezier(.2,.8,.2,1) both}
+#view.vin>*>.kpis>*,#view.vin>*>.grid>*,#view.vin .feat>*{animation:vin .5s cubic-bezier(.2,.8,.2,1) both}
+#view.vin .kpis>*:nth-child(2),#view.vin .grid>*:nth-child(2),#view.vin .feat>*:nth-child(2){animation-delay:.05s}
+#view.vin .kpis>*:nth-child(3),#view.vin .grid>*:nth-child(3),#view.vin .feat>*:nth-child(3){animation-delay:.1s}
+#view.vin .kpis>*:nth-child(4),#view.vin .grid>*:nth-child(4),#view.vin .feat>*:nth-child(4){animation-delay:.15s}
+#view.vin .kpis>*:nth-child(n+5),#view.vin .grid>*:nth-child(n+5),#view.vin .feat>*:nth-child(n+5){animation-delay:.2s}
+@keyframes tin{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translateX(-50%)}}
+#toast:not([hidden]){animation:tin .26s cubic-bezier(.2,.8,.2,1)}
+.nv,.bn{transition:background .18s,color .18s,box-shadow .18s,transform .12s}.nv:active,.bn:active{transform:scale(.96)}
+.kpi{transition:transform .18s,border-color .18s}.kpi:hover{transform:translateY(-2px);border-color:var(--line2)}
+.v3:not(.pv)::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:radial-gradient(125% 95% at 50% 42%,transparent 58%,rgba(0,0,0,.3))}
+@media(min-width:900px){.hin{max-width:min(560px,47%)}.hin h1{font-size:clamp(34px,4.5vw,76px)}}
+/* video */
+.vsec .story{height:auto}
+.vsec .stick{position:relative;top:auto;height:auto;aspect-ratio:16/9;max-height:calc(100dvh - 150px);width:100%;background:radial-gradient(120% 90% at 50% 20%,#0d1410,#000);box-shadow:0 30px 80px -30px var(--sh)}
+@media(max-width:699px){.vsec .stick{aspect-ratio:4/5}}
+.vsec .scard{bottom:58px;left:clamp(12px,3vw,28px);max-width:min(380px,calc(100% - 24px));padding:12px 14px;background:rgba(0,0,0,.6);color:#fff;border-color:rgba(255,255,255,.16)}
+.vsec .scard p{color:rgba(255,255,255,.72);font-size:13px}.vsec .scard h3{font-size:clamp(18px,3vw,24px)}
+.vsec .sdots{top:14px;right:14px;transform:none;flex-direction:row}
+.vctl{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;gap:10px;padding:26px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.72));color:#fff;font:500 12px var(--fm)}
+.vctl button{all:unset;cursor:pointer;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:14px;background:rgba(255,255,255,.14);flex:none;-webkit-tap-highlight-color:transparent}
+.vctl button:active{transform:scale(.92)}.vctl span{flex:none;font-variant-numeric:tabular-nums}
+.vctl input[type=range]{flex:1;height:22px;margin:0;-webkit-appearance:none;appearance:none;background:none;border:0;box-shadow:none;padding:0}
+.vctl input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--ac) var(--p,0%),rgba(255,255,255,.25) var(--p,0%))}
+.vctl input[type=range]::-moz-range-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--ac) var(--p,0%),rgba(255,255,255,.25) var(--p,0%))}
+.vctl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;margin-top:-5px;box-shadow:0 1px 5px rgba(0,0,0,.6)}
+.vctl input[type=range]::-moz-range-thumb{width:15px;height:15px;border:0;border-radius:50%;background:#fff}
+.vbig{all:unset;position:absolute;inset:0 0 56px 0;z-index:3;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vbig svg{width:76px;height:76px;padding:20px;box-sizing:border-box;border-radius:50%;background:rgba(0,0,0,.55);fill:#fff;border:1px solid rgba(255,255,255,.3);opacity:0;transform:scale(.8);transition:opacity .2s,transform .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.paused .vbig svg{opacity:1;transform:none}
+/* crtač */
+.dwv{background:#fcfcf9}.dwv canvas{cursor:crosshair;touch-action:none}
+.dpal{position:absolute;z-index:3;left:8px;right:8px;bottom:8px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.dpal>div{display:flex;gap:6px;overflow-x:auto;padding:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;pointer-events:auto}
+.dpal>div::-webkit-scrollbar{display:none}
+.dpal .btn{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.dpal .btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pv .dpal .btn.g{background:rgba(14,18,16,.9);color:#eef3ee;border-color:rgba(255,255,255,.14);box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.pv .dpal .btn.g.on{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.dsw{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.6)}
+.dhint{font-size:12px;padding:8px 12px;border-radius:99px;background:rgba(14,18,16,.86);color:#dfe6df}
+.dwv .sheet{background:var(--panel2);color:var(--fg);z-index:7}
+@media(max-width:899px){.dwv .sheet{bottom:8px;max-height:62%}}
+.dk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+.dk>div{padding:8px 10px;border-radius:10px;background:var(--inp);border:1px solid var(--line)}
+.dk span{display:block;font-size:11px;color:var(--mu)}.dk b{font:500 14px var(--fm);font-variant-numeric:tabular-nums}
+.dk.big b{font-size:17px}.dk .hi{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent)}.dk .hi b{color:var(--act)}
+.dwv .t td input[type=number]{width:58px}.dwv .t{font-size:12.5px}.dwv .t td,.dwv .t th{padding:4px 3px}
+@media(max-width:699px){.vsec .scard p{display:none}.vsec .scard{padding:10px 12px}}
+
+/* ===== v5: uvodni ekran, početna, cijeli ekran ===== */
+@property --ir{syntax:'<length-percentage>';inherits:false;initial-value:0%}
+#intro{position:fixed;inset:0;z-index:200;background:radial-gradient(120% 90% at 50% 30%,#0b130c,#000 70%);color:#f1f5ec;display:grid;place-items:end center;cursor:pointer;--ir:0%;
+  -webkit-mask:radial-gradient(circle at 50% 46%,transparent var(--ir),#000 calc(var(--ir) + 1.5%));mask:radial-gradient(circle at 50% 46%,transparent var(--ir),#000 calc(var(--ir) + 1.5%))}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%}
+#intro::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.82));pointer-events:none}
+.ivin{position:relative;z-index:2;width:min(440px,calc(100% - 48px));padding-bottom:calc(72px + env(safe-area-inset-bottom,0px));animation:vin .7s cubic-bezier(.2,.8,.2,1) both}
+.ivlogo{font:700 clamp(30px,8vw,46px)/1 var(--fd);letter-spacing:-.02em}.ivlogo b{color:var(--ac)}
+.ivsub{font:500 12px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:rgba(241,245,236,.6);margin:10px 0 22px}
+.ivbar{height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}.ivbar i{display:block;height:100%;width:0;background:var(--ac);box-shadow:0 0 16px var(--ac)}
+.ivrow{display:flex;justify-content:space-between;margin-top:10px;font:500 12px var(--fm);color:rgba(241,245,236,.72);font-variant-numeric:tabular-nums}
+.ivskip{position:absolute;z-index:2;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;font:11px var(--fm);color:rgba(241,245,236,.4)}
+@keyframes iout{0%{--ir:0%;opacity:1}75%{opacity:1}100%{--ir:130%;opacity:0}}
+#intro.out{animation:iout .95s cubic-bezier(.6,0,.3,1) forwards;pointer-events:none}#intro.out .ivin,#intro.out .ivskip{opacity:0;transition:opacity .25s}
+.hero{min-height:min(720px,calc(100dvh - 130px))}
+.hin h1{font-size:clamp(34px,6.4vw,68px);line-height:1.02}
+@media(min-width:900px){.hin h1{font-size:clamp(34px,4.3vw,68px)}}
+.stats b{font-variant-numeric:tabular-nums}
+.norms{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:center;margin-top:calc(-1 * clamp(14px,4vw,50px))}
+.norms span{font-size:12px;color:var(--mu);margin-right:4px}.norms i{font:500 12px var(--fm);font-style:normal;padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:var(--inp);color:var(--fg)}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px;counter-reset:fl}
+.flow li{counter-increment:fl;position:relative;padding:20px 18px 18px;border-radius:calc(var(--r) + 6px);border:1px solid var(--line);background:var(--panel);box-shadow:inset 0 1px 0 var(--hi)}
+.flow li::before{content:counter(fl);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;font:600 15px var(--fm);color:var(--on);background:var(--ac);margin-bottom:14px;box-shadow:0 6px 18px -6px var(--ac)}
+.flow h3{margin:0 0 6px;font:600 17px var(--fd)}.flow p{margin:0;color:var(--mu);font-size:13.5px}
+/* cijeli ekran za Crtač */
+body.dwfs #top,body.dwfs #rail,body.dwfs #bnav,body.dwfs #scrim,body.dwfs #pcl{display:none!important}
+body.dwfs #dwv{position:fixed;inset:0;z-index:60;height:auto;min-height:0;border-radius:0;border:0}
+body.dwfs #dwv .tbar.t1{top:calc(10px + env(safe-area-inset-top,0px));left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px))}
+body.dwfs #dwv .dpal{bottom:calc(8px + env(safe-area-inset-bottom,0px));left:max(8px,env(safe-area-inset-left,0px));right:max(8px,env(safe-area-inset-right,0px))}
+body.dwfs{overflow:hidden}
+.dkr{align-items:center}.dkr input{width:110px;flex:none;background:rgba(14,18,16,.92);color:#eef3ee;border-color:rgba(255,255,255,.2);font-family:var(--fm)}
+.dwv .tbar.t1{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.dwv .tbar.t1::-webkit-scrollbar{display:none}.dwv .tbar.t1>*{flex:none}
+.dwv .menu .btn{justify-content:center;text-align:center}
+.ivlogo{white-space:nowrap}
+
+/* ===== v6: performanse, video bez okvira, električni loader, kontakt ===== */
+body.cvr #pcl{display:none}
+.v3 .tbar .btn.s,.v3 .tbar .seg,.v3 .live .lv,.v3 .sheet,.v3 .pal .btn,.v3 .btn.g,.v3 .hint,.v3 .dhint{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.v3 .btn.g,.v3 .tbar .seg{background:linear-gradient(180deg,var(--hi),transparent 62%),color-mix(in srgb,var(--bg) 86%,var(--fg))}
+.v3 .live .lv{background:color-mix(in srgb,var(--bg) 88%,var(--fg))}
+.v3 .sheet{background:color-mix(in srgb,var(--bg) 93%,var(--fg))}
+:root:not([data-theme="glass"]) :is(.panel,.kpi,.tilt,.hero){backdrop-filter:none;-webkit-backdrop-filter:none}
+.v3 canvas,.hero canvas,.stick canvas{will-change:contents}
+/* video */
+.vsec .stick{border:0;border-radius:0;box-shadow:none;background:none;overflow:visible}
+.vsec .stick canvas{-webkit-mask-image:radial-gradient(ellipse 72% 68% at 50% 48%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 72% 68% at 50% 48%,#000 58%,transparent 100%);transition:opacity .2s linear}
+.vsec .scard{left:0;bottom:2%;max-width:min(460px,92%);padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--fg);text-shadow:0 2px 14px var(--bg),0 0 2px var(--bg)}
+.vsec .scard b{color:var(--act)}.vsec .scard p{color:var(--mu)}
+.vsec .scard h3{font-size:clamp(20px,3.2vw,30px)}
+/* loader */
+#intro{place-items:center}#intro::after{display:none}
+.ivin{padding-bottom:0;text-align:center;width:auto;max-width:calc(100% - 32px)}
+.ivlogo{font-size:clamp(28px,7.5vw,44px);transition:text-shadow .2s}.ivsub{margin:8px 0 12px}
+.ivrow{justify-content:center;gap:14px;margin-top:0}
+#intro.hit .ivlogo{text-shadow:0 0 16px var(--ac),0 0 46px var(--ac);animation:ivz .5s steps(2) 2}
+@keyframes ivz{50%{opacity:.75}}
+/* kontakt */
+.ctg{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:var(--pad);align-items:start}
+@media(max-width:899px){.ctg{grid-template-columns:minmax(0,1fr)}}
+.ctside{display:flex;flex-direction:column;gap:var(--pad);min-width:0}
+#ctbox .f{margin-bottom:4px}.fl{min-width:0}
+.fe{display:block;min-height:16px;font-size:12px;color:var(--er);margin-top:3px}
+.fl.bad input,.fl.bad textarea,.fl.bad select{border-color:var(--er);box-shadow:0 0 0 1px var(--er)}
+#w_cg.bad .ck{color:var(--er)}
+.ck{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--fg);margin:10px 0 0}.ck input{margin-top:2px;flex:none}
+.ctc{text-align:right;font:11px var(--fm);color:var(--mu);margin-top:-14px;font-variant-numeric:tabular-nums}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.ctok{text-align:center;padding:28px 10px}.ctok h2{font-size:20px}
+.ctic{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:28px;font-weight:700;color:var(--on);background:var(--ac);box-shadow:0 10px 30px -8px var(--ac);animation:vin .5s cubic-bezier(.2,.8,.2,1) both}
+.ctl2{margin:0;padding-left:18px;color:var(--mu);font-size:13px;display:flex;flex-direction:column;gap:6px}
+.ctfb{margin-top:14px;padding:14px;border-radius:var(--r);border:1px solid var(--wa);background:color-mix(in srgb,var(--wa) 10%,transparent)}.ctfb p{margin:6px 0 10px}
+.msg{border-top:1px solid var(--line);padding:12px 0;display:flex;flex-direction:column;gap:6px;min-width:0}.msg header{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.msg p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.new header b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac);margin-right:7px;vertical-align:1px}
+.sel{user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
+
 </style>
 
 <canvas id="pcl" aria-hidden="true"></canvas>
+<div id="intro" hidden><canvas id="ivc" aria-hidden="true"></canvas><div class="ivin"><div class="ivlogo"><b>#</b>bash-electro</div><div class="ivsub">Elektroplaniranje · VDE 0100</div><div class="ivrow"><span id="ivt">Učitavanje</span><span id="ivp">0 %</span></div></div><div class="ivskip">Dodir za preskakanje</div></div>
 <aside id="rail" aria-label="Navigacija"></aside><div id="scrim"></div><nav id="bnav" aria-label="Glavna navigacija"></nav>
 <header id="top"><button class="btn g s" id="burger" data-a="nav" aria-label="Izbornik">☰</button><h1 id="ttl"></h1>
-  <button class="btn g s" data-a="theme" id="thm" title="Promijeni temu"></button></header>
+  <button class="btn g s" data-a="go" data-v="nalog" id="acct" title="Nalog">Prijava</button><button class="btn g s" data-a="theme" id="thm" title="Promijeni temu"></button></header>
 <main id="app"><div id="view"></div></main>
 <div id="toast" hidden></div>
 <input type="file" id="imp" accept=".json,application/json" hidden>
@@ -271,9 +402,9 @@ const fmt=(n,d=1)=>Number(n).toFixed(d).replace('.',',');
 const fa=a=>String(a).replace('.',',');
 const today=()=>new Date().toLocaleDateString('de-DE');
 
-/* ---------- podaci o normama (orijentaciono, Cu, PVC, 30 °C) ---------- */
+/* ---------- podaci o normama (orijentaciono, Cu, PVC, 25 °C, DIN VDE 0298-4, Verlegeart B2) ---------- */
 const AS=[1.5,2.5,4,6,10,16,25,35], INS=[6,10,13,16,20,25,32,40,50,63];
-const IZ2={1.5:16.5,2.5:23,4:30,6:38,10:52,16:69,25:90,35:111}, IZ3={1.5:15.5,2.5:21,4:27,6:34,10:46,16:62,25:80,35:99};
+const IZ2={1.5:16.5,2.5:23,4:30,6:38,10:52,16:69,25:90,35:111}, IZ3={1.5:15,2.5:20,4:27,6:34,10:46,16:62,25:80,35:99};
 const VL={A1:['A1 · u izolaciji',.87],B2:['B2 · cijev / UP',1],C:['C · na zidu',1.15],E:['E · kabelska rešetka',1.22]};
 const CABT=['NYM-J','NYY-J','NYCWY','H07RN-F','NHXH FE180/E30','(N)HXMH-J'];
 const BR={ls:['ABB','Siemens','Hager','Eaton','Schneider Electric','Legrand','Doepke','Gewiss','Mersen'],
@@ -300,6 +431,7 @@ const ROUTES=[['start','Početna','M3 11l9-8 9 8M5 10v10h14V10'],
  ['pregled','Pregled','M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'],
  ['kuca3d','3D Kuća','M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12 4 7.5'],
  ['plan','Plan 2D / ispis','M3 3h18v18H3zM3 9h9v12M12 9V3M16 14h5'],
+ ['crtac','Crtač 5D','M4 20l4-1L19 8l-3-3L5 16zM14 7l3 3M4 4h6M4 4v6'],
  ['ormar3d','3D Verteiler','M6 3h12v18H6zM9 7h6M9 11h6M9 15h3'],
  ['monter','Montaža','M5 4h14v16H5zM8 8h8M8 12h3M13 12h3M8 16h8M12 2v2'],
  ['prostorije','Prostorije','M4 20V9l8-5 8 5v11zM10 20v-6h4v6'],
@@ -309,14 +441,21 @@ const ROUTES=[['start','Početna','M3 11l9-8 9 8M5 10v10h14V10'],
  ['dokumente','Dokumenti','M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7'],
  ['projekt','Projekt','M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6'],
  ['postavke','Postavke','M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM4 12h2M18 12h2M12 4v2M12 18v2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4'],
- ['kontakt','Kontakt','M4 6h16v12H4zM4 7l8 6 8-6']];
+ ['kontakt','Kontakt','M4 6h16v12H4zM4 7l8 6 8-6'],
+ ['projekti','Moji projekti','M3 7h6l2 2h10v10H3zM3 7v12'],
+ ['chat','Chat','M4 5h16v11H9l-5 4zM8 9h8M8 12h5'],
+ ['nalog','Nalog','M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c1-4 4.5-6 8-6s7 2 8 6'],
+ ['admin','Admin','M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4']];
+const CLOUD=new Set(['projekti','chat','nalog','admin']);
+const cloudView=()=>window.BECloud?window.BECloud.view(route):'<div class="empty">Povezivanje s oblakom …</div>';
 
 
+let FLY=true;
 /* ---------- stanje ---------- */
 const K='be2';
 let S=null, route='pregled', undo=null, tmr=0, focusId=null;
 function load(){try{const r=JSON.parse(localStorage.getItem(K));if(r&&(r.v==2||r.v==3)&&Array.isArray(r.c)&&Array.isArray(r.rooms))return r}catch(e){}return null}
-function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}if(window.BECloud)window.BECloud.onSave()}
 function mkRoom(type,name,area,wert,ap){const t=RT[type]||RT.Flur,i=wert-1;return{id:S.nid++,type,name,area,wert,s:t.s[i],l:t.l[i],w:t.w[i],ap:ap||[]}}
 function sample(){
   S={v:3,sample:true,nid:1,ui:{theme:'amoled',ac:'#95d600'},p:{name:'Einfamilienhaus Muster',obj:'Neubau EFH, 2 Etagen',addr:'Musterstraße 12, 12345 Musterstadt',firma:'',ers:'',zv:.35,lim:3,maxN:4,res:20,brands:{ls:'Hager',fi:'Hager',kab:'Nexans',sw:'Gira',geh:'Hager'}},
@@ -352,9 +491,12 @@ function gen(silent){
 
 /* ---------- proračun ---------- */
 function calc(c){
+  if(!(c.A>0))c.A=1.5;if(!(c.cos>0)||c.cos>1)c.cos=1;if(!(c.L>0))c.L=1;if(!(c.P>=0))c.P=0;if(!(c.In>0))c.In=16;
+  /* ravnomjerno raspoređeno opterećenje (više utičnica/svjetala na jednom krugu): efektivna duljina za ΔU */
+  const nOut=c.out?(c.out.s||c.out.l||0):0,Le=nOut>1?c.L*(nOut+1)/(2*nOut):c.L;
   const t3=c.ph==3,Ib=t3?c.P/(Math.sqrt(3)*400*(c.cos||1)):c.P/(230*(c.cos||1));
   const Iz=((t3?IZ3:IZ2)[c.A]||0)*(VL[c.vl]||VL.B2)[1];
-  const dU=t3?Math.sqrt(3)*c.L*Ib*(c.cos||1)/(56*c.A*400)*100:2*c.L*Ib*(c.cos||1)/(56*c.A*230)*100;
+  const dU=t3?Math.sqrt(3)*Le*Ib*(c.cos||1)/(56*c.A*400)*100:2*Le*Ib*(c.cos||1)/(56*c.A*230)*100;
   const Zs=S.p.zv+2*c.L/(48*c.A),Ik=230/Zs,k=c.ch=='B'?5:10,need=k*c.In,zmax=230/need,is=[];
   if(Ib>c.In)is.push(['er','Ib '+fmt(Ib)+' A > In '+c.In+' A (preopterećenje)']);
   if(c.In>Iz)is.push(['er','In '+c.In+' A > Iz '+fmt(Iz)+' A (presjek '+fa(c.A)+' mm² premali)']);
@@ -366,9 +508,10 @@ function calc(c){
 }
 function size(c){
   const t3=c.ph==3,Ib=t3?c.P/(Math.sqrt(3)*400*(c.cos||1)):c.P/(230*(c.cos||1));
-  const mn=c.kind=='licht'?10:c.kind=='steck'?16:6;
+  const ap=c.kind=='geraet'&&c.key&&c.key.startsWith('A:')?APP[c.key.split(':')[2]]:null;
+  const mn=c.kind=='licht'?10:c.kind=='steck'?16:ap?ap.In:6;
   c.In=[6,10,16,20,25,32,40,50,63].find(v=>v>=Math.max(Ib,mn))||63;
-  for(const a of AS){c.A=a;const r=calc(c);if(c.In<=r.Iz&&r.dU<=S.p.lim&&r.Ik>=r.need)break}
+  for(const a of AS){if(ap&&a<ap.A&&a<35)continue;c.A=a;const r=calc(c);if(c.In<=r.Iz&&r.dU<=S.p.lim&&r.Ik>=r.need)break}
 }
 function model(){
   const rows=S.c.map(c=>Object.assign({c},calc(c)));
@@ -535,36 +678,40 @@ function vProjekt(){const p=S.p,b=p.brands;
   <section class="panel"><h2>Parametri mreže</h2><div class="f"><div><label>Impedanca mreže Zv (Ω)</label><input type="number" step="0.05" data-p="zv" value="${p.zv}"></div><div><label>Dopušteni ΔU (%)</label><input type="number" step="0.5" data-p="lim" value="${p.lim}"></div>
    <div><label>Max. krugova po FI</label><input type="number" min="1" data-p="maxN" value="${p.maxN}"></div><div><label>Rezerva u ormaru (%)</label><input type="number" min="0" data-p="res" value="${p.res}"></div></div></section>
   <section class="panel"><h2>Proizvođači</h2><div class="f"><div><label>LS / Hauptschalter</label><select data-b="ls">${sel(BR.ls,b.ls)}</select></div><div><label>FI</label><select data-b="fi">${sel(BR.ls,b.fi)}</select></div><div><label>Kabel</label><select data-b="kab">${sel(BR.kab,b.kab)}</select></div><div><label>Schalterprogramm</label><select data-b="sw">${sel(BR.sw,b.sw)}</select></div><div><label>Verteilergehäuse</label><select data-b="geh">${sel(BR.geh,b.geh)}</select></div></div></section>
-  <section class="panel"><h2>Podaci i tema</h2><div class="row"><button class="btn g" data-a="sample">Učitaj primjer</button><button class="btn g" data-a="blank">Novi prazni projekt</button></div><p class="mu" style="font-size:12px">Podaci se spremaju samo u ovom pregledniku. Izvezi .json u tabu Dokumenti da ih preneseš ili sačuvaš.</p></section></div>`;
+  <section class="panel"><h2>Podaci i tema</h2><div class="row"><button class="btn g" data-a="sample">Učitaj primjer</button><button class="btn g" data-a="blank">Novi prazni projekt</button></div><p class="mu" style="font-size:12px">Podaci se spremaju u ovom pregledniku. Prijavi se i otvori <b>Moji projekti</b> da projekt spremiš u oblak i otvoriš ga na drugom uređaju.</p><button class="btn g" data-a="go" data-v="projekti">Moji projekti</button></section></div>`;
 }
-const VIEWS={start:vStart,kuca3d:vKuca,ormar3d:vOrmar,monter:vMont,plan:vPlan,postavke:vPostavke,kontakt:vKontakt,pregled:vPregled,prostorije:vProstorije,krugovi:vKrugovi,verteiler:vVerteiler,pruefung:vPruefung,dokumente:vDokumente,projekt:vProjekt};
+const VIEWS={crtac:vCrtac,start:vStart,kuca3d:vKuca,ormar3d:vOrmar,monter:vMont,plan:vPlan,postavke:vPostavke,kontakt:vKontakt,projekti:cloudView,chat:cloudView,nalog:cloudView,admin:cloudView,pregled:vPregled,prostorije:vProstorije,krugovi:vKrugovi,verteiler:vVerteiler,pruefung:vPruefung,dokumente:vDokumente,projekt:vProjekt};
 
 /* ---------- render ---------- */
 function chrome(){
-  const m=getModel(),cnt={krugovi:S.c.length,prostorije:S.rooms.length},SEP=new Set(['monter','dokumente']);
-  $('#rail').innerHTML=`<div class="brand"><b>#</b>bash-electro<small>Elektroplaner · VDE 0100</small></div>`+ROUTES.map(([k,n,d])=>`<button class="nv${route==k?' on':''}" data-a="go" data-v="${k}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg>${n}${k=='krugovi'?`<em class="${m.err?'bad':''}">${m.err?m.err+' ✕':S.c.length}</em>`:cnt[k]!=null?`<em>${cnt[k]}</em>`:''}</button>${SEP.has(k)?'<div class="nsep"></div>':''}`).join('')+`<div class="rfoot">Planiranje i dokumentacija. Ne zamjenjuje projekt i prijem od Elektrofachkraft.</div>`;
-  $('#bnav').innerHTML=[['pregled','Pregled'],['kuca3d','3D Kuća'],['ormar3d','Verteiler'],['krugovi','Krugovi']].map(([k,n])=>`<button class="bn${route==k?' on':''}" data-a="go" data-v="${k}"><svg viewBox="0 0 24 24"><path d="${ROUTES.find(r=>r[0]==k)[2]}"/></svg>${n}</button>`).join('')+`<button class="bn" data-a="nav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Više</button>`;
+  const m=getModel(),cnt={krugovi:S.c.length,prostorije:S.rooms.length,...(CT.owner&&CT.inbox.some(m=>!m.read)?{kontakt:CT.inbox.filter(m=>!m.read).length}:{})},SEP=new Set(['monter','dokumente','kontakt']);
+  $('#rail').innerHTML=`<div class="brand"><b>#</b>bash-electro<small>Elektroplaner · VDE 0100</small></div>`+ROUTES.filter(r=>r[0]!='admin'||(window.BECloud&&window.BECloud.isAdmin)).map(([k,n,d])=>`<button class="nv${route==k?' on':''}" data-a="go" data-v="${k}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg>${n}${k=='krugovi'?`<em class="${m.err?'bad':''}">${m.err?m.err+' ✕':S.c.length}</em>`:cnt[k]!=null?`<em>${cnt[k]}</em>`:''}</button>${SEP.has(k)?'<div class="nsep"></div>':''}`).join('')+`<div class="rfoot">Alat za planiranje i dokumentaciju. Ne zamjenjuje projekt ni prijem instalacije od strane Elektrofachkraft.</div>`;
+  $('#bnav').innerHTML=[['pregled','Pregled'],['kuca3d','3D Kuća'],['crtac','Crtač'],['ormar3d','Verteiler']].map(([k,n])=>`<button class="bn${route==k?' on':''}" data-a="go" data-v="${k}"><svg viewBox="0 0 24 24"><path d="${ROUTES.find(r=>r[0]==k)[2]}"/></svg>${n}</button>`).join('')+`<button class="bn" data-a="nav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Više</button>`;
   const cur=ROUTES.find(r=>r[0]==route)||ROUTES[1];$('#ttl').innerHTML=`${esc(S.p.name)} <i>· ${cur[1]}</i>`;
   const th=S.ui.theme||'amoled';$('#thm').textContent={amoled:'AMOLED',light:'Svijetla',glass:'Glass',auto:'Auto'}[th]||th;
-  applyUI();
+  applyUI();if(window.BECloud)window.BECloud.chrome();
 }
 function render(){
-  MV++;MC=null;unmount();if(!S.ui)S.ui={theme:'amoled'};
+  MV++;MC=null;unmount();if(window.BECloud)window.BECloud.unmount();if(!S.ui)S.ui={theme:'amoled'};
   chrome();
-  $('#view').innerHTML=VIEWS[route](getModel());document.body.classList.remove('nav');
-  if(route=='kuca3d')mountHouse();else if(route=='ormar3d')mountCab();else if(route=='monter')mountMont();else if(route=='plan')mountPlan();else if(route=='start')mountLanding();
+  $('#view').innerHTML=VIEWS[route](getModel());document.body.classList.remove('nav');document.body.classList.toggle('dwfs',route=='crtac'&&DW.fs);document.body.classList.toggle('cvr',['kuca3d','ormar3d','monter','plan','crtac','start'].includes(route));
+  if(route=='kuca3d')mountHouse();else if(route=='ormar3d')mountCab();else if(route=='monter')mountMont();else if(route=='plan')mountPlan();else if(route=='crtac')mountCrtac();else if(route=='start')mountLanding();
+  if(CLOUD.has(route)&&window.BECloud)window.BECloud.mount(route);
   if(focusId){const e=document.querySelector(`[data-row="${focusId}"]`);if(e){e.classList.add('hl');e.scrollIntoView({block:'center'})}focusId=null}
   save();
 }
-function go(r){if(!VIEWS[r])r='pregled';if(route=='start'&&S.ui)S.ui.seen=1;route=r;if(location.hash!=='#'+r)history.replaceState(null,'','#'+r);render();scrollTo(0,0)}
+function go(r){if(!VIEWS[r])r='pregled';FLY=r!==route;const vw=$('#view');if(vw&&r!==route){vw.classList.remove('vin');void vw.offsetWidth;vw.classList.add('vin')}if(route=='start'&&S.ui)S.ui.seen=1;route=r;if(location.hash!=='#'+r)history.replaceState(null,'','#'+r);render();scrollTo(0,0)}
 addEventListener('hashchange',()=>{const r=location.hash.slice(1);if(VIEWS[r]&&r!==route){route=r;render()}});
 
+/* ---------- spremanje datoteka (Claude downloads ili obični download u pregledniku/APK-u) ---------- */
+const DL={async get(){let dl=null;try{dl=window.claude?await window.claude.use('downloads'):null}catch(e){}
+  return dl||{save:async({filename,data})=>{const u=URL.createObjectURL(data),a=document.createElement('a');a.href=u;a.download=filename;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),8000)}}}};
 /* ---------- PDF ---------- */
 const T=s=>[...String(s??'')].map(ch=>{const c=ch.charCodeAt(0);if(c<=255)return ch;const M={'Ω':'Ohm','≥':'>=','≤':'<=','Δ':'d','→':'->','–':'-','—':'-','…':'...','đ':'d','Đ':'D','·':'-','×':'x','~':'~'}[ch];if(M)return M;const n=ch.normalize('NFD')[0];return n.charCodeAt(0)<=255?n:'?'}).join('');
 async function pdf(){
   const st=$('#dst');const say=t=>{if(st)st.textContent=t};
   if(!window.jspdf){say('PDF biblioteka se nije učitala (provjeri vezu).');return}
-  let dl=null;try{dl=window.claude?await window.claude.use('downloads'):null}catch(e){}
+  const dl=await DL.get();
   if(!dl){say('Spremanje datoteka nije dostupno u ovom prikazu.');return}
   say('Generiram PDF …');
   const m=model(),d=new window.jspdf.jsPDF({unit:'mm',format:'a4'}),p=S.p;let y=16;
@@ -586,7 +733,7 @@ async function pdf(){
   const n=d.getNumberOfPages();for(let i=1;i<=n;i++){d.setPage(i);d.setFontSize(7);d.text('Seite '+i+' / '+n+'  ·  bash-electro',150,291)}
   try{await dl.save({filename:'Elektro-Dokumentation_'+today().replace(/\./g,'-')+'.pdf',data:d.output('blob')});say('PDF spreman.')}catch(e){say(e&&e.code=='declined'?'Spremanje otkazano.':'Greška: '+((e&&(e.message||e.code))||e))}
 }
-async function jsave(){const st=$('#dst');let dl=null;try{dl=window.claude?await window.claude.use('downloads'):null}catch(e){}
+async function jsave(){const st=$('#dst');const dl=await DL.get();
   if(!dl){if(st)st.textContent='Spremanje nije dostupno u ovom prikazu.';return}
   try{await dl.save({filename:'bash-electro-'+S.p.name.replace(/[^\w-]+/g,'_')+'.json',data:new Blob([JSON.stringify(S)],{type:'application/json'})});if(st)st.textContent='Projekt spremljen.'}catch(e){if(st)st.textContent=e&&e.code=='declined'?'Spremanje otkazano.':'Greška pri spremanju.'}}
 
@@ -604,7 +751,7 @@ document.addEventListener('click',e=>{
   if(a=='go'){go(v);return}
   if(a=='goc'){focusId=+v;S.sel=+v;go('krugovi');return}
   if(a=='theme'){const o=['amoled','light','glass'],i=o.indexOf(S.ui.theme);S.ui.theme=o[(i+1)%3];render();return}
-  if(a=='undo'){if(undo){S=JSON.parse(undo);undo=null;$('#toast').hidden=true;render()}return}
+  if(a=='undo'){if(undo){S=JSON.parse(undo);undo=null;$('#toast').hidden=true;simReset();clearSel();ensureAll();commit(true);render()}return}
   if(a=='radd'){snap('Prostorija dodana');const t=$('#nrt').value;S.rooms.push(mkRoom(t,t,15,2));ensureAll();commit();render();return}
   if(a=='rdel'){snap('Prostorija uklonjena');S.rooms=S.rooms.filter(r=>r.id!=v);ensureAll();commit();render();return}
   if(a=='rwert'){const[id,n]=v.split(':').map(Number),r=S.rooms.find(r=>r.id==id),t=RT[r.type];r.wert=n;r.s=t.s[n-1];r.l=t.l[n-1];r.w=t.w[n-1];r.ap=r.objs.filter(o=>o.t=='geraet').map(o=>o.key);r.objs=null;ensureAll();commit();render();return}
@@ -621,8 +768,8 @@ document.addEventListener('click',e=>{
   if(a=='jsave'){jsave();return}
   if(a=='jload'){$('#imp').click();return}
   if(a=='copy'){const t=stueck(model()).map(r=>r.join('\t')).join('\n');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Stückliste kopirana')).catch(()=>toast('Kopiranje nije dostupno'));return}
-  if(a=='sample'){snap('Učitan primjer');sample();render();return}
-  if(a=='blank'){snap('Novi prazni projekt');const nid=1,p=S.p;CAM.h=null;CAM.c=null;simReset();S={v:3,sample:false,nid,ui:S.ui,p:Object.assign({},p,{name:'Novi projekt',obj:'',addr:''}),rooms:[],c:[],test:{},tm:{pruefer:'',geraet:'',serial:''}};route='prostorije';render();return}
+  if(a=='sample'){snap('Učitan primjer');const d0=S.dw,u0=S.ui;sample();if(d0)S.dw=d0;if(u0)S.ui=u0;CAM.h=null;CAM.c=null;simReset();clearSel();render();return}
+  if(a=='blank'){snap('Novi prazni projekt');const nid=1,p=S.p;CAM.h=null;CAM.c=null;simReset();S={v:3,sample:false,nid,ui:S.ui,p:Object.assign({},p,{name:'Novi projekt',obj:'',addr:''}),rooms:[],c:[],test:{},tm:{pruefer:'',geraet:'',serial:''},dw:S.dw};clearSel();PL.hist=[];PL.redo=[];ensureAll();commit(true);route='prostorije';render();return}
 });
 document.addEventListener('change',e=>{
   const t=e.target,D=t.dataset;
@@ -631,8 +778,8 @@ document.addEventListener('change',e=>{
     else if(k=='type'){const ap=r.objs.filter(o=>o.t=='geraet').map(o=>o.key),tt=RT[t.value];r.type=t.value;r.s=tt.s[r.wert-1];r.l=tt.l[r.wert-1];r.w=tt.w[r.wert-1];r.ap=ap;r.objs=null}
     else if(k=='area')r.area=Math.max(3,cnum(t.value));else r[k]=t.value;
     ensureAll();commit();render();return}
-  if(D.c){const[id,k]=D.c.split(':'),c=S.c.find(c=>c.id==id);if(!c)return;c[k]=['name','ch','cab','vl','rcd'].includes(k)?t.value:cnum(t.value);if(k=='L')c.Lfix=true;if(k=='P')c.Pfix=true;render();return}
-  if(D.p){S.p[D.p]=['name','obj','addr','firma','ers'].includes(D.p)?t.value:cnum(t.value);if(D.p=='maxN')S.p.maxN=Math.max(1,S.p.maxN|0);render();return}
+  if(D.c){const[id,k]=D.c.split(':'),c=S.c.find(c=>c.id==id);if(!c)return;c[k]=['name','ch','cab','vl','rcd'].includes(k)?t.value:cnum(t.value);if(k=='L'){c.L=Math.max(1,c.L);c.Lfix=true}if(k=='P'){c.P=Math.max(0,c.P);c.Pfix=true}if(k=='cos')c.cos=Math.min(1,Math.max(.1,c.cos||1));if(k=='gz')c.gz=Math.min(1,Math.max(0,c.gz));render();return}
+  if(D.p){S.p[D.p]=['name','obj','addr','firma','ers'].includes(D.p)?t.value:cnum(t.value);if(D.p=='maxN')S.p.maxN=Math.max(1,S.p.maxN|0);if(D.p=='lim')S.p.lim=Math.min(10,Math.max(.5,S.p.lim||3));if(D.p=='zv')S.p.zv=Math.max(0,S.p.zv);if(D.p=='res')S.p.res=Math.min(100,Math.max(0,S.p.res));render();return}
   if(D.b){S.p.brands[D.b]=t.value;render();return}
   if(D.m){S.tm[D.m]=t.value;save();return}
 });
@@ -642,10 +789,10 @@ $('#scrim').addEventListener('click',()=>document.body.classList.remove('nav'));
 $('#imp').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||(o.v!=2&&o.v!=3)||!Array.isArray(o.c)||!Array.isArray(o.rooms))throw 0;snap('Projekt uvezen');S=o;S.v=3;S.ui=S.ui||{theme:'amoled'};CAM.h=null;CAM.c=null;ensureAll();commit(true);render()}catch(x){toast('Datoteka nije valjan projekt.')}};rd.readAsText(f);e.target.value=''});
 
 /* ---------- čestice (minimalno) ---------- */
-(()=>{const c=$('#pcl'),x=c.getContext('2d'),red=matchMedia('(prefers-reduced-motion:reduce)').matches;let w,h,P=[],col='47,229,138',n=0;
+(()=>{const c=$('#pcl'),x=c.getContext('2d'),red=matchMedia('(prefers-reduced-motion:reduce)').matches;let w,h,P=[],col='47,229,138',n=0,sk=0;
   const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight;P=Array.from({length:Math.min(44,Math.round(w*h/32000))},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.16,r:Math.random()*1.1+.4}))};
   rs();addEventListener('resize',rs);
-  const f=()=>{if(document.hidden||(S&&S.ui&&S.ui.part===false)){requestAnimationFrame(f);return}
+  const f=()=>{if(document.hidden||(S&&S.ui&&S.ui.part===false)||document.body.classList.contains('cvr')||(++sk&1)){requestAnimationFrame(f);return}
     if(n++%90==0){const a=getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();const m=/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(a);if(m)col=[1,2,3].map(i=>parseInt(m[i],16)).join(',')}
     x.clearRect(0,0,w,h);P.forEach((p,i)=>{if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1}
       x.fillStyle=`rgba(${col},.55)`;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();
@@ -665,7 +812,7 @@ const C3=c=>Array.isArray(c)?c:hexc(c);
 const mixc=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
 const rgba=(c,k,a)=>`rgba(${Math.max(0,Math.min(255,c[0]*k))|0},${Math.max(0,Math.min(255,c[1]*k))|0},${Math.max(0,Math.min(255,c[2]*k))|0},${a})`;
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
-let H3=2.5;
+let H3=2.5,INT=0,QS=1;
 
 class Sc{
   constructor(){this.f=[];this.ln=[];this.tx=[];this.gl=[]}
@@ -692,10 +839,13 @@ class Sc{
   line(pts,col,w,a,o){this.ln.push(Object.assign({pts,col,w:w||1.5,a:a==null?1:a},o||{}))}
   text(p,s,o){this.tx.push(Object.assign({p,s},o||{}))}
   glow(p,r,col,a){this.gl.push({p,r,col:C3(col),a:a==null?.5:a})}
+  /* meka sjena na podu: tri sloja koja se šire */
+  shadow(x,z,w,d,ry,a){a=a==null?.3:a;const{T}=this.frame(x,0,z,ry||0);[[.16,.22],[.08,.3],[0,.48]].forEach(([g,k],i)=>{const hw=w/2+g,hd=d/2+g,c=Math.min(hw,hd)*.42,P=[[-hw+c,-hd],[hw-c,-hd],[hw,-hd+c],[hw,hd-c],[hw-c,hd],[-hw+c,hd],[-hw,hd-c],[-hw,-hd+c]];
+    this.face(P.map(p=>T(p[0],.004+i*.001,p[1])),[0,0,0],{lay:.5,a:a*k,n:[0,1,0],dbl:true})})}
 }
 
 function drawScene(ctx,W,Hh,cam,sc,opt){
-  opt=opt||{};
+  opt=opt||{};const HQ=!(S&&S.ui&&S.ui.hq===false),FAST=!!opt.fast||performance.now()-INT<200;
   const cy=Math.cos(cam.yaw),sy=Math.sin(cam.yaw),cp=Math.cos(cam.pitch),sp=Math.sin(cam.pitch);
   const E=[cam.t[0]+cam.dist*cp*sy,cam.t[1]+cam.dist*sp,cam.t[2]+cam.dist*cp*cy];
   const f=vnorm(vsub(cam.t,E)),r=vnorm(vcross(f,[0,1,0])),u=vcross(r,f);
@@ -721,16 +871,20 @@ function drawScene(ctx,W,Hh,cam,sc,opt){
   for(const it of list){
     const fc=it.fc;let a=fc.a;if(fc.lay==2&&opt.ga!=null)a*=opt.ga;
     const pts=it.q.map(scr);
+    if(FAST&&!fc.hit){let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const q of pts){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]}if((x1-x0)*(y1-y0)<1.5){if(fc.id)st.hits.push({id:fc.id,poly:pts});continue}}
     if(!fc.hit){
       if(a>.004){
-        let k=1;if(!fc.add){const d1=vdot(fc.n,L1),d2=vdot(fc.n,L2);k=.46+.54*(fc.dbl?Math.abs(d1):Math.max(0,d1))+.14*(fc.dbl?Math.abs(d2):Math.max(0,d2))}
+        let k=1,w1=0;if(!fc.add){const d1=vdot(fc.n,L1),d2=vdot(fc.n,L2);w1=fc.dbl?Math.abs(d1):Math.max(0,d1);k=.4+.5*w1+.13*(fc.dbl?Math.abs(d2):Math.max(0,d2))+.1*(.5+.5*fc.n[1])}
         let col=fc.col;if(fc.em)col=mixc(col,[255,238,196],fc.em);
         if(fc.lr!=null&&opt.lit&&opt.lit[fc.lr])col=mixc(col,[255,214,140],.3*opt.lit[fc.lr]);
-        const fs=fc.add?rgba(col,1,a):rgba(col,fc.em?1:k,a);
+        const shd=kk=>(fc.add||fc.em)?rgba(col,1,a):`rgba(${cl(col[0]*kk*(.965+.075*w1),0,255)|0},${cl(col[1]*kk,0,255)|0},${cl(col[2]*kk*(1.05-.1*w1),0,255)|0},${a})`;
+        const fs=shd(k);let fill=fs;
+        if(a>=.97&&!fc.add&&!fc.em&&HQ&&!FAST){let y0=1e9,y1=-1e9,x0=1e9,x1=-1e9;for(const p of pts){if(p[1]<y0)y0=p[1];if(p[1]>y1)y1=p[1];if(p[0]<x0)x0=p[0];if(p[0]>x1)x1=p[0]}
+          if(y1-y0>16&&(y1-y0)*(x1-x0)>2200){const g=ctx.createLinearGradient(0,y0,0,y1);g.addColorStop(0,shd(k*1.045));g.addColorStop(1,shd(k*.9));fill=g}}
         ctx.globalCompositeOperation=fc.add?'lighter':'source-over';
         ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();
-        ctx.fillStyle=fs;ctx.fill();
-        if(a>=.97&&!fc.add){ctx.strokeStyle=fs;ctx.lineWidth=.8;ctx.stroke()}
+        ctx.fillStyle=fill;ctx.fill();
+        if(a>=.97&&!fc.add&&!FAST){ctx.strokeStyle=fs;ctx.lineWidth=.8;ctx.stroke()}
         if(fc.edge){ctx.strokeStyle=fc.edge;ctx.lineWidth=fc.ew;ctx.stroke()}
         ctx.globalCompositeOperation='source-over';
       }
@@ -783,7 +937,7 @@ function Ctl(cv,cam,h){
   cv.addEventListener('pointermove',e=>{
     const p=pos(e);
     if(!P.has(e.pointerId)){h.hover&&h.hover(p[0],p[1]);return}
-    P.set(e.pointerId,p);
+    P.set(e.pointerId,p);INT=performance.now();
     if(P.size>=2){const[a,b]=[...P.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pd>0&&d>0)cam.dist=clampD(cam.dist*pd/d);pd=d;const c=[(a[0]+b[0])/2,(a[1]+b[1])/2];pan(c[0]-last[0],c[1]-last[1]);last=c;h.request();return}
     const dx=p[0]-last[0],dy=p[1]-last[1];
     if(!moved&&Math.hypot(p[0]-start[0],p[1]-start[1])>6)moved=1;
@@ -800,7 +954,7 @@ function Ctl(cv,cam,h){
     else if(P.size==1){mode='orbit';last=[...P.values()][0];moved=1}
     h.request()};
   cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>{if(mode=='drag'&&h.cancelDrag)h.cancelDrag();up(e)});
-  if(!h.noWheel)cv.addEventListener('wheel',e=>{e.preventDefault();cam.dist=clampD(cam.dist*Math.exp(e.deltaY*.0012));h.request()},{passive:false});
+  if(!h.noWheel)cv.addEventListener('wheel',e=>{e.preventDefault();INT=performance.now();cam.dist=clampD(cam.dist*Math.exp(e.deltaY*.0012));h.request()},{passive:false});
   cv.addEventListener('contextmenu',e=>e.preventDefault());
 }
 
@@ -996,12 +1150,12 @@ function buildObj(sc,P,r,o,x){ /* x: {sel,m,all,glowOK} */
   const dc=(lx,ly,lz,rad,col,op)=>{const q=Q(lx*Z,lz*Z);sc.disc(q[0],y0+ly*Z,q[1],rad*Z,col,Object.assign({ry,id},op||{}))};
   const white=P.obj,dark=P.dark;
   if(o.t=='steck'){
-    const g=o.g||1,w=.082*g;bx(0,0,0,w,.082,.016,white,{edge,ew});
+    const g=o.g||1,w=.082*g;bx(0,-.005,-.005,w+.01,.092,.006,[196,200,194],{edge,ew});bx(0,0,.002,w,.082,.012,white);
     for(let i=0;i<g;i++){const lx=(i-(g-1)/2)*.082;dc(lx,.041,.0092,.027,dark);dc(lx,.041,.0097,.016,[70,74,70]);
       bx(lx-.0095,.036,.0105,.004,.011,.003,[190,190,185]);bx(lx+.0095,.036,.0105,.004,.011,.003,[190,190,185])}
     if(plugOn(o,m)){bx(0,.011,.045,.06,.06,.05,P.ac,{em:.25});const q=Q(0,.085*Z);sc.line([[q[0],y0+.04*Z,q[1]],[q[0],.03,q[1]]],'rgba(150,150,150,.9)',2);sc.glow([q[0],y0+.04*Z,q[1]],.3,P.ac,.45)}
   }else if(o.t=='schalter'){
-    bx(0,0,0,.082,.082,.016,white,{edge,ew});
+    bx(0,-.005,-.005,.092,.092,.006,[196,200,194],{edge,ew});bx(0,0,.002,.082,.082,.012,white);
     const lamps=lampsOf(r,o),on=lamps.some(l=>lampOn(l,m,x.all)),sub=o.sub||'aus';
     if(sub=='dimmer'){dc(0,.041,.0092,.028,[60,64,60]);dc(0,.041,.0105,.018,[130,134,130]);dc(0,.052,.0115,.004,P.ac,{em:.8})}
     else if(sub=='taster'){dc(0,.041,.0092,.022,[200,204,198]);dc(0,.041,.0105,.015,[240,242,238])}
@@ -1023,7 +1177,7 @@ function buildObj(sc,P,r,o,x){ /* x: {sel,m,all,glowOK} */
   }else{ /* uređaji */
     const a=AP3[o.key]||AP3.herd,col=a.col,[w,h,dd]=a.sz,on=loadOn(o,m);
     const rot90=(o.rot|0)%2;
-    if(pl.mt=='floor'){sc.hdisc(cx,.004,cz,Math.max(w,dd)*.8,[0,0,0],{lay:.5,a:.22,nn:14,n:[0,1,0]})}
+    if(pl.mt=='floor'){sc.shadow(cx,cz,w,dd,ry,.36)}
     bx(0,0,0,w,h,dd,col,{edge,ew});
     const fz=dd/2;
     if(o.key=='herd'){bx(0,h,0,w,.01,dd,[28,30,32],{});[[-.15,-.14],[.15,-.14],[-.15,.14],[.15,.14]].forEach(([a1,b1])=>{const q=Q(a1,b1);sc.hdisc(q[0],y0+h+.012,q[1],.09,on?[255,90,30]:[50,52,54],{id,em:on?.7:0,nn:14})});bx(0,h*.62,fz+.001,w*.7,.22,.004,[34,36,38]);
@@ -1196,6 +1350,8 @@ function floorReal(sc,P,r,G,isC){
   else if(!plain){const cs=FM.s||.6,nx=Math.max(1,Math.round(W/cs)),nz=Math.max(1,Math.round(D/cs)),w=W/nx,d=D/nz;
     for(let i=0;i<nx;i++)for(let j=0;j<nz;j++){const sh=((i+j)%2?.94:1.03)*(.97+.06*rnd2(i,j));
       q(x+i*w+.012,z+j*d+.012,x+(i+1)*w-.012,z+(j+1)*d-.012,mixc(base,[0,0,0],1-sh*dim),null)}}
+  [[.34,.07],[.16,.09],[.06,.12]].forEach(([g,a],i)=>{const y=.002+i*.0004,f=(p)=>sc.face(p,[0,0,0],{lay:.2,a,n:[0,1,0],dbl:true});if(W<g*2.2||D<g*2.2)return;
+    f([[x,y,z],[x+W,y,z],[x+W-g,y,z+g],[x+g,y,z+g]]);f([[x+W,y,z],[x+W,y,z+D],[x+W-g,y,z+D-g],[x+W-g,y,z+g]]);f([[x+W,y,z+D],[x,y,z+D],[x+g,y,z+D-g],[x+W-g,y,z+D-g]]);f([[x,y,z+D],[x,y,z],[x+g,y,z+g],[x+g,y,z+D-g]])});
   if(isC){const o=[[x,.01,z],[x+W,.01,z],[x+W,.01,z+D],[x,.01,z+D],[x,.01,z]];sc.line(o,P.acs,2.5,.95)}
 }
 /* ---- deterministični otvori (vrata, prozori): isti podaci za crtanje i za klampanje objekata ---- */
@@ -1410,7 +1566,7 @@ function mCheck(){
     if(r.ph==3&&d.k!='ls3')add('er',`${r.n} je trofazni: treba 3-polni LS, a postavljen je 1-polni.`,d.id);
     else if(r.ph==1&&d.k=='ls3')add('wa',`${r.n} je jednofazni: 3-polni LS je nepotreban.`,d.id);
     if(Ib>d.In)add('er',`${r.n}: struja ${Ib.toFixed(1).replace('.',',')} A je veća od ${nm}. Osigurač će stalno isključivati.`,d.id);
-    if(d.In>Iz)add('er',`${r.n}: kabel ${d.A} mm² drži samo ${Iz} A, a ${nm} je ${d.In} A. Kabel pregrijan, požar!`,d.id);
+    if(d.In>Iz)add('er',`${r.n}: kabel ${d.A} mm² drži samo ${Iz} A, a ${nm} je ${d.In} A. Vod se pregrijava, opasnost od požara.`,d.id);
     else if(Ib<=d.In)add('ok',`${r.n}: ${nm} i ${d.A} mm² odgovaraju (Ib ${Ib.toFixed(1).replace('.',',')} A, Iz ${Iz} A).`,d.id);
     if(d.pe===false)add('er',`${r.n}: PE nije spojen. Kućište bez zaštitnog vodiča.`,d.id);
     if(d.nfi!=null&&d.fi&&d.nfi!=d.fi.id)add('er',`${r.n}: N-vodič je na drugoj FI grupi. FI će isključivati bez razloga.`,d.id)});
@@ -1434,7 +1590,7 @@ function mSim(){const M=mState(),D=mDevs();MT.fail={};
   D.filter(d=>d.k=='ls'||d.k=='ls3').forEach(d=>{const r=mReq(M,d);if(!r||!MT.load[d.id]||!mEn(d))return;
     const Ib=mIb(r),Iz=((r.ph==3?IZ3:IZ2)[d.A]||0);
     if(Ib>d.In*1.45){MT.trip[d.id]=1;MT.load[d.id]=false;mLog('er',`${d.ch}${d.In} isključio: ${r.n} povlači ${Ib.toFixed(1).replace('.',',')} A (preopterećenje).`);return}
-    if(Ib>Iz)MT.fail[d.id]=`Kabel ${d.A} mm² pregrijan (${Ib.toFixed(1).replace('.',',')} A > Iz ${Iz} A). Požar!`;
+    if(Ib>Iz)MT.fail[d.id]=`Kabel ${d.A} mm² pregrijan (${Ib.toFixed(1).replace('.',',')} A > Iz ${Iz} A). Opasnost od požara.`;
     else if(d.In>Iz)MT.fail[d.id]=`Kabel ${d.A} mm² nije zaštićen od preopterećenja: ${d.ch}${d.In} je veći od Iz ${Iz} A.`;
     if(d.pe===false)MT.fail[d.id]=(MT.fail[d.id]?MT.fail[d.id]+' ':'')+'PE nedostaje: kućište pod naponom!';
     if(!d.fi&&!MT.fail[d.id])MT.fail[d.id]='Nema FI zaštite za ovaj krug.';
@@ -1500,8 +1656,8 @@ function vMont(){return`<div class="v3" id="v3m"><canvas id="cv" aria-label="Mon
 function mountMont(){
   const cv=$('#cv');if(!cv)return;const M=mState();mReset();mHand=null;mHov=null;mSel=null;mSheet=null;
   if(!CAM.m||CAM.m.rows!=M.rows)CAM.m=defMCam(M.rows);const cam=CAM.m;
-  const v=V3={kind:'mont',cv,dirty:true,st:null};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
-  v.draw=()=>{const c=cvs[0];const b=buildMont(cam,{});v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{oy:sheetOY(c.H)});mLive()};
+  const v=V3={kind:'mont',cv,cam,dirty:true,st:null};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
+  v.draw=()=>{const c=cvs[0];const b=memo3('m',[MV,mState(),MT.on,MT.trip,MT.lev,MT.load,MT.fail,mHand,mHov,mSel,themeName(),S.ui.ac],()=>buildMont(cam,{}));v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{oy:sheetOY(c.H)});mLive()};
   v.anim=()=>MT.log.length&&Date.now()-MT.log[MT.log.length-1].t0<9500;
   const tapCell=id=>{const[,r,x]=id.split(':').map(Number);if(!mHand){mSel=null;mSheet=null;return}
     const d=mPlace(mHand,r,x);if(!d){toast('Nema mjesta na ovoj šini.');return}
@@ -1677,7 +1833,7 @@ function itemB(sc,it,wx,wz,lr,dim){const e=CAT[it.k]||CAT.kutija,b=e.b,sx=it.w/b
   return{B:(lx,y,lz,w,h,d,c,op)=>sc.box(wx+lx*sx,y0+y*sy,wz+lz*sz,w*sx,h*sy,d*sz,cm(c),Object.assign({lay:2,ry:it.ry||0,pv:[wx,wz],lr},op||{})),
     C:(lx,y,lz,r,h,c,op)=>{const p=sc.frame(wx,0,wz,it.ry||0).T(lx*sx,0,lz*sz);sc.cyl(p[0],y0+y*sy,p[2],r*Math.min(sx,sz),h*sy,cm(c),Object.assign({lay:2,lr},op||{}),10)}}}
 function drawItem(sc,P,it,wx,wz,lr){const e=CAT[it.k]||CAT.kutija,dim=P&&P.th=='amoled'?.9:1,F=itemB(sc,it,wx,wz,lr,dim);
-  if(!(it.y0>0)&&e.m!='teppich'){const sw=Math.abs(Math.sin(it.ry||0))>.5?it.d:it.w,sd=Math.abs(Math.sin(it.ry||0))>.5?it.w:it.d;sc.face([[wx-sw/2-.05,0,wz-sd/2-.05],[wx+sw/2+.05,0,wz-sd/2-.05],[wx+sw/2+.05,0,wz+sd/2+.05],[wx-sw/2-.05,0,wz+sd/2+.05]],[0,0,0],{lay:.5,a:.2,n:[0,1,0],dbl:true})}
+  if(!(it.y0>0)&&e.m!='teppich'){sc.shadow(wx,wz,it.w,it.d,it.ry||0,.34)}
   (MD[e.m]||MD.box)(F.B,F.C,it.c||e.c)}
 /* ---------- automatski raspored namještaja (dok korisnik ne preuzme) ---------- */
 function autoFurn(r,G){
@@ -1744,6 +1900,7 @@ function canvasPen(ctx,minTxt,tm){tm=tm||1;return{
   line(p,w,c,dash){ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.setLineDash(dash||[]);ctx.lineWidth=Math.max(.5,w);ctx.strokeStyle=c;ctx.stroke();ctx.setLineDash([])},
   poly(p,f,s,w){ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.lineWidth=Math.max(.5,w||1);ctx.strokeStyle=s;ctx.stroke()}},
   circ(x,y,r,f,s,w){ctx.beginPath();ctx.arc(x,y,Math.max(.5,r),0,Math.PI*2);if(f){ctx.fillStyle=f;ctx.fill()}if(s){ctx.lineWidth=Math.max(.5,w||1);ctx.strokeStyle=s;ctx.stroke()}},
+  fs(sz){return Math.max(minTxt||0,sz*tm)},
   text(x,y,s,sz,o){o=o||{};sz*=tm;if(minTxt&&sz<minTxt*.6)return;const px=Math.max(minTxt||0,sz);if(px<2)return;ctx.save();ctx.translate(x,y);if(o.rot)ctx.rotate(o.rot);ctx.font=`${o.b?'700 ':''}${px}px Helvetica, Arial, sans-serif`;ctx.fillStyle=o.col||'#111';ctx.textAlign=o.al=='l'?'left':o.al=='r'?'right':'center';ctx.textBaseline=o.bl||'middle';ctx.fillText(s,0,0);ctx.restore()}}}
 class MiniPDF{
   constructor(W,H){this.W=W;this.H=H;this.k=72/25.4;this.s=[];this.mc=document.createElement('canvas').getContext('2d')}
@@ -1756,7 +1913,7 @@ class MiniPDF{
   circ(x,y,r,f,s,w){const c=.5523*r,P=(a,b)=>`${this.X(a)} ${this.Y(b)}`;
     const p=`${P(x+r,y)} m ${P(x+r,y+c)} ${P(x+c,y+r)} ${P(x,y+r)} c ${P(x-c,y+r)} ${P(x-r,y+c)} ${P(x-r,y)} c ${P(x-r,y-c)} ${P(x-c,y-r)} ${P(x,y-r)} c ${P(x+c,y-r)} ${P(x+r,y-c)} ${P(x+r,y)} c h`;
     this.s.push(`${f?this.rgb(f)+' rg ':''}${s?this.rgb(s)+' RG '+this.n(Math.max(.05,w||.2)*this.k)+' w ':''}[] 0 d ${p} ${f&&s?'b':f?'f':'s'}`)}
-  enc(s){return[...String(s)].map(ch=>{const c=ch.charCodeAt(0);if(c<256)return ch;const M={'–':'-','—':'-','…':'...','·':'·','≤':'<=','≥':'>=','Δ':'d','Ω':'Ohm','→':'->','đ':'d','Đ':'D','č':'c','ć':'c','Č':'C','Ć':'C','š':'s','Š':'S','ž':'z','Ž':'Z'}[ch];if(M)return M;const n=ch.normalize('NFD')[0];return n.charCodeAt(0)<256?n:'?'}).join('')}
+  enc(s){return[...String(s)].map(ch=>{const c=ch.charCodeAt(0);if(ch=='²')return'2';if(ch=='³')return'3';if(c<256)return ch;const M={'–':'-','—':'-','…':'...','·':'·','≤':'<=','≥':'>=','Δ':'d','Ω':'Ohm','→':'->','đ':'d','Đ':'D','č':'c','ć':'c','Č':'C','Ć':'C','š':'s','Š':'S','ž':'z','Ž':'Z'}[ch];if(M)return M;const n=ch.normalize('NFD')[0];return n.charCodeAt(0)<256?n:'?'}).join('')}
   text(x,y,s,sz,o){o=o||{};s=this.enc(s);if(!s)return;this.mc.font=`${o.b?'700 ':''}100px Helvetica, Arial, sans-serif`;const w=this.mc.measureText(s).width/100*sz*.98;
     let dx=o.al=='l'?0:o.al=='r'?-w:-w/2,dy=o.bl=='alphabetic'?0:o.bl=='top'?sz*.72:sz*.35;
     const a=-(o.rot||0),cs=Math.cos(a),sn=Math.sin(a),px=x+dx*Math.cos(o.rot||0)-dy*Math.sin(o.rot||0),py=y+dx*Math.sin(o.rot||0)+dy*Math.cos(o.rot||0);
@@ -1817,8 +1974,9 @@ function drawPlan(pen,T,k,o){
   /* oznake soba */
   R.forEach(r=>{const G=GEO[r.id],c=T(G.x+G.W/2,G.z+G.D/2),wpx=G.W*o.ppm*.86;if(Math.min(G.W,G.D)*o.ppm<mm(10))return;
     const f=Math.min(1,wpx/(Math.max(r.name.length*.6,6)*mm(3.2)));const z=mm(1)*f;
-    pen.text(c[0],c[1]-z*3.2,r.name,z*3.2,{b:1,col:col.ink});pen.text(c[0],c[1]+z*1.2,`${nf(G.W*G.D)} m²`,z*2.5,{col:col.ink});
-    if(o.dims)pen.text(c[0],c[1]+z*4.6,`${nf(G.W)} × ${nf(G.D)}`,z*2,{col:col.dim})});
+    const ef=s=>pen.fs?pen.fs(s):s,h1=ef(z*3.2),h2=ef(z*2.5),h3=ef(z*2);
+    pen.text(c[0],c[1]-h1*.8,r.name,z*3.2,{b:1,col:col.ink});pen.text(c[0],c[1]+h2*.55,`${nf(G.W*G.D)} m²`,z*2.5,{col:col.ink});
+    if(o.dims&&h3*8<wpx)pen.text(c[0],c[1]+h2*1.2+h3*.7,`${nf(G.W)} × ${nf(G.D)}`,z*2,{col:col.dim})});
   /* kote (Maßketten) */
   if(o.dims&&R.length){const bb=planBBox(),xs=new Set([bb.x0,bb.x1]),zs=new Set([bb.z0,bb.z1]);R.forEach(r=>{const G=GEO[r.id];xs.add(+G.x.toFixed(3));xs.add(+(G.x+G.W).toFixed(3));zs.add(+G.z.toFixed(3));zs.add(+(G.z+G.D).toFixed(3))});
     const ch=(vals,horiz,off)=>{const v=[...vals].sort((a,b)=>a-b),pts=v.map(a=>horiz?T(a,bb.z0):T(bb.x0,a)).map(p=>horiz?[p[0],p[1]-mw(off)]:[p[0]-mw(off),p[1]]);
@@ -1902,7 +2060,7 @@ function legendSym(pen,ob,x,y,E){const w1=.35,R0=1.6;
   else if(ob.t=='verteiler'){const q=[[x-3.5,y-1.2],[x+3.5,y-1.2],[x+3.5,y+1.2],[x-3.5,y+1.2]];pen.poly(q,'#ffffff',E,w1);pen.poly([q[0],q[1],q[2]],E,null)}
   else{pen.poly([[x-2.5,y-1.5],[x+2.5,y-1.5],[x+2.5,y+1.5],[x-2.5,y+1.5]],null,E,w1);pen.text(x,y,'H',1.9,{col:E,b:1})}}
 async function planPDF(){const cfg=planCfg(),L=planPage(cfg),st=$('#ppst'),say=t=>{if(st)st.textContent=t};
-  let dl=null;try{dl=window.claude?await claude.use('downloads'):null}catch(e){}
+  const dl=await DL.get();
   const pdf=new MiniPDF(L.W,L.H);renderSheet(pdf,L,cfg,{el:'#d0101a'});const blob=pdf.blob((cfg.art=='el'?'Elektro-Installationsplan':'Grundriss')+' '+(S.p.name||''));
   window.__lastPlanPDF=blob;
   if(!dl){say('Spremanje datoteka nije dostupno u ovom prikazu.');return blob}
@@ -2286,45 +2444,98 @@ function uiClick(a,v){
 
 /* ---------- kontakt ---------- */
 const MAIL='basagtm@gmail.com';
-function vKontakt(){
-  let d={};try{d=JSON.parse(localStorage.getItem('be2draft'))||{}}catch(e){}
-  return`<div class="head"><h2>Kontakt</h2></div><div class="grid">
-  <section class="panel"><h2>Pošalji poruku</h2>
-   <form id="cf" novalidate><div class="f">
-    <div><label for="cn">Ime</label><input id="cn" autocomplete="name" value="${esc(d.n||'')}"></div>
-    <div><label for="ce">Tvoj e-mail</label><input id="ce" type="email" autocomplete="email" inputmode="email" value="${esc(d.e||'')}"></div>
-    <div style="grid-column:1/-1"><label for="ct">Tema</label><select id="ct">${sel(['Pitanje','Prijedlog funkcije','Prijava greške','Ponuda / saradnja','Ostalo'],d.t||'Pitanje')}</select></div>
-    <div style="grid-column:1/-1"><label for="cm">Poruka</label><textarea id="cm" rows="6">${esc(d.m||'')}</textarea></div>
-    <div style="grid-column:1/-1"><label style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--fg)"><input type="checkbox" id="cp" ${d.p?'checked':''}> Priloži sažetak projekta (broj krugova, snaga, Verteiler)</label></div></div>
-   <div class="row" style="margin-top:14px"><button class="btn" type="submit">Pripremi poruku</button></div></form>
-   <div id="cres" style="margin-top:14px"></div></section>
-  <section class="panel"><h2>Direktno</h2><p class="mu" style="margin-top:0">Pošalji e-mail na adresu:</p>
-   <div class="addr"><span id="mad">${MAIL}</span><button class="btn s g" data-a="cpmail">Kopiraj</button></div>
-   <p class="mu" style="font-size:12px;margin-bottom:0">Aplikacija radi u pregledniku i sama ne šalje e-mail. Dugme otvara tvoju mail aplikaciju s već ispunjenom porukom. Ako se ne otvori, kopiraj tekst i adresu.</p></section></div>`}
-function contactSubmit(){
-  const g=id=>$('#'+id),n=g('cn').value.trim(),e=g('ce').value.trim(),t=g('ct').value,msg=g('cm').value.trim(),p=g('cp').checked;
-  try{localStorage.setItem('be2draft',JSON.stringify({n,e,t,m:msg,p}))}catch(x){}
-  const out=$('#cres');
-  const err=[];if(!n)err.push('ime');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))err.push('ispravan e-mail');if(msg.length<5)err.push('poruku');
-  if(err.length){out.innerHTML=`<div class="er">Upiši ${err.join(', ')}.</div>`;return}
-  let sum='';if(p){const m=getModel();sum=`\n\n--\nProjekt: ${S.p.name}\nKrugova: ${S.c.length}, prostorija: ${S.rooms.length}\nPriključeno: ${fmt(m.tot/1000)} kW, Hauptsicherung ${m.fuse} A\nVerteiler: ${m.board.length} reda`}
-  const body=`${msg}\n\n— ${n} <${e}>${sum}`,subj=`[bash-electro] ${t}`;
-  window.__mail={to:MAIL,subj,body};
-  out.innerHTML=`<div class="panel" style="box-shadow:none"><b class="ok">Poruka je spremna.</b><p class="mu" style="margin:6px 0 10px">Još nije poslana. Otvori mail aplikaciju ili kopiraj tekst i pošalji na <b>${MAIL}</b>.</p>
-   <div class="row"><a class="btn" href="mailto:${MAIL}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Otvori e-mail aplikaciju</a><button type="button" class="btn g" data-a="cpmsg">Kopiraj poruku</button></div></div>`}
+/* ---------- kontakt: forma, slanje, primljene poruke ---------- */
+const FORM_ENDPOINT=''; /* rezerva: Formspree/Web3Forms; glavno slanje ide u Firestore (js/cloud.js) */
+const CTT=['Upit o aplikaciji','Prijedlog funkcije','Prijava greške','Poslovna suradnja','Ostalo'];
+const CT={db:null,user:null,uid:null,owner:false,can:null,inbox:[],loading:false,err:'',unsub:null,sent:null};
+async function ctInit(){if(!(window.claude&&window.claude.use))return;try{const [u,d]=await Promise.all([window.claude.use('user'),window.claude.use('db')]);CT.user=u;CT.db=d;
+    if(u){CT.uid=await u.id();CT.owner=await u.isOwner();CT.can=await u.can('data.write')}}catch(e){}
+  if(CT.owner&&CT.db)ctWatch();if(route=='kontakt')ctPaint()}
+function ctWatch(){if(CT.unsub)return;CT.loading=true;const tm=setTimeout(()=>{if(CT.loading){CT.loading=false;CT.err='Primljene poruke se trenutno ne mogu učitati.';ctPaint()}},10000);
+  CT.unsub=CT.db.collection('poruke').onSnapshot(s=>{if(!s.metadata.fromCache){clearTimeout(tm);CT.loading=false;CT.err=''}
+      const L=[];s.docs.forEach(d=>{const b=d.data()||{};(b.msgs||[]).forEach(m=>L.push(Object.assign({doc:d.id},m)))});L.sort((a,b)=>b.ts-a.ts);CT.inbox=L;chrome();ctPaint()},
+    e=>{clearTimeout(tm);CT.loading=false;CT.err='Primljene poruke nisu dostupne ('+((e&&e.code)||'greška')+').';ctPaint()})}
+const fld=(id,lab,inp)=>`<div class="fl" id="w_${id}"><label for="${id}">${lab}</label>${inp}<small class="fe" id="e_${id}"></small></div>`;
+function ctForm(d){return`<h2>Pošalji poruku</h2><form id="cf" novalidate>
+  <div class="f">${fld('cn','Ime i prezime',`<input id="cn" autocomplete="name" maxlength="80" value="${esc(d.n||'')}">`)}${fld('ce','E-mail za odgovor',`<input id="ce" type="email" autocomplete="email" inputmode="email" maxlength="120" value="${esc(d.e||'')}">`)}</div>
+  <div class="f">${fld('cph','Telefon (nije obavezno)',`<input id="cph" type="tel" autocomplete="tel" maxlength="30" value="${esc(d.ph||'')}">`)}${fld('ct','Tema',`<select id="ct">${sel(CTT,d.t||CTT[0])}</select>`)}</div>
+  ${fld('cm','Poruka',`<textarea id="cm" rows="7" maxlength="2000">${esc(d.m||'')}</textarea>`)}<div class="ctc" id="cmc">${(d.m||'').length} / 2000</div>
+  <input id="chp" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+  <label class="ck"><input type="checkbox" id="cp" ${d.p?'checked':''}> Priloži sažetak projekta (krugovi, priključna snaga, razdjelnik)</label>
+  <div id="w_cg"><label class="ck"><input type="checkbox" id="cg" ${d.g?'checked':''}> Pristajem da se moji podaci koriste isključivo za odgovor na ovaj upit.</label><small class="fe" id="e_cg"></small></div>
+  <div class="row" style="margin-top:14px"><button class="btn" type="submit" id="csb">Pošalji poruku</button></div></form><div id="ctfb"></div>`}
+function ctDone(){const s=CT.sent;return`<div class="ctok"><div class="ctic">✓</div><h2>Poruka je poslana</h2><p class="mu">Odgovor stiže na <b>${esc(s.e)}</b>.</p><p class="mu mono">Broj upita: ${esc(s.ref)}</p><button class="btn g" type="button" data-ct="new">Nova poruka</button></div>`}
+function ctInboxHTML(){if(!CT.owner)return'';const L=CT.inbox,un=L.filter(m=>!m.read).length;
+  return`<section class="panel" style="margin-top:var(--pad)"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Primljene poruke</h2><span class="mu">${CT.loading?'Učitavanje…':L.length?`${L.length} ukupno · ${un} nepročitanih`:''}</span></div>
+  ${CT.err?`<p class="er">${esc(CT.err)}</p>`:''}
+  ${L.length?L.map(m=>`<article class="msg${m.read?'':' new'}"><header><b>${esc(m.n)}</b><span class="mu mono">${esc(new Date(m.ts).toLocaleString('de-DE'))}</span></header>
+   <div class="mu" style="font-size:12px">${esc(m.t)} · <span class="sel">${esc(m.e)}</span>${m.ph?' · '+esc(m.ph):''} · ${esc(m.ref)}</div><p>${esc(m.m)}</p>${m.sum?`<p class="mu" style="font-size:12px">${esc(m.sum)}</p>`:''}
+   <div class="row"><button class="btn g s" type="button" data-ct="cp" data-v="${esc(m.e)}">Kopiraj e-mail</button>${m.read?'':`<button class="btn g s" type="button" data-ct="read" data-d="${esc(m.doc)}" data-v="${esc(m.ref)}">Označi pročitano</button>`}<button class="btn dg s" type="button" data-ct="del" data-d="${esc(m.doc)}" data-v="${esc(m.ref)}">Obriši</button></div></article>`).join('')
+   :(CT.loading?'':'<p class="mu" style="margin-bottom:0">Još nema poruka. Poruke poslane preko forme pojavljuju se ovdje.</p>')}</section>`}
+function vKontakt(){let d={};try{d=JSON.parse(localStorage.getItem('be2draft'))||{}}catch(e){}
+  return`<div class="head"><h2>Kontakt</h2><span class="mu">Upiti, prijedlozi i prijave grešaka</span></div>
+  <div class="ctg"><section class="panel" id="ctbox">${CT.sent?ctDone():ctForm(d)}</section>
+   <aside class="ctside"><section class="panel"><h2>E-mail</h2><p class="mu" style="margin-top:0">Poruku možeš poslati i izravno na adresu:</p><div class="addr"><span class="sel">${MAIL}</span><button class="btn s g" type="button" data-a="cpmail">Kopiraj</button></div></section>
+   <section class="panel"><h2>Što navesti u poruci</h2><ul class="ctl2"><li>Kod prijave greške: tab, korak koji je izveden i što se dogodilo.</li><li>Kod upita o projektu: uključi „Priloži sažetak projekta“.</li><li>Snimke ekrana pošalji e-mailom uz broj upita.</li></ul></section></aside></div>
+  <div id="ctinbox">${ctInboxHTML()}</div>`}
+function ctPaint(){const i=$('#ctinbox');if(i&&route=='kontakt')i.innerHTML=ctInboxHTML()}
+function ctPaintForm(){const b=$('#ctbox');if(!b)return;let d={};try{d=JSON.parse(localStorage.getItem('be2draft'))||{}}catch(e){}b.innerHTML=CT.sent?ctDone():ctForm(d)}
+async function contactSubmit(){const g=id=>$('#'+id),v={n:g('cn').value.trim(),e:g('ce').value.trim(),ph:g('cph').value.trim(),t:g('ct').value,m:g('cm').value.trim(),p:g('cp').checked,g:g('cg').checked};
+  try{localStorage.setItem('be2draft',JSON.stringify(v))}catch(x){}
+  const er={};if(v.n.length<2)er.cn='Upiši ime i prezime.';if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v.e))er.ce='Upiši ispravnu e-mail adresu, npr. ime@domena.de.';
+  if(v.ph&&!/^\+?[\d\s/()-]{6,}$/.test(v.ph))er.cph='Telefon smije sadržavati znamenke, razmake i znak +.';if(v.m.length<10)er.cm='Poruka mora imati barem 10 znakova.';if(!v.g)er.cg='Za slanje je potrebna privola.';
+  ['cn','ce','cph','cm','cg'].forEach(k=>{const w=g('w_'+k),e=g('e_'+k);if(w)w.classList.toggle('bad',!!er[k]);if(e)e.textContent=er[k]||''});
+  const first=Object.keys(er)[0];if(first){const el=g(first);if(el)el.focus();return}
+  const ref='BE-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+  if(g('chp').value){CT.sent={ref,e:v.e};ctPaintForm();return}
+  let sum='';if(v.p){const m=getModel();sum=`Projekt: ${S.p.name} · ${S.c.length} krugova · ${S.rooms.length} prostorija · ${fmt(m.tot/1000)} kW · Hauptsicherung ${m.fuse} A · Verteiler ${m.board.length} reda`}
+  const msg={ref,ts:Date.now(),n:v.n,e:v.e,ph:v.ph,t:v.t,m:v.m,sum,read:false},b=g('csb'),fb=g('ctfb');b.disabled=true;b.textContent='Šaljem…';if(fb)fb.innerHTML='';
+  let ok=false,why='';
+  if(window.BECloud){try{await window.BECloud.sendContact(msg);ok=true}catch(e){why='Poruka nije spremljena ('+((e&&e.code)||'veza')+').'}}
+  if(!ok&&FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({name:v.n,email:v.e,phone:v.ph,subject:'[bash-electro] '+v.t+' · '+ref,message:v.m+(sum?'\n\n'+sum:'')})});ok=r.ok;if(!ok)why='Server je odbio poruku (kod '+r.status+').'}catch(e){why='Server za slanje nije dostupan.'}}
+  if(!ok&&CT.db&&CT.uid&&CT.can!==false){try{const rf=CT.db.doc('poruke/'+CT.uid),cur=await rf.get(),L=((cur.exists&&cur.data().msgs)||[]).slice(-19);L.push(msg);await rf.set({msgs:L,last:msg.ts});ok=true}
+    catch(e){why=e&&e.code=='quota_exceeded'?'Spremnik poruka je pun.':'Poruka nije spremljena ('+((e&&e.code)||'greška')+').'}}
+  if(ok){CT.sent={ref,e:v.e};try{localStorage.removeItem('be2draft')}catch(x){}ctPaintForm();return}
+  b.disabled=false;b.textContent='Pošalji poruku';
+  window.__mail={to:MAIL,subj:'[bash-electro] '+v.t+' · '+ref,body:`${v.m}\n\n${v.n} <${v.e}>${v.ph?' · '+v.ph:''}${sum?'\n'+sum:''}\nBroj upita: ${ref}`};
+  if(fb)fb.innerHTML=`<div class="ctfb"><b>Poruka nije poslana.</b><p class="mu">${esc(why||'Ova verzija aplikacije nema povezan servis za slanje.')} Kopiraj poruku i pošalji je na <span class="sel">${MAIL}</span>.</p><div class="row"><button class="btn" type="button" data-ct="cpm">Kopiraj poruku</button><button class="btn g" type="button" data-ct="cp" data-v="${MAIL}">Kopiraj adresu</button></div></div>`}
+const ctClr=t=>{const id=t&&t.id;if(!id||!['cn','ce','cph','cm','cg'].includes(id))return;const w=$('#w_'+id),e=$('#e_'+id);if(w)w.classList.remove('bad');if(e)e.textContent=''};
+document.addEventListener('input',e=>{const t=e.target;if(t.id=='cm'){const c=$('#cmc');if(c)c.textContent=t.value.length+' / 2000'}ctClr(t)});
+document.addEventListener('change',e=>ctClr(e.target));
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-ct]');if(!b)return;e.preventDefault();const a=b.dataset.ct,v=b.dataset.v,d=b.dataset.d;
+  if(a=='new'){CT.sent=null;ctPaintForm();return}
+  if(a=='cp'){copyTxt(v,'E-mail adresa kopirana');return}
+  if(a=='cpm'){const w=window.__mail;if(w)copyTxt('Za: '+w.to+'\nTema: '+w.subj+'\n\n'+w.body,'Poruka kopirana');return}
+  if(a=='del'&&!b.dataset.sure){b.dataset.sure='1';b.textContent='Potvrdi brisanje';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Obriši'}},4000);return}
+  if((a=='read'||a=='del')&&CT.db){b.disabled=true;try{const r=CT.db.doc('poruke/'+d),s=await r.get(),L=((s.exists&&s.data().msgs)||[]).map(m=>Object.assign({},m)),
+      N=a=='del'?L.filter(m=>m.ref!==v):L.map(m=>m.ref===v?Object.assign(m,{read:true}):m);if(N.length)await r.set({msgs:N,last:(s.exists&&s.data().last)||Date.now()});else await r.delete()}
+    catch(x){toast('Promjena nije spremljena.');b.disabled=false}}});
+
 function copyTxt(t,ok){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(ok)).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();let k=false;try{k=document.execCommand('copy')}catch(x){}ta.remove();toast(k?ok:'Kopiranje nije dostupno, označi tekst ručno')})}
 
 /* ---------- životni ciklus canvasa ---------- */
-function unmount(){if(V3){cancelAnimationFrame(V3.raf);V3.ro&&V3.ro.disconnect();V3.stop&&V3.stop();V3=null}}
+const M3={};function memo3(n,key,fn){const k=JSON.stringify(key),c=M3[n];if(c&&c.k===k&&c.s===S)return c.b;const b=fn();M3[n]={k,b,s:S};return b}
+function simSig(){return[SIM.main,SIM.fi,SIM.ls,SIM.lamp,SIM.plug,SIM.load,SIM.force,SIM.trip,SIM.fail]}
+function eyeSig(cam){const e=camEye(cam);let a=0,b=0;S.rooms.forEach(r=>{const G=GEO[r.id];if(!G)return;if(G.x<e[0])a++;if(G.x+G.W<e[0])a++;if(G.z<e[2])b++;if(G.z+G.D<e[2])b++});return a+':'+b}
+function unmount(){if(V3){V3.flyEnd&&V3.flyEnd();cancelAnimationFrame(V3.raf);V3.ro&&V3.ro.disconnect();V3.stop&&V3.stop();V3=null}}
 function startV(v,cvs){
   v.dirty=true;
-  const fit=()=>{cvs.forEach(c=>{const b=c.cv.getBoundingClientRect(),dpr=S.ui.hq===false?1:Math.min(2,window.devicePixelRatio||1);c.W=Math.max(10,b.width);c.H=Math.max(10,b.height);
+  const fit=()=>{cvs.forEach(c=>{const b=c.cv.getBoundingClientRect(),dpr=S.ui.hq===false?1:Math.max(1,Math.min(2,window.devicePixelRatio||1)*QS);c.W=Math.max(10,b.width);c.H=Math.max(10,b.height);
     c.cv.width=Math.round(c.W*dpr);c.cv.height=Math.round(c.H*dpr);c.ctx.setTransform(dpr,0,0,dpr,0,0)});v.dirty=true};
   v.fit=fit;
-  if(window.ResizeObserver){v.ro=new ResizeObserver(fit);cvs.forEach(c=>v.ro.observe(c.cv))}else addEventListener('resize',fit);
+  if(window.ResizeObserver){v.ro=new ResizeObserver(fit);cvs.forEach(c=>v.ro.observe(c.cv))}else{addEventListener('resize',fit);const s0=v.stop;v.stop=()=>{removeEventListener('resize',fit);s0&&s0()}}
   fit();let last=performance.now();
-  const tick=t=>{if(V3!==v)return;v.raf=requestAnimationFrame(tick);const dt=Math.min(.1,(t-last)/1000);last=t;
-    const an=v.anim?v.anim(dt):false;if(!v.dirty&&!an)return;v.dirty=false;try{v.draw(t/1000,dt)}catch(e){console.error(e);v.err=String(e)}};
+  if(v.cam&&FLY&&!matchMedia('(prefers-reduced-motion:reduce)').matches){FLY=false;const c=v.cam,dr0=v.draw,an0=v.anim;let ft=0,pf=1.6,py=-.55;c.dist*=pf;c.yaw+=py;
+    const setF=e=>{const f=1.6-.6*e,y=-.55*(1-e);c.dist*=f/pf;c.yaw+=y-py;pf=f;py=y};
+    v.flyEnd=()=>{if(ft<1){ft=1;setF(1)}};
+    v.draw=(t,dt)=>{if(ft<1){ft=Math.min(1,ft+dt/1.25);setF(1-Math.pow(1-ft,3))}dr0(t,dt)};v.anim=dt=>ft<1||(an0?an0(dt):false);
+    cvs[0].cv.addEventListener('pointerdown',v.flyEnd,{once:true});cvs[0].cv.addEventListener('wheel',v.flyEnd,{once:true,passive:true})}
+  let lastD=0,wasF=false,samp=[];
+  const tick=t=>{if(V3!==v)return;v.raf=requestAnimationFrame(tick);if(document.hidden)return;const dt=Math.min(.1,(t-last)/1000);last=t;
+    const an=v.anim?v.anim(dt):false,fN=performance.now()-INT<200;if(wasF&&!fN)v.dirty=true;wasF=fN;if(!v.dirty&&!an)return;
+    const gap=t-lastD;lastD=t;v.dirty=false;try{v.draw(t/1000,dt)}catch(e){console.error(e);v.err=String(e)}
+    /* prilagodljiva rezolucija: ako crtanje stalno kasni, smanji gustoću piksela */
+    if(gap<120){samp.push(gap);if(samp.length>=30){const avg=samp.reduce((a,b)=>a+b,0)/samp.length;samp=[];if(avg>30&&QS>.5&&(window.devicePixelRatio||1)*QS>1.01){QS=Math.max(.5,QS-.25);fit()}}}else samp=[]};
   v.raf=requestAnimationFrame(tick)}
 
 /* ---------- 3D KUĆA ---------- */
@@ -2342,7 +2553,7 @@ function bars(){
     ${hMode=='test'?`<button class="btn g s" data-x="h:reset">Reset</button><button class="btn s" data-x="h:tests">Testlauf</button>`:''}`;
     const p=$('#pal');if(p){p.innerHTML=hMode=='edit'?`<button class="btn" data-x="h:add" data-v="steck:1">${ic('steck')}Utičnica</button><button class="btn" data-x="h:add" data-v="steck:2">${ic('steck')}2-fach</button><button class="btn" data-x="h:add" data-v="schalter:aus">${ic('schalter')}Schalter</button><button class="btn" data-x="h:add" data-v="schalter:wechsel">${ic('schalter')}Wechsel</button><button class="btn" data-x="h:add" data-v="licht:decke">${ic('licht')}Leuchte</button><button class="btn" data-x="h:add" data-v="licht:spot">${ic('licht')}Spot</button><button class="btn g" data-x="h:menu">${ic('geraet')}Gerät</button><button class="btn g" data-x="h:vert">${ic('vert')}Verteiler</button><button class="btn g" data-x="h:rooms">${ic('sobe')}Sobe</button>`
       :`<button class="btn g" data-x="h:tocab">${ic('vert')}Otvori Verteiler</button><button class="btn g" data-x="h:tests">${ic('test')}Testlauf</button>`}
-    const h=$('#hint');if(h)h.textContent=hintOn?(hMode=='edit'?'Povuci objekt da ga premjestiš. Povuci prazno za rotiranje, štipni za zum.':'Dodirni prekidač, svjetlo, utičnicu ili uređaj. Pa otvori Verteiler i isključi osigurač.'):'';
+    const h=$('#hint');if(h)h.textContent=hintOn?(hMode=='edit'?'Povlačenje objekta ga premješta. Povlačenje po praznom rotira prikaz, štipanje zumira.':'Dodirni prekidač, svjetlo, utičnicu ili uređaj. Pa otvori Verteiler i isključi osigurač.'):'';
   }else{
     b.innerHTML=`<button class="btn g s${cabDoor?' on':''}" data-x="c:door">${ic('door').replace('<svg','<svg style="width:15px;height:15px"')} Vrata</button>
     <button class="btn g s${SIM.main&&!SIM.trip.main?' on':''}" data-x="c:main">Hauptschalter ${SIM.main&&!SIM.trip.main?'AN':'AUS'}</button><button class="btn g s" data-x="c:add">+ Krug</button><button class="btn s" data-x="c:tests">Testlauf</button><button class="btn g s" data-x="c:reset">Reset</button><button class="btn g s" data-x="c:view">Pogled</button>`}
@@ -2360,12 +2571,12 @@ function defHouseCam(){const g=GEO.__||{W:10,D:10};return{yaw:.55,pitch:.7,dist:
 function mountHouse(){
   const cv=$('#cv');if(!cv)return;ensureAll();commit(true);
   if(!CAM.h)CAM.h=defHouseCam();const cam=CAM.h;
-  const v=V3={kind:'house',cv,dirty:true,st:null,time:0};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
+  const v=V3={kind:'house',cv,cam:hTop?null:cam,dirty:true,st:null,time:0};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
   let DR=null;
   v.draw=(t)=>{const m=getModel(),c=cvs[0];v.time=t;
     const row=selO?m.om[selO]:null;
     const o={sel:selO?{k:'o',id:selO}:null,selC:row?row.c.id:null,labels:hLab,cables:hCab,wmode:hWm,furn:hFurn,top:hTop,showCur:hMode=='edit',time:t};
-    const b=buildHouse(cam,o);v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{lit:b.lit,oy:sheetOY(c.H)});liveBox()};
+    const an=!!(row&&en(row.c,m)&&curI(row.c,m)>.01),b=memo3('h',[MV,simSig(),Object.assign({},o,{time:an?t:0}),curRoom,eyeSig(cam),themeName(),S.ui.ac],()=>buildHouse(cam,o));v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{lit:b.lit,oy:sheetOY(c.H)});liveBox()};
   v.anim=()=>{const m=getModel();if(selO){const row=m.om[selO];if(row&&en(row.c,m)&&curI(row.c,m)>.01)return true}
     return Date.now()-(v.lastLog||0)<10000||SIM.log.length&&Date.now()-SIM.log[SIM.log.length-1].t<9500};
   simHook=(lv,txt)=>{v.lastLog=Date.now();toast(txt);v.dirty=true;showSheet()};
@@ -2521,8 +2732,8 @@ function defCabCam(m){const rows=Math.max(1,m.board.length),bh=rows*.15+.17;retu
 function mountCab(){
   const cv=$('#cv');if(!cv)return;ensureAll();commit(true);simEval();const m0=getModel();
   if(!CAM.c||CAM.c.rows!=m0.board.length){CAM.c=defCabCam(m0);CAM.c.rows=m0.board.length}const cam=CAM.c;
-  const v=V3={kind:'cab',cv,dirty:true,st:null,door:cabDoor?1.95:0};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
-  v.draw=()=>{const c=cvs[0];const b=buildCab(cam,{door:v.door,sel:selDev});v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{oy:sheetOY(c.H)});liveBox()};
+  const v=V3={kind:'cab',cv,cam,dirty:true,st:null,door:cabDoor?1.95:0};const cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];
+  v.draw=()=>{const c=cvs[0];const b=memo3('c',[MV,simSig(),+v.door.toFixed(3),selDev,cabDoor,themeName(),S.ui.ac],()=>buildCab(cam,{door:v.door,sel:selDev}));v.st=drawScene(c.ctx,c.W,c.H,cam,b.sc,{oy:sheetOY(c.H)});liveBox()};
   v.anim=()=>{const tg=cabDoor?1.95:0;if(Math.abs(v.door-tg)>.004){v.door+=(tg-v.door)*.16;return true}v.door=tg;return false};
   simHook=(lv,txt)=>{toast(txt);v.dirty=true;showSheet()};
   Ctl(cv,cam,{request:()=>{v.dirty=true},state:()=>v.st,pick:(x,y)=>pickAt(v.st,x,y),
@@ -2645,16 +2856,40 @@ function withDemo(fn){
   if(!DEMO){const rs=S,rg=GEO,rc=curRoom;try{sample();DEMO=S;DGEO=GEO}finally{S=rs;GEO=rg;curRoom=rc}}
   const rs=S,rg=GEO,rc=curRoom,rm=MC,bak=Object.assign({},SIM);S=DEMO;GEO=DGEO;MC=null;simReset();
   try{return fn()}finally{S=rs;GEO=rg;curRoom=rc;MC=rm;Object.assign(SIM,bak)}}
-const STEPS=[['01 · Zidovi','Počni od kuće','Prostorije poredane kao u pravom tlocrtu. Zidovi su staklo, pa vidiš sve odjednom.'],
-  ['02 · Oprema','Postavi svaku utičnicu','Utičnice, prekidači, svjetla i uređaji. Povuci ih po zidu, na standardnu visinu po DIN 18015-3.'],
-  ['03 · Vodovi','Kablovi se računaju sami','Dužina svakog kruga ide od Verteilera do potrošača. Pomakni utičnicu i vidi kako se mijenja pad napona.'],
-  ['04 · Verteiler','Uključi, testiraj, pokvari','Otvori ormar, okreni ga, isključi osigurač. Mali presjek ili kriv spoj? Dobiješ FAIL s razlogom.']];
-const FEAT=[['cube','3D urednik kuće','Dodaj svaku utičnicu i svaki prekidač zasebno, povuci ih po zidu, klikni za sve podatke.'],
-  ['vert','Interaktivni Verteiler','Okreni, zumiraj, otvori vrata, uključi i isključi osigurače, FI i glavnu sklopku.'],
-  ['bolt','Testiranje s FAIL porukama','Premali presjek, kriv N, nema PE, kratki spoj: aplikacija ti kaže što je pogrešno i zašto.'],
-  ['test','Prüfprotokoll i PDF','Stückliste, Kabelliste, Stromkreisverzeichnis i potpisi u jednom PDF-u.'],
-  ['sobe','Montaža ormara od nule','Složi Verteiler za stan, kuću ili radionicu, dobij FAIL poruke i ocjenu. Radi i na telefonu.'],
-  ['plus','Tvoj izgled','AMOLED crna, svijetla ili iOS glass. Boja, zaobljenost i blur po tvom.']];
+const STEPS=[['Faza 1 · Građevina','Objekt nastaje iz tlocrta','Prostorije i zidovi u stvarnim mjerama. Prozirni zidovi otkrivaju cijelu instalaciju.'],
+  ['Faza 2 · Oprema','Svaka utičnica na svom mjestu','Utičnice, prekidači, rasvjeta i uređaji na standardnim visinama prema DIN 18015-3.'],
+  ['Faza 3 · Vodovi','Trase i presjeci računaju se sami','Duljina svakog kruga mjeri se od razdjelnika do potrošača i odmah ulazi u pad napona.'],
+  ['Faza 4 · Razdjelnik','Zaštita pod kontrolom','FI sklopke i osigurači složeni po krugovima, s provjerom uvjeta isklapanja.'],
+  ['Faza 5 · Predaja','Objekt spreman za gradilište','Realan prikaz za investitora, a nacrt i dokumentacija kao PDF za montažu.']];
+const VDUR=32;
+const FEAT=[['cube','3D planer objekta','Prostorije, oprema i trase vodova u prostornom prikazu. Svaki element se postavlja i pomiče pojedinačno.','kuca3d'],
+  ['sobe','Crtač 5D','Slobodno crtanje tlocrta: zidovi, otvori, više od 40 elektro simbola, kote, količine, vrijeme montaže i trošak.','crtac'],
+  ['vert','Razdjelnik u 3D','Raspored FI sklopki i osigurača po redovima, uklapanje, ispitivanje i simulacija kvara s obrazloženjem.','ormar3d'],
+  ['bolt','Proračun strujnih krugova','Struja, opteretivost voda, pad napona i uvjet isklapanja za svaki krug, s automatskim odabirom presjeka.','krugovi'],
+  ['test','Dokumentacija i protokol','Stromkreisverzeichnis, popis kabela i materijala te Prüfprotokoll prema DIN VDE 0100-600 u jednom PDF-u.','dokumente'],
+  ['door','Plan za ispis','Tlocrt s instalacijom u mjerilu, formati A4 do A0, s okvirom i sastavnicom za gradilište.','plan']];
+const FLOW=[['Nacrtaj objekt','Tlocrt iz prostorija ili slobodnim crtanjem zidova u stvarnim mjerama.'],['Rasporedi opremu','Utičnice, prekidači, rasvjeta i priključci uređaja na zidovima i stropu.'],['Provjeri krugove','Presjek, zaštita i pad napona za svaki strujni krug, uz upozorenja na odstupanja.'],['Predaj dokumentaciju','Nacrt u mjerilu, popis materijala i ispitni protokol spremni za potpis.']];
+function vStart(){
+  return`<div class="land">
+  <section class="hero" id="hero"><canvas id="hc" aria-label="3D prikaz kuće s instalacijom"></canvas>
+   <div class="hin"><span class="tag">DIN VDE 0100 · DIN 18015</span>
+    <h1>Elektroinstalacija isplanirana <em>do posljednje utičnice.</em></h1>
+    <p>bash-electro povezuje tlocrt, strujne krugove, razdjelnik i dokumentaciju u jednom alatu. Od prve skice do nacrta koji ide na gradilište.</p>
+    <div class="row"><button class="btn lg" data-a="go" data-v="kuca3d">Pokreni 3D planer</button><button class="btn g lg" data-a="go" data-v="crtac">Otvori Crtač 5D</button></div>
+    <div class="stats"><div><b>${Object.keys(DEL).length}</b>elektro simbola</div><div><b>A4–A0</b>vektorski PDF</div><div><b>5D</b>količine, vrijeme, trošak</div></div></div></section>
+  <section class="norms" aria-label="Norme na kojima se temelji proračun"><span>Proračun se oslanja na</span><i>DIN VDE 0100-410</i><i>DIN VDE 0100-600</i><i>DIN VDE 0298-4</i><i>DIN 18015-2</i><i>DIN 18015-3</i></section>
+  <section class="vsec"><div class="sec-h"><h2>Od tlocrta do predaje u 32 sekunde</h2><p>Kratki prikaz cijelog postupka, od zidova do dokumentacije.</p></div>
+  <div class="story" id="story"><div class="stick" id="vbox"><canvas id="sc2" aria-label="Video prikaz: od zidova do gotovog objekta"></canvas>
+   ${STEPS.map((s,i)=>`<div class="scard" data-st="${i}"><b>${s[0]}</b><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join('')}
+</div></div></section>
+  <section><div class="sec-h"><h2>Četiri koraka do gotovog projekta</h2><p>Isti redoslijed kojim se instalacija planira i u praksi.</p></div>
+   <ol class="flow">${FLOW.map(f=>`<li><h3>${f[0]}</h3><p>${f[1]}</p></li>`).join('')}</ol></section>
+  <section><div class="sec-h"><h2>Moduli</h2><p>Svaki dio projekta ima svoj alat, a svi rade nad istim podacima.</p></div>
+   <div class="feat" id="feat">${FEAT.map(f=>`<button class="tilt" data-a="go" data-v="${f[3]}"><svg viewBox="0 0 24 24">${IC[f[0]]}</svg><h3>${f[1]}</h3><p>${f[2]}</p></button>`).join('')}</div></section>
+  <section><div class="sec-h"><h2>Brza procjena priključka</h2><p>Površina, broj prostorija i veći potrošači daju okvirni broj krugova, glavni osigurač i veličinu razdjelnika.</p></div>
+   <div class="panel cfg" id="cfg">${cfgHTML()}</div></section>
+  <section class="cta"><h2>Pitanja i prijedlozi</h2><p>Za upite o aplikaciji, prijedloge funkcija ili prijavu greške dostupna je kontakt forma.</p><div class="row" style="justify-content:center"><button class="btn lg" data-a="go" data-v="kontakt">Kontakt</button><button class="btn g lg" data-a="go" data-v="kuca3d">Započni projekt</button></div></section>
+  <div class="foot">bash-electro · Proračun je orijentacijski. Konačnu provjeru i prijem instalacije obavlja ovlaštena Elektrofachkraft.</div></div>`}
 const CFG={area:140,rooms:6,wert:2,wb:true,wp:false,herd:true,dle:false};
 function cfgRooms(c){
   const base=[['Wohnzimmer',.22],['Küche',.11],['Schlafzimmer',.13],['Bad',.07],['Flur',.08],['Kinderzimmer',.1],['Arbeitszimmer',.09],['HWR',.06],['WC',.03],['Esszimmer',.09],['Keller',.12],['Garage',.14]];
@@ -2670,24 +2905,6 @@ function quick(c){
     cfgRooms(c);gen(true);S.c.forEach(size);const m=model();
     return{n:S.c.length,fuse:m.fuse,sw:m.sw,rows:m.board.length,tot:m.tot,fi:m.groups.length,kab:Math.round(S.c.reduce((s,x)=>s+x.L,0)*1.1),te:m.used}
   }finally{S=real;GEO=rg;curRoom=rc;MC=rm}}
-function vStart(){
-  return`<div class="land">
-  <section class="hero" id="hero"><canvas id="hc" aria-label="3D prikaz kuće s instalacijom"></canvas>
-   <div class="hin"><span class="tag">#bash-electro · VDE 0100 · DIN 18015</span>
-    <h1>Električna instalacija. <em>U 3D.</em></h1>
-    <p>Postavi svaku utičnicu i svaki prekidač u kući, otvori Verteiler, uključi osigurače i testiraj. Pogrešan presjek ili kriv spoj? Dobiješ FAIL s razlogom.</p>
-    <div class="row"><button class="btn lg" data-a="go" data-v="kuca3d">Otvori 3D planer</button><button class="btn g lg" data-a="go" data-v="ormar3d">Isprobaj Verteiler</button></div>
-    <div class="stats"><div><b>10+</b>vrsta opreme</div><div><b>3</b>teme</div><div><b>PDF</b>dokumentacija</div></div></div>
-   <div class="scrl">skroluj ↓</div></section>
-  <section class="story" id="story"><div class="stick"><canvas id="sc2" aria-label="Animacija: od zidova do Verteilera"></canvas>
-   ${STEPS.map((s,i)=>`<div class="scard" data-st="${i}"><b>${s[0]}</b><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join('')}
-   <div class="sdots">${STEPS.map(()=>'<i></i>').join('')}</div><div class="sprog"><i id="sp"></i></div></div></section>
-  <section><div class="sec-h"><h2>Namjesti vlastitu kuću</h2><p>Pomakni klizače i vidi odmah koliko krugova, koja glavna sigurnost i koliko Verteilera ti treba.</p></div>
-   <div class="panel cfg" id="cfg">${cfgHTML()}</div></section>
-  <section><div class="sec-h"><h2>Sve na jednom mjestu</h2><p>Od prve utičnice do potpisanog protokola.</p></div>
-   <div class="feat" id="feat">${FEAT.map(f=>`<button class="tilt" data-a="go" data-v="${f[0]=='cube'?'kuca3d':f[0]=='vert'?'ormar3d':f[0]=='bolt'?'ormar3d':f[0]=='test'?'dokumente':f[0]=='sobe'?'pregled':'postavke'}"><svg viewBox="0 0 24 24">${IC[f[0]]}</svg><h3>${f[1]}</h3><p>${f[2]}</p></button>`).join('')}</div></section>
-  <section class="cta"><h2>Pitanje, ideja ili greška?</h2><p>Javi se direktno, odgovaram na svaku poruku.</p><div class="row" style="justify-content:center"><button class="btn lg" data-a="go" data-v="kontakt">Kontakt forma</button><button class="btn g lg" data-a="go" data-v="kuca3d">Počni planirati</button></div></section>
-  <div class="foot">#bash-electro · orijentacijski proračun, konačnu provjeru radi Elektrofachkraft.</div></div>`}
 function cfgCtl(){
   const c=CFG,tgl=(k,l)=>`<button class="${c[k]?'on':''}" data-a="cf" data-v="${k}">${l}</button>`;
   return`<div><div class="rw"><span>Površina</span><b>${c.area} m²</b></div><input type="range" min="40" max="320" step="5" value="${c.area}" data-cfg="area" aria-label="Površina"></div>
@@ -2711,26 +2928,27 @@ function mountLanding(){
   const hc=$('#hc'),sc2=$('#sc2');if(!hc||!sc2)return;
   withDemo(()=>{ensureAll()});
   const g=DGEO.__,mk=()=>({yaw:.6,pitch:.62,dist:Math.max(g.W,g.D*1.3)*1.25+3,t:[g.W/2,.6,g.D/2],fov:.8,near:.1,min:5,max:60});
-  const hcam=mk(),scam=mk();
-  const v=V3={kind:'land',dirty:true};const cvs=[{cv:hc,ctx:hc.getContext('2d'),W:0,H:0},{cv:sc2,ctx:sc2.getContext('2d'),W:0,H:0}];
-  const heroEl=$('#hero'),storyEl=$('#story'),cards=$$('.scard'),dots=$$('.sdots i'),sp=$('#sp');
-  let drag=false,P=0,vp=null;
-  Ctl(hc,hcam,{request:()=>{},noWheel:true,noPitch:false,state:()=>v.hs,pick:()=>null,tap(){},grab(){drag=true;return false}});
+  const hcam=mk(),scam=mk(),v=V3={kind:'land',dirty:true},cvs=[{cv:hc,ctx:hc.getContext('2d'),W:0,H:0},{cv:sc2,ctx:sc2.getContext('2d'),W:0,H:0}];
+  const heroEl=$('#hero'),storyEl=$('#story'),cards=$$('.scard'),red=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let drag=false,VT=red?VDUR*.9:0,heroB=null,vidT=-1,heroT=-1;
+  Ctl(hc,hcam,{request:()=>{v.dirty=true},noWheel:true,noPitch:false,state:()=>v.hs,pick:()=>null,tap(){},grab(){drag=true;return false}});
   hc.addEventListener('pointerup',()=>{drag=false});
-  const vis=el=>{const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight};
-  const sm=t=>t*t*(3-2*t);
+  const vis=el=>{const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight},sm=t=>t*t*(3-2*t);
   v.draw=(t,dt)=>{
-    const b=storyEl.getBoundingClientRect(),range=Math.max(1,b.height-innerHeight*.9);P=cl(-b.top/range,0,1);
-    if(vis(heroEl)){if(!drag)hcam.yaw+=dt*.12;withDemo(()=>{const bd=buildHouse(hcam,{all:true,cables:true,wmode:0,time:t,reveal:{o:1,c:1}});v.hs=drawScene(cvs[0].ctx,cvs[0].W,cvs[0].H,hcam,bd.sc,{lit:bd.lit})})}
-    if(vis(storyEl)){
-      const rv={o:sm(cl((P-.2)/.2,0,1)),c:sm(cl((P-.46)/.24,0,1))},z=sm(cl((P-.74)/.22,0,1));
-      scam.yaw=.5+P*2.6;scam.pitch=.9-P*.3-z*.1;scam.dist=mk().dist*(1-.52*z);
-      const vpos=withDemo(()=>vertPos());
-      if(vpos){const bt=mk().t;scam.t=[bt[0]+(vpos.x-bt[0])*z,bt[1]+(1.3-bt[1])*z,bt[2]+(vpos.z-bt[2])*z]}
-      withDemo(()=>{const vp2=vertPos();const bd=buildHouse(scam,{all:true,cables:P>.46,labels:P>.7,wmode:0,time:t,reveal:rv,sel:z>.5&&vp2?{k:'o',id:vp2.o.id}:null});drawScene(cvs[1].ctx,cvs[1].W,cvs[1].H,scam,bd.sc,{lit:bd.lit,ga:Math.max(.0001,rv.o)})});
-      const si=P<.25?0:P<.5?1:P<.74?2:3;cards.forEach((c,i)=>c.classList.toggle('on',i==si));dots.forEach((d,i)=>d.classList.toggle('on',i==si));if(sp)sp.style.width=(P*100)+'%'}
+    if(vis(heroEl)&&(drag||heroT<0||t-heroT>=1/30-.002)){const hdt=heroT<0?0:Math.min(.1,t-heroT);heroT=t;if(!drag&&!red)hcam.yaw+=hdt*.12;const th=themeName()+S.ui.ac;
+      if(!heroB||heroB.th!==th)heroB={th,b:withDemo(()=>buildHouse(hcam,{all:true,cables:true,wmode:0,time:0,reveal:{o:1,c:1}}))};
+      v.hs=drawScene(cvs[0].ctx,cvs[0].W,cvs[0].H,hcam,heroB.b.sc,{lit:heroB.b.lit})}
+    /* video: 30 sličica u sekundi, petlja, bez kontrola */
+    if(vis(storyEl)&&(vidT<0||t-vidT>=1/30-.002)){const vdt=vidT<0?0:Math.min(.1,t-vidT);vidT=t;if(!red){VT+=vdt;if(VT>=VDUR)VT-=VDUR}
+      const P=cl(VT/VDUR,0,1),real=P>.8,rv={o:sm(cl((P-.17)/.18,0,1)),c:real?0:sm(cl((P-.4)/.2,0,1))},z=sm(cl((P-.6)/.1,0,1))*(1-sm(cl((P-.76)/.06,0,1))),grow=sm(cl(P/.15,0,1)),fin=sm(cl((P-.8)/.08,0,1));
+      scam.yaw=.5+P*3.4;scam.pitch=.95-P*.34-z*.1+fin*.1;scam.dist=mk().dist*(1-.52*z)*(real?1.12-.2*sm(cl((P-.8)/.2,0,1)):1+.25*(1-grow));
+      const vpos=withDemo(()=>vertPos());if(vpos){const bt=mk().t;scam.t=[bt[0]+(vpos.x-bt[0])*z,bt[1]+(1.3-bt[1])*z,bt[2]+(vpos.z-bt[2])*z]}
+      withDemo(()=>{const vp2=vertPos(),h0=H3;H3=Math.max(.05,h0*grow);try{const bd=buildHouse(scam,{all:real||P>.3,cables:!real&&P>.4,labels:!real&&P>.52&&P<.76&&cvs[1].W>600,wmode:real?2:0,furn:true,time:t,reveal:rv,sel:z>.5&&vp2?{k:'o',id:vp2.o.id}:null});
+        drawScene(cvs[1].ctx,cvs[1].W,cvs[1].H,scam,bd.sc,{lit:bd.lit,ga:real?1:Math.max(.0001,rv.o)})}finally{H3=h0}});
+      const op=red?1:cl(Math.min(VT/.6,(VDUR-VT)/.6,.15+Math.abs(P-.8)/.012),0,1);sc2.style.opacity=op.toFixed(3);
+      const si=P<.17?0:P<.4?1:P<.6?2:P<.8?3:4;cards.forEach((c,i)=>c.classList.toggle('on',i==si))}
   };
-  v.anim=()=>vis(heroEl)||vis(storyEl);
+  v.anim=()=>!red&&(vis(heroEl)||vis(storyEl));
   const onS=()=>{v.dirty=true};addEventListener('scroll',onS,{passive:true});v.stop=()=>removeEventListener('scroll',onS);
   startV(v,cvs);
   /* tilt */
@@ -2760,13 +2978,493 @@ document.addEventListener('input',e=>{const t=e.target,D=t.dataset;
   if(D.cfg){cfgLive(t);return}});
 document.addEventListener('submit',e=>{if(e.target.id=='cf'){e.preventDefault();contactSubmit()}});
 
+/* =====================================================================
+   CRTAČ 5D — prazan papir za cijelo gradilište
+   2D crtež · 3D prikaz · količine · vrijeme montaže (4D) · trošak (5D) · vektorski PDF
+   ===================================================================== */
+const DEL={
+  steck1:{n:'Steckdose',m:'wall',h:.3,pr:9,min:12,g:1,c:'st'},steck2:{n:'Steckdose 2-fach',m:'wall',h:.3,pr:17,min:18,g:2,c:'st'},steck3:{n:'Steckdose 3-fach',m:'wall',h:.3,pr:25,min:24,g:3,c:'st'},
+  stecka:{n:'Außensteckdose IP44',m:'wall',h:.3,pr:19,min:18,g:1,tx:'IP',c:'st'},cee:{n:'CEE 16 A',m:'wall',h:1.1,pr:28,min:30,lb:'CEE',c:'st'},herd:{n:'Herdanschluss',m:'wall',h:.3,pr:14,min:20,lb:'H',c:'st'},
+  schalter:{n:'Ausschalter',m:'wall',h:1.05,pr:11,min:12,c:'sw'},wechsel:{n:'Wechselschalter',m:'wall',h:1.05,pr:12,min:14,c:'sw'},serie:{n:'Serienschalter',m:'wall',h:1.05,pr:14,min:14,c:'sw'},kreuz:{n:'Kreuzschalter',m:'wall',h:1.05,pr:18,min:16,sx:'K',c:'sw'},
+  taster:{n:'Taster',m:'wall',h:1.05,pr:12,min:12,c:'sw'},dimmer:{n:'Dimmer',m:'wall',h:1.05,pr:42,min:16,sx:'D',c:'sw'},jalousie:{n:'Jalousieschalter',m:'wall',h:1.05,pr:24,min:18,sx:'J',c:'sw'},
+  licht:{n:'Deckenleuchte',m:'ceil',pr:35,min:20,c:'li'},spot:{n:'Einbauspot',m:'ceil',pr:16,min:15,c:'li'},wandl:{n:'Wandleuchte',m:'wall',h:1.8,pr:30,min:20,c:'li'},aussen:{n:'Außenleuchte',m:'wall',h:2.1,pr:45,min:25,lb:'AL',c:'li'},
+  notl:{n:'Notleuchte',m:'ceil',pr:60,min:25,lb:'NL',c:'li'},led:{n:'LED-Band Anschluss',m:'wall',h:2.2,pr:20,min:20,lb:'LED',c:'li'},
+  backofen:{n:'Backofen',m:'wall',h:.6,pr:14,min:20,lb:'BO',c:'ge'},gs:{n:'Geschirrspüler',m:'wall',h:.5,pr:9,min:15,lb:'GS',c:'ge'},kuehl:{n:'Kühlschrank',m:'wall',h:.3,pr:9,min:12,lb:'KS',c:'ge'},wm:{n:'Waschmaschine',m:'wall',h:1.1,pr:9,min:15,lb:'WM',c:'ge'},tr:{n:'Trockner',m:'wall',h:1.1,pr:9,min:15,lb:'TR',c:'ge'},
+  dle:{n:'Durchlauferhitzer',m:'wall',h:1.2,pr:18,min:35,lb:'DLE',c:'ge'},boiler:{n:'Warmwasserspeicher',m:'wall',h:1.2,pr:14,min:25,lb:'WW',c:'ge'},klima:{n:'Klimagerät',m:'wall',h:2.2,pr:16,min:30,lb:'KL',c:'ge'},wp:{n:'Wärmepumpe',m:'wall',h:.5,pr:40,min:60,lb:'WP',c:'ge'},
+  wb:{n:'Wallbox 11 kW',m:'wall',h:1.2,pr:650,min:120,lb:'WB',c:'ge'},luft:{n:'Lüfter',m:'wall',h:2.2,pr:35,min:25,lb:'V',c:'ge'},
+  lan:{n:'Netzwerkdose',m:'wall',h:.3,pr:22,min:20,lb:'LAN',c:'ne'},tv:{n:'Antennendose',m:'wall',h:.3,pr:15,min:15,lb:'TV',c:'ne'},tel:{n:'Telefondose',m:'wall',h:.3,pr:12,min:15,lb:'TEL',c:'ne'},wlan:{n:'WLAN Access Point',m:'ceil',pr:95,min:25,lb:'AP',c:'ne'},
+  sprech:{n:'Türsprechanlage',m:'wall',h:1.5,pr:140,min:45,lb:'TS',c:'ne'},gong:{n:'Klingel / Gong',m:'wall',h:2.1,pr:25,min:20,lb:'GO',c:'ne'},
+  rm:{n:'Rauchmelder',m:'ceil',pr:24,min:10,lb:'RM',c:'si'},bwm:{n:'Bewegungsmelder',m:'ceil',pr:38,min:20,lb:'BM',c:'si'},kam:{n:'Kamera',m:'wall',h:2.4,pr:120,min:40,lb:'CAM',c:'si'},ema:{n:'Alarmzentrale',m:'wall',h:1.5,pr:260,min:90,lb:'EMA',c:'si'},thermo:{n:'Raumthermostat',m:'wall',h:1.5,pr:45,min:20,lb:'T',c:'si'},
+  vert:{n:'Verteiler',m:'wall',h:1.5,pr:420,min:240,c:'ve'},zaehl:{n:'Zählerschrank',m:'wall',h:1.4,pr:780,min:300,lb:'Z',c:'ve'},hak:{n:'Hausanschlusskasten',m:'wall',h:1.2,pr:160,min:90,lb:'HAK',c:'ve'},pas:{n:'Potentialausgleich',m:'wall',h:.4,pr:22,min:30,lb:'PA',c:'ve'},
+  abzw:{n:'Abzweigdose',m:'wall',h:2.2,pr:3,min:10,c:'ve'},pv:{n:'PV-Wechselrichter',m:'wall',h:1.4,pr:1200,min:180,lb:'PV',c:'ve'}};
+const DCAT=[['st','Utičnice'],['sw','Prekidači'],['li','Rasvjeta'],['ge','Uređaji'],['ne','Mreža i mediji'],['si','Sigurnost'],['ve','Razvod']];
+const DCAB={n15:{n:'NYM-J 3×1,5',pr:.85,c:'#1f6feb'},n25:{n:'NYM-J 3×2,5',pr:1.35,c:'#d0101a'},n515:{n:'NYM-J 5×1,5',pr:1.5,c:'#0891b2'},n525:{n:'NYM-J 5×2,5',pr:2.2,c:'#8a2be2'},n56:{n:'NYM-J 5×6',pr:4.6,c:'#b45309'},nyy:{n:'NYY-J 5×10 (Erdkabel)',pr:9.5,c:'#374151'},cat:{n:'Cat.7 Datenkabel',pr:.9,c:'#0f9d58'},koax:{n:'Koax SAT',pr:.7,c:'#a16207'},tel:{n:'J-Y(St)Y 2×2×0,8',pr:.6,c:'#be185d'},rohr:{n:'Leerrohr M25',pr:.8,c:'#6b7280'}};
+/* oprema prostora (tlocrtni simboli): w × d × visina */
+const DIT={bett:{n:'Bračni krevet',w:1.6,d:2,h:.5,col:[150,170,190]},ebett:{n:'Krevet',w:.9,d:2,h:.5,col:[150,170,190]},sofa:{n:'Sofa',w:2,d:.9,h:.8,col:[120,130,150]},tisch:{n:'Stol',w:1.6,d:.9,h:.75,col:[176,140,100]},schrank:{n:'Ormar',w:1.2,d:.6,h:2,col:[190,170,140]},
+  kueche:{n:'Kuhinjski blok',w:2.4,d:.6,h:.9,col:[210,210,205]},wanne:{n:'Kada',w:1.7,d:.75,h:.55,col:[240,244,246]},dusche:{n:'Tuš',w:.9,d:.9,h:.08,col:[225,235,240]},wc:{n:'WC',w:.4,d:.65,h:.42,col:[245,245,245]},wasch:{n:'Umivaonik',w:.6,d:.45,h:.85,col:[245,245,245]},
+  treppe:{n:'Stepenice',w:1,d:3,h:1.4,col:[200,190,175]},stup:{n:'Stup',w:.3,d:.3,h:0,col:[160,160,156]},heiz:{n:'Radijator',w:1,d:.12,h:.6,col:[235,235,232]}};
+const DTOOLS=[['sel','Odaberi','M5 3l14 8-6 2-2 6z'],['zid','Zid','M3 6h18v12H3zM3 12h18M9 6v6M15 12v6'],['soba','Soba','M4 4h16v16H4zM4 4l3 3M20 4l-3 3M4 20l3-3M20 20l-3-3'],
+  ['tuer','Vrata','M5 20V4h3M8 4v16M8 4a13 13 0 0 1 11 11'],['fen','Prozor','M3 9h18v6H3zM3 12h18'],['el','Elektro','M13 3 5 14h6l-1 7 8-11h-6z'],
+  ['krug','Krug','M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM9 9h5M9 9v6M9 12h4'],['kab','Kabel','M3 17c4 0 4-10 9-10s5 10 9 10'],['it','Oprema','M4 12h16v6H4zM6 12V8h12v4M6 18v2M18 18v2'],['kota','Kota','M3 12h18M3 8v8M21 8v8M6 10l-3 2 3 2M18 10l3 2-3 2'],['mj','Mjeri','M4 15 15 4l5 5L9 20zM8 14l2 2M11 11l2 2M14 8l2 2'],['lin','Linija','M4 20 20 4'],['txt','Tekst','M5 6h14M12 6v13M9 19h6'],['del','Briši','M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13']];
+const DWT=[.115,.175,.24,.30,.365];
+const DW={vx:4,vz:3,zm:60,tool:'sel',ek:'steck1',ecat:'st',ik:'bett',kr:'F1.1',meas:null,bg:null,fs:false,ck:'n15',mode:'2d',sel:null,chain:null,cur:null,box:null,hist:[],redo:[],sheet:null,rooms:[],area:0,W:0,H:0,fitted:false,cam:null,raf:0};
+function dwS(){if(!S.dw||!Array.isArray(S.dw.walls))S.dw={walls:[],ops:[],els:[],dims:[],cabs:[],txt:[],nid:1,h:2.5,t:.24,title:'Baustelle',auto:true,grid:true,fmt:'A3',rate:58,pm:4,price:{}};
+  const D=S.dw;['ops','els','dims','cabs','txt','its','lines'].forEach(k=>{if(!Array.isArray(D[k]))D[k]=[]});D.price=D.price||{};D.lay=D.lay||{};D.els=D.els.filter(e=>DEL[e.k]);return D}
+const dsn=v=>{const q=(S&&S.dw&&S.dw.snap)||.05;return +(Math.round(v/q)*q).toFixed(3)};
+const dwLay=k=>dwS().lay[k]!==false;
+function itC(it,pad){pad=pad||0;const q=(it.ry|0)%4,a=q*Math.PI/2,cs=Math.cos(a),sn=Math.sin(a),w=it.w/2+pad,d=it.d/2+pad;return[[-w,-d],[w,-d],[w,d],[-w,d]].map(p=>[it.x+p[0]*cs-p[1]*sn,it.z+p[0]*sn+p[1]*cs])}
+const dwT=()=>{const c=DW;return(x,z)=>[(x-c.vx)*c.zm+c.W/2,(z-c.vz)*c.zm+c.H/2]};
+const dwInv=(px,py)=>[(px-DW.W/2)/DW.zm+DW.vx,(py-DW.H/2)/DW.zm+DW.vz];
+const wLen=w=>Math.hypot(w.b[0]-w.a[0],w.b[1]-w.a[1]);
+function wFrame(w){const L=wLen(w)||1e-6,dx=(w.b[0]-w.a[0])/L,dz=(w.b[1]-w.a[1])/L;return{L,dx,dz,nx:-dz,nz:dx}}
+function projW(w,x,z){const f=wFrame(w),rx=x-w.a[0],rz=z-w.a[1],u=cl(rx*f.dx+rz*f.dz,0,f.L),px=w.a[0]+f.dx*u,pz=w.a[1]+f.dz*u;return{u,px,pz,d:Math.hypot(x-px,z-pz),side:(rx*f.nx+rz*f.nz)>=0?1:-1,f,w}}
+function nearW(x,z,max){let b=null;dwS().walls.forEach(w=>{const p=projW(w,x,z);if(p.d<=max&&(!b||p.d<b.d))b=p});return b}
+const dwWall=id=>dwS().walls.find(w=>w.id==id);
+const dwSame=(p,q)=>Math.abs(p[0]-q[0])<.002&&Math.abs(p[1]-q[1])<.002;
+function dwNodes(pt){const out=[];dwS().walls.forEach(w=>['a','b'].forEach(e=>{if(dwSame(w[e],pt))out.push({w,e,p:[w[e][0],w[e][1]]})}));return out}
+function dwBBox(){const D=dwS();let x0=1e9,z0=1e9,x1=-1e9,z1=-1e9;const add=(x,z)=>{x0=Math.min(x0,x);z0=Math.min(z0,z);x1=Math.max(x1,x);z1=Math.max(z1,z)};
+  D.walls.forEach(w=>{add(w.a[0],w.a[1]);add(w.b[0],w.b[1])});D.els.forEach(e=>add(e.x,e.z));D.its.forEach(it=>itC(it).forEach(p=>add(p[0],p[1])));D.lines.forEach(l=>{add(l.a[0],l.a[1]);add(l.b[0],l.b[1])});D.txt.forEach(t=>add(t.x,t.z));D.cabs.forEach(c=>c.pts.forEach(p=>add(p[0],p[1])));
+  D.dims.forEach(d=>{const g=dwDimG(d);add(g.p1[0],g.p1[1]);add(g.p2[0],g.p2[1]);add(d.a[0],d.a[1]);add(d.b[0],d.b[1])});
+  if(x0>x1)return{x0:0,z0:0,x1:8,z1:6,empty:true};return{x0,z0,x1,z1}}
+function dwDimG(d){const L=Math.hypot(d.b[0]-d.a[0],d.b[1]-d.a[1])||1e-6,dx=(d.b[0]-d.a[0])/L,dz=(d.b[1]-d.a[1])/L,nx=-dz,nz=dx,o=d.off;return{L,dx,dz,nx,nz,p1:[d.a[0]+nx*o,d.a[1]+nz*o],p2:[d.b[0]+nx*o,d.b[1]+nz*o]}}
+const dwEmpty=()=>{const D=dwS();return !(D.walls.length||D.els.length||D.txt.length||D.cabs.length||D.dims.length||D.its.length||D.lines.length)};
+function dwFit(){const bb=dwBBox(),m=1.2;DW.vx=(bb.x0+bb.x1)/2;DW.vz=(bb.z0+bb.z1)/2;DW.zm=cl(Math.min(DW.W/(bb.x1-bb.x0+2*m),(DW.H-150)/(bb.z1-bb.z0+2*m)),8,400);DW.fitted=true}
+/* prostorije: rasterska detekcija zatvorenih površina (5 cm) */
+function dwRooms(){const D=dwS();DW.rooms=[];DW.area=0;if(D.walls.length<3)return;let x0=1e9,z0=1e9,x1=-1e9,z1=-1e9;D.walls.forEach(w=>[w.a,w.b].forEach(p=>{x0=Math.min(x0,p[0]);z0=Math.min(z0,p[1]);x1=Math.max(x1,p[0]);z1=Math.max(z1,p[1])}));
+  const c=.05,m=.5;x0-=m;z0-=m;const nx=Math.ceil((x1-x0+m)/c),nz=Math.ceil((z1-z0+m)/c);if(nx*nz>2.2e6||nx<3||nz<3)return;const g=new Uint8Array(nx*nz);
+  D.walls.forEach(w=>{const f=wFrame(w),t=Math.max(w.t/2,c*.8),i0=Math.max(0,Math.floor((Math.min(w.a[0],w.b[0])-t-x0)/c)),i1=Math.min(nx-1,Math.ceil((Math.max(w.a[0],w.b[0])+t-x0)/c)),j0=Math.max(0,Math.floor((Math.min(w.a[1],w.b[1])-t-z0)/c)),j1=Math.min(nz-1,Math.ceil((Math.max(w.a[1],w.b[1])+t-z0)/c));
+    for(let j=j0;j<=j1;j++)for(let i=i0;i<=i1;i++){const rx=x0+(i+.5)*c-w.a[0],rz=z0+(j+.5)*c-w.a[1],u=rx*f.dx+rz*f.dz;if(u>=-t&&u<=f.L+t&&Math.abs(rx*f.nx+rz*f.nz)<=t)g[j*nx+i]=1}});
+  const st=new Int32Array(nx*nz);const flood=(s,lab)=>{let n=0,sx=0,sz=0,top=0;st[top++]=s;g[s]=lab;while(top){const q=st[--top],i=q%nx,j=(q-i)/nx;n++;sx+=i;sz+=j;
+      if(i>0&&!g[q-1]){g[q-1]=lab;st[top++]=q-1}if(i<nx-1&&!g[q+1]){g[q+1]=lab;st[top++]=q+1}if(j>0&&!g[q-nx]){g[q-nx]=lab;st[top++]=q-nx}if(j<nz-1&&!g[q+nx]){g[q+nx]=lab;st[top++]=q+nx}}return{n,sx,sz}};
+  flood(0,2);
+  for(let q=0;q<g.length;q++)if(!g[q]){const r=flood(q,3),a=r.n*c*c;if(a>=.6){let cx=x0+(r.sx/r.n+.5)*c,cz=z0+(r.sz/r.n+.5)*c;DW.rooms.push({a,x:cx,z:cz});DW.area+=a}}}
+function dwPush(){DW.hist.push(JSON.stringify(dwS()));if(DW.hist.length>80)DW.hist.shift();DW.redo=[]}
+function dwCommit(){dwRooms();save();dwBars();dwSheet();dwReq();if(V3&&V3.kind=='dw3')V3.dirty=true}
+function dwReq(){if(DW.raf||DW.mode!='2d')return;DW.raf=requestAnimationFrame(()=>{DW.raf=0;dwPaint()})}
+/* ---- hvatanje točke: krajevi zidova → raster 5 cm, kutovi 0/45/90° ---- */
+function dwSnapPt(x,z,from,els){const D=dwS(),th=14/DW.zm;let best=null,bd=th;
+  D.walls.forEach(w=>[w.a,w.b].forEach(p=>{const d=Math.hypot(p[0]-x,p[1]-z);if(d<bd){bd=d;best=[p[0],p[1]]}}));
+  if(els)D.els.forEach(e=>{const d=Math.hypot(e.x-x,e.z-z);if(d<bd){bd=d;best=[e.x,e.z]}});
+  if(best)return{p:best,end:true};
+  let p=[dsn(x),dsn(z)];
+  if(from){const dx=x-from[0],dz=z-from[1],L=Math.hypot(dx,dz);if(L>0){const ang=Math.atan2(dz,dx),s=Math.PI/4,a2=Math.round(ang/s)*s;if(Math.abs(ang-a2)<.14){const l2=Math.max(.05,dsn(L));p=[+(from[0]+Math.cos(a2)*l2).toFixed(3),+(from[1]+Math.sin(a2)*l2).toFixed(3)]}}}
+  return{p,end:false}}
+function dwElAt(k,x,z){const e=DEL[k];if(e.m=='wall'){const n=nearW(x,z,.9);if(n){const u=cl(dsn(n.u),.05,Math.max(.05,n.f.L-.05)),t=n.w.t/2,px=n.w.a[0]+n.f.dx*u,pz=n.w.a[1]+n.f.dz*u;
+      return{k,x:+(px+n.f.nx*n.side*t).toFixed(3),z:+(pz+n.f.nz*n.side*t).toFixed(3),nx:n.f.nx*n.side,nz:n.f.nz*n.side,w:n.w.id,h:e.h}}
+    return{k,x:dsn(x),z:dsn(z),nx:0,nz:1,w:null,h:e.h}}
+  return{k,x:dsn(x),z:dsn(z),nx:0,nz:1,w:null}}
+const dwOpC=op=>{const w=dwWall(op.w);if(!w)return null;const f=wFrame(w);return{w,f,x:w.a[0]+f.dx*op.u,z:w.a[1]+f.dz*op.u}};
+function dwAddWall(a,b,t){const D=dwS();if(Math.hypot(b[0]-a[0],b[1]-a[1])<.1)return null;if(D.walls.some(w=>(dwSame(w.a,a)&&dwSame(w.b,b))||(dwSame(w.a,b)&&dwSame(w.b,a))))return null;
+  const w={id:D.nid++,a:[a[0],a[1]],b:[b[0],b[1]],t:t||D.t};D.walls.push(w);return w}
+
+/* ---- simboli (isti kod za ekran i PDF) ---- */
+function dwSym(pen,P0,R,e,col,lw){const E=DEL[e.k]||DEL.steck1,nx=e.nx||0,nz=e.nz==null?1:e.nz,ux=-nz,uz=nx,L=(a,b)=>[P0[0]+(ux*a+nx*b)*R,P0[1]+(uz*a+nz*b)*R];
+  const arc=(ca,cb,r,t0,t1,n)=>{const p=[];for(let i=0;i<=n;i++){const t=t0+(t1-t0)*i/n;p.push(L(ca+Math.cos(t)*r,cb+Math.sin(t)*r))}return p};
+  const ln=(...p)=>pen.line(p.map(q=>L(q[0],q[1])),lw,col),k=e.k;
+  const box=(cb,s,tx)=>{const sw=s*(tx.length>2?1.55:1);pen.poly([L(-sw,cb-s),L(sw,cb-s),L(sw,cb+s),L(-sw,cb+s)],'#ffffff',col,lw);const c=L(0,cb);pen.text(c[0],c[1],tx,R*(tx.length>2?.72:.95),{b:1,col})};
+  if(E.g){ln([0,0],[0,.7]);pen.line(arc(0,1.7,1,Math.PI,2*Math.PI,14),lw,col);ln([-1.3,1.7],[1.3,1.7]);if(E.g>1||E.tx){const c=L(1.6,.75);pen.text(c[0],c[1],E.tx||String(E.g),R*(E.tx?.8:1.05),{b:1,col})}}
+  else if(E.c=='sw'){ln([0,0],[0,.75]);const cb=1.2,r=.45,d=[.5,.866],q=[.866,-.5];pen.line(arc(0,cb,r,0,2*Math.PI,16),lw,col);
+    const arm=(s,tk)=>{const e1=[d[0]*s*1.9,cb+d[1]*s*1.9];ln([d[0]*s*r,cb+d[1]*s*r],e1);tk.forEach(f=>{const b=[d[0]*s*1.9*f,cb+d[1]*s*1.9*f];ln(b,[b[0]+q[0]*s*.55,b[1]+q[1]*s*.55])})};
+    if(E.sx){arm(1,[1]);if(k=='kreuz')arm(-1,[1]);const c=L(-1.25,cb+.1);pen.text(c[0],c[1],E.sx,R*.9,{b:1,col})}else if(k=='schalter')arm(1,[1]);else if(k=='wechsel'){arm(1,[1]);arm(-1,[1])}else if(k=='serie')arm(1,[1,.72]);else{arm(1,[]);const c=L(0,cb);pen.circ(c[0],c[1],R*.2,col)}}
+  else if(k=='licht'||k=='spot'){const r=k=='spot'?.62:1,c=L(0,0);pen.circ(c[0],c[1],R*r,'#ffffff',col,lw);const s=r*.707;ln([-s,-s],[s,s]);ln([-s,s],[s,-s])}
+  else if(k=='wandl'){ln([0,0],[0,.6]);const c=L(0,1.4);pen.circ(c[0],c[1],R*.8,'#ffffff',col,lw);ln([-.57,.83],[.57,1.97]);ln([-.57,1.97],[.57,.83])}
+  else if(k=='vert'){const a=1.5,b0=.15,b1=1.25;pen.poly([L(-a,b0),L(a,b0),L(a,b1),L(-a,b1)],'#ffffff',col,lw);pen.poly([L(-a,b0),L(a,b0),L(-a,b1)],col,col,lw)}
+  else if(k=='abzw'){ln([0,0],[0,.4]);const c=L(0,.75);pen.circ(c[0],c[1],R*.38,col)}
+  else if(E.m=='ceil')box(0,.85,E.lb||'?');
+  else{ln([0,0],[0,.6]);box(1.45,.85,E.lb||'?')}
+  if(e.c){const far=E.m=='wall'?3.4:1.9,c=L(0,far);pen.text(c[0],c[1],e.c,R*.8,{col})}}
+/* ---- crtež ---- */
+function dwDraw(pen,T,k,o){const D=dwS(),WC=o.wall||'#2b2e33',EC=o.el||'#d0101a',DC='#3c4350',mt=o.minT||0,tx=s=>Math.max(mt,s*k),lw=o.lw||Math.max(.6,k*.012);
+  /* površine */
+  DW.rooms.forEach(r=>{const c=T(r.x,r.z+.42);pen.text(c[0],c[1],nf(r.a)+' m²',tx(.2),{col:'#6a7280'})});
+  /* oprema prostora */
+  if(dwLay('furn'))D.its.forEach(it=>{const E=DIT[it.k]||DIT.tisch,P=itC(it).map(p=>T(p[0],p[1])),G='#7d8794',q=(it.ry|0)%4,a=q*Math.PI/2,cs=Math.cos(a),sn=Math.sin(a),Q=(u,v)=>T(it.x+u*it.w*cs-v*it.d*sn,it.z+u*it.w*sn+v*it.d*cs);
+    pen.poly(P,it.k=='stup'?'#3a3e44':'#f1f3f5',G,lw*.8);
+    if(it.k=='treppe'){const n=Math.max(3,Math.round(it.d/.27));for(let i=1;i<n;i++)pen.line([Q(-.5,-.5+i/n),Q(.5,-.5+i/n)],lw*.6,G);pen.line([Q(0,.42),Q(0,-.4)],lw*.8,G);pen.line([Q(-.12,-.28),Q(0,-.4),Q(.12,-.28)],lw*.8,G)}
+    else if(it.k=='bett'||it.k=='ebett'){pen.line([Q(-.5,-.28),Q(.5,-.28)],lw*.6,G);if(it.k=='bett')pen.line([Q(0,-.5),Q(0,-.28)],lw*.6,G)}
+    else if(it.k=='sofa')pen.line([Q(-.5,-.22),Q(.5,-.22)],lw*.6,G);
+    else if(it.k=='kueche'){[-.3,-.12].forEach(u=>{const c=Q(u,0);pen.circ(c[0],c[1],it.d*k*.22,null,G,lw*.6)});const c=Q(.28,0);pen.poly([Q(.14,-.3),Q(.42,-.3),Q(.42,.3),Q(.14,.3)],null,G,lw*.6)}
+    else if(it.k=='wanne'||it.k=='dusche'||it.k=='wasch'||it.k=='wc'){const c=Q(0,it.k=='wc'?.12:0);pen.circ(c[0],c[1],Math.min(it.w,it.d)*k*(it.k=='wc'?.36:.3),null,G,lw*.6)}
+    else if(it.k=='heiz'){}else if(it.k!='stup'){const c=Q(0,0);pen.text(c[0],c[1],E.n,tx(.13),{col:G})}});
+  /* pomoćne linije */
+  D.lines.forEach(l=>pen.line([T(l.a[0],l.a[1]),T(l.b[0],l.b[1])],lw*.7,'#7d8794',[k*.1,k*.06]));
+  /* zidovi */
+  const cnt={},key=p=>Math.round(p[0]*200)+':'+Math.round(p[1]*200);D.walls.forEach(w=>[w.a,w.b].forEach(p=>{cnt[key(p)]=(cnt[key(p)]||0)+1}));
+  D.walls.forEach(w=>{const f=wFrame(w),t=w.t/2,ea=cnt[key(w.a)]>1?t:0,eb=cnt[key(w.b)]>1?t:0,ax=w.a[0]-f.dx*ea,az=w.a[1]-f.dz*ea,bx=w.b[0]+f.dx*eb,bz=w.b[1]+f.dz*eb;
+    pen.poly([T(ax+f.nx*t,az+f.nz*t),T(bx+f.nx*t,bz+f.nz*t),T(bx-f.nx*t,bz-f.nz*t),T(ax-f.nx*t,az-f.nz*t)],WC,WC,lw*.5)});
+  /* otvori */
+  D.ops.forEach(op=>{const g=dwOpC(op);if(!g)return;const{f,w}=g,t=w.t/2+.004,h=op.wd/2,Q=(a,b)=>T(g.x+f.dx*a+f.nx*b,g.z+f.dz*a+f.nz*b);
+    pen.poly([Q(-h,t),Q(h,t),Q(h,-t),Q(-h,-t)],'#ffffff','#ffffff',lw*.3);pen.line([Q(-h,t),Q(-h,-t)],lw,WC);pen.line([Q(h,t),Q(h,-t)],lw,WC);
+    if(op.k=='fen'){pen.line([Q(-h,t),Q(h,t)],lw*.8,WC);pen.line([Q(-h,-t),Q(h,-t)],lw*.8,WC);pen.line([Q(-h,0),Q(h,0)],lw*.8,WC)}
+    else{const hs=(op.flip&1)?1:-1,ss=(op.flip&2)?-1:1,hx=h*hs,p=[];for(let i=0;i<=14;i++){const a=Math.PI/2*i/14;p.push(Q(hx-hs*op.wd*Math.sin(a),ss*(t+op.wd*Math.cos(a))))}
+      pen.line([Q(hx,ss*t),Q(hx,ss*(t+op.wd))],lw*1.4,WC);pen.line(p,lw*.6,'#6a7280')}});
+  /* duljine zidova */
+  if(D.auto&&dwLay('dim'))D.walls.forEach(w=>{const f=wFrame(w);if(f.L<.4)return;let rot=Math.atan2(f.dz,f.dx);if(Math.cos(rot)<-1e-6||(Math.abs(Math.cos(rot))<1e-6&&Math.sin(rot)>0))rot+=Math.PI;const off=w.t/2+.16+mt/(2*k),c=T((w.a[0]+w.b[0])/2-f.nx*off,(w.a[1]+w.b[1])/2-f.nz*off);
+    pen.text(c[0],c[1],nf(f.L),tx(.15),{rot,col:DC})});
+  /* kote */
+  if(dwLay('dim'))D.dims.forEach(d=>{const g=dwDimG(d),s=d.off>=0?1:-1,e=.1,P=(p,m)=>T(p[0]+g.nx*m,p[1]+g.nz*m);
+    pen.line([P(d.a,s*.06),P(g.p1,s*e)],lw*.6,DC);pen.line([P(d.b,s*.06),P(g.p2,s*e)],lw*.6,DC);pen.line([T(g.p1[0]-g.dx*e,g.p1[1]-g.dz*e),T(g.p2[0]+g.dx*e,g.p2[1]+g.dz*e)],lw*.8,DC);
+    [g.p1,g.p2].forEach(p=>{const q=.07;pen.line([T(p[0]+(g.dx+g.nx)*q,p[1]+(g.dz+g.nz)*q),T(p[0]-(g.dx+g.nx)*q,p[1]-(g.dz+g.nz)*q)],lw*1.3,DC)});
+    let rot=Math.atan2(g.dz,g.dx);if(Math.cos(rot)<-1e-6||(Math.abs(Math.cos(rot))<1e-6&&Math.sin(rot)>0))rot+=Math.PI;const off=d.off+s*(.13+mt/(2*k)),c=T((d.a[0]+d.b[0])/2+g.nx*off,(d.a[1]+d.b[1])/2+g.nz*off);
+    pen.text(c[0],c[1],nf(g.L),tx(.17),{rot,b:1,col:'#111827'})});
+  /* kablovi */
+  if(dwLay('cab'))D.cabs.forEach(c=>{const cc=(DCAB[c.k]||DCAB.n15).c;pen.line(c.pts.map(p=>T(p[0],p[1])),lw*1.5,cc,[k*.14,k*.07]);
+    let bi=0,bl=0,tot=0;for(let i=0;i<c.pts.length-1;i++){const l=Math.hypot(c.pts[i+1][0]-c.pts[i][0],c.pts[i+1][1]-c.pts[i][1]);tot+=l;if(l>bl){bl=l;bi=i}}
+    if(tot>.6&&!c.auto){const a=c.pts[bi],b=c.pts[bi+1];let rot=Math.atan2(b[1]-a[1],b[0]-a[0]);if(Math.cos(rot)<-1e-6)rot+=Math.PI;const nx=-Math.sin(rot),nz=Math.cos(rot),q=T((a[0]+b[0])/2-nx*.12,(a[1]+b[1])/2-nz*.12);pen.text(q[0],q[1],nf(tot,1)+' m',tx(.12),{rot,col:cc})}});
+  /* elektro */
+  const R=Math.max(o.minR||0,.115*k);if(dwLay('el'))D.els.forEach(e=>dwSym(pen,T(e.x,e.z),R,e,EC,Math.max(lw,R*.09)));
+  /* tekst */
+  if(dwLay('txt'))D.txt.forEach(t=>{const c=T(t.x,t.z);pen.text(c[0],c[1],t.s||'',tx(t.sz||.25),{b:1,col:'#111827'})})}
+function dwPaint(){const c=DW,ctx=c.ctx;if(!ctx||!c.cv||!c.cv.isConnected)return;const D=dwS(),T=dwT(),k=c.zm,W=c.W,H=c.H;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fcfcf9';ctx.fillRect(0,0,W,H);
+  if(c.bg&&c.bg.img){const b=c.bg,p=T(b.x,b.z),w=b.w*k,h=w*b.img.naturalHeight/b.img.naturalWidth;ctx.globalAlpha=b.op;try{ctx.drawImage(b.img,p[0],p[1],w,h)}catch(e){}ctx.globalAlpha=1}
+  if(D.grid!==false){const[x0,z0]=dwInv(0,0),[x1,z1]=dwInv(W,H),step=k>=44?.25:k>=14?1:5;ctx.lineWidth=1;
+    for(let pass=0;pass<2;pass++){const s=pass?step*(step==.25?4:5):step;ctx.strokeStyle=pass?'rgba(40,70,110,.17)':'rgba(40,70,110,.07)';ctx.beginPath();
+      for(let x=Math.floor(x0/s)*s;x<=x1;x+=s){const p=T(x,0)[0];ctx.moveTo(Math.round(p)+.5,0);ctx.lineTo(Math.round(p)+.5,H)}
+      for(let z=Math.floor(z0/s)*s;z<=z1;z+=s){const p=T(0,z)[1];ctx.moveTo(0,Math.round(p)+.5);ctx.lineTo(W,Math.round(p)+.5)}ctx.stroke()}}
+  const pen=canvasPen(ctx,9.5);dwDraw(pen,T,k,{minT:9.5,minR:8.5});
+  const AC='#0a7cff',hd=(p,f)=>{const q=T(p[0],p[1]);ctx.beginPath();ctx.arc(q[0],q[1],7,0,7);ctx.fillStyle=f||'#fff';ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle=AC;ctx.stroke()};
+  /* odabir */
+  const s=c.sel;if(s){ctx.save();ctx.strokeStyle=AC;ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    if(s.t=='wall'){const w=dwWall(s.id);if(w){const f=wFrame(w),t=w.t/2+3/k,p=[T(w.a[0]+f.nx*t,w.a[1]+f.nz*t),T(w.b[0]+f.nx*t,w.b[1]+f.nz*t),T(w.b[0]-f.nx*t,w.b[1]-f.nz*t),T(w.a[0]-f.nx*t,w.a[1]-f.nz*t)];ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.stroke();ctx.setLineDash([]);hd(w.a);hd(w.b)}}
+    else{let q=null,r=18;if(s.t=='el'){const e=D.els.find(x=>x.id==s.id);if(e){const R=Math.max(8.5,.115*k),far=DEL[e.k].m=='wall'?1.2:0;q=T(e.x+e.nx*far*R/k,e.z+e.nz*far*R/k);r=R*2.3}}
+      else if(s.t=='it'){const it=D.its.find(x=>x.id==s.id);if(it){const p=itC(it,4/k).map(v=>T(v[0],v[1]));ctx.beginPath();p.forEach((v,i)=>i?ctx.lineTo(v[0],v[1]):ctx.moveTo(v[0],v[1]));ctx.closePath();ctx.stroke()}}
+      else if(s.t=='lin'){const l=D.lines.find(x=>x.id==s.id);if(l){const a=T(...l.a),b=T(...l.b);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.lineWidth=5;ctx.globalAlpha=.35;ctx.setLineDash([]);ctx.stroke()}}
+      else if(s.t=='txt'){const t=D.txt.find(x=>x.id==s.id);if(t){q=T(t.x,t.z);r=Math.max(18,(t.s||'').length*Math.max(9.5,(t.sz||.25)*k)*.32)}}
+      else if(s.t=='op'){const op=D.ops.find(x=>x.id==s.id),g=op&&dwOpC(op);if(g){q=T(g.x,g.z);r=Math.max(16,op.wd*k*.62)}}
+      else if(s.t=='dim'){const d=D.dims.find(x=>x.id==s.id);if(d){const g=dwDimG(d),a=T(...g.p1),b=T(...g.p2);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.lineWidth=5;ctx.globalAlpha=.35;ctx.setLineDash([]);ctx.stroke()}}
+      else if(s.t=='cab'){const cb=D.cabs.find(x=>x.id==s.id);if(cb){ctx.beginPath();cb.pts.forEach((p,i)=>{const a=T(p[0],p[1]);i?ctx.lineTo(a[0],a[1]):ctx.moveTo(a[0],a[1])});ctx.lineWidth=6;ctx.globalAlpha=.3;ctx.setLineDash([]);ctx.stroke()}}
+      if(q){ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke()}}ctx.restore()}
+  /* pregled crtanja */
+  const lab=(x,y,t)=>{ctx.font='700 12px IBM Plex Mono,ui-monospace,monospace';const w=ctx.measureText(t).width+12;ctx.fillStyle='rgba(10,20,30,.86)';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x-w/2,y-11,w,22,7);else ctx.rect(x-w/2,y-11,w,22);ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,x,y)};
+  if(c.chain){const pts=c.chain.pts,cur=c.cur,all=cur?pts.concat([cur]):pts,isW=c.tool=='zid';ctx.save();ctx.strokeStyle=c.tool=='kab'?(DCAB[c.ck]||DCAB.n15).c:AC;ctx.lineWidth=isW?Math.max(3,D.t*k):2.5;ctx.globalAlpha=isW?.45:.9;ctx.lineCap='butt';if(c.tool!='zid')ctx.setLineDash([7,5]);if(c.tool=='lin'||c.tool=='kota')ctx.strokeStyle='#7d8794';
+    ctx.beginPath();all.forEach((p,i)=>{const a=T(p[0],p[1]);i?ctx.lineTo(a[0],a[1]):ctx.moveTo(a[0],a[1])});ctx.stroke();ctx.restore();pts.forEach(p=>hd(p,AC));
+    if(cur){hd(cur);const a=pts[pts.length-1],L=Math.hypot(cur[0]-a[0],cur[1]-a[1]);if(L>.04){const m=T((a[0]+cur[0])/2,(a[1]+cur[1])/2),ang=Math.round(((Math.atan2(-(cur[1]-a[1]),cur[0]-a[0])*180/Math.PI)+360)%360);lab(m[0],m[1]-20,nf(L)+' m · '+ang+'°')}}}
+  if(c.box){const a=T(c.box.a[0],c.box.a[1]),b=T(c.box.b[0],c.box.b[1]);ctx.save();ctx.strokeStyle=AC;ctx.lineWidth=Math.max(3,D.t*k);ctx.globalAlpha=.45;ctx.strokeRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);ctx.restore();
+    const w=Math.abs(c.box.b[0]-c.box.a[0]),d=Math.abs(c.box.b[1]-c.box.a[1]);lab((a[0]+b[0])/2,(a[1]+b[1])/2,nf(w)+' × '+nf(d)+' m · '+nf(w*d,1)+' m²')}
+  if(c.meas){const a=T(...c.meas.a),b=T(...c.meas.b),L=Math.hypot(c.meas.b[0]-c.meas.a[0],c.meas.b[1]-c.meas.a[1]);ctx.save();ctx.strokeStyle='#f59e0b';ctx.lineWidth=2.5;ctx.setLineDash([8,5]);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.restore();hd(c.meas.a,'#f59e0b');hd(c.meas.b,'#f59e0b');
+    lab((a[0]+b[0])/2,(a[1]+b[1])/2-20,nf(L)+' m  ·  Δx '+nf(Math.abs(c.meas.b[0]-c.meas.a[0]))+'  Δy '+nf(Math.abs(c.meas.b[1]-c.meas.a[1])))}
+  if(dwEmpty()&&!c.chain&&!c.box&&!c.bg){ctx.fillStyle='#8a94a3';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 17px IBM Plex Sans,sans-serif';ctx.fillText('Prazan papir',W/2,H/2-26);ctx.font='14px IBM Plex Sans,sans-serif';
+    ['Odaberi „Zid“ ili „Soba“ dolje i povuci prstom.','Zatim dodaj vrata, utičnice, kablove i kote.'].forEach((t,i)=>ctx.fillText(t,W/2,H/2+4+i*22))}
+  /* mjerilo */
+  {const m=[.25,.5,1,2,5,10,20].find(v=>v*k>=70)||50,x=14,y=H-(innerWidth<900?118:104);ctx.strokeStyle='#39424e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x,y);ctx.lineTo(x+m*k,y);ctx.lineTo(x+m*k,y-5);ctx.stroke();ctx.fillStyle='#39424e';ctx.font='11px IBM Plex Mono,monospace';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(nf(m,m<1?2:0)+' m',x+5,y-3)}}
+/* ---- odabir ---- */
+function dwPick(px,py){const D=dwS(),[x,z]=dwInv(px,py),k=DW.zm,r=17/k;let b=null,bd=1e9;const tryIt=(t,id,d,lim)=>{if(d<=lim&&d<bd){bd=d;b={t,id}}};
+  const segD=(a,c)=>{const L=Math.hypot(c[0]-a[0],c[1]-a[1])||1e-6,u=cl(((x-a[0])*(c[0]-a[0])+(z-a[1])*(c[1]-a[1]))/(L*L),0,1);return Math.hypot(a[0]+(c[0]-a[0])*u-x,a[1]+(c[1]-a[1])*u-z)};
+  D.els.forEach(e=>{const R=Math.max(8.5,.115*k)/k,far=DEL[e.k].m=='wall'?1.2:0;tryIt('el',e.id,Math.hypot(e.x+e.nx*far*R-x,e.z+e.nz*far*R-z)*.6,Math.max(r,R*2)*.6)});if(b)return b;
+  D.txt.forEach(t=>{const sz=Math.max(9.5,(t.sz||.25)*k)/k,hw=Math.max(r,(t.s||'').length*sz*.3);if(Math.abs(t.x-x)<hw&&Math.abs(t.z-z)<Math.max(r,sz*.8))tryIt('txt',t.id,0,1)});if(b)return b;
+  D.lines.forEach(l=>tryIt('lin',l.id,segD(l.a,l.b),r*.6));if(b)return b;
+  D.ops.forEach(op=>{const g=dwOpC(op);if(g)tryIt('op',op.id,Math.hypot(g.x-x,g.z-z),Math.max(r,op.wd/2))});if(b)return b;
+  D.dims.forEach(d=>{const g=dwDimG(d);tryIt('dim',d.id,segD(g.p1,g.p2),r*.8)});if(b)return b;
+  D.cabs.forEach(c=>{for(let i=0;i<c.pts.length-1;i++)tryIt('cab',c.id,segD(c.pts[i],c.pts[i+1]),r*.6)});if(b)return b;
+  D.walls.forEach(w=>tryIt('wall',w.id,projW(w,x,z).d,Math.max(w.t/2,r*.6)));if(b)return b;
+  D.its.forEach(it=>{const q=(it.ry|0)%4,a=-q*Math.PI/2,dx=x-it.x,dz=z-it.z,u=dx*Math.cos(a)-dz*Math.sin(a),v=dx*Math.sin(a)+dz*Math.cos(a);if(Math.abs(u)<=it.w/2+r*.3&&Math.abs(v)<=it.d/2+r*.3)tryIt('it',it.id,Math.hypot(dx,dz)*.01,1)});return b}
+function dwDel(s){const D=dwS();if(!s)return;const rm=(k)=>{D[k]=D[k].filter(x=>x.id!=s.id)};
+  if(s.t=='wall'){rm('walls');D.ops=D.ops.filter(o=>o.w!=s.id);D.els.forEach(e=>{if(e.w==s.id)e.w=null})}else rm({el:'els',txt:'txt',op:'ops',dim:'dims',cab:'cabs',it:'its',lin:'lines'}[s.t])}
+const dwGet=s=>s?(dwS()[{wall:'walls',el:'els',txt:'txt',op:'ops',dim:'dims',cab:'cabs',it:'its',lin:'lines'}[s.t]]||[]).find(x=>x.id==s.id):null;
+function dwEndChain(){const c=DW.chain;DW.chain=null;DW.cur=null;if(c&&DW.tool=='kab'&&c.pts.length>1){const D=dwS();dwPush();D.cabs.push({id:D.nid++,k:DW.ck,pts:c.pts.map(p=>[p[0],p[1]])});dwCommit();return}dwBars();dwReq()}
+
+/* ---- pogled ---- */
+function vCrtac(){return`<div class="v3 pv dwv" id="dwv"><canvas id="dcv" aria-label="Crtač: prazan papir za nacrt"></canvas><div class="tbar t1" id="dbars"></div><div class="dpal" id="dpal"></div><aside class="sheet" id="dsh" hidden></aside><input type="file" id="dwbg" accept="image/*" hidden></div>`}
+const dwIc=d=>`<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+function dwBars(){const b=$('#dbars'),p=$('#dpal');if(!b||!p)return;const d3=DW.mode=='3d',D=dwS();
+  b.innerHTML=`<div class="seg"><button class="${d3?'':'on'}" data-dw="mode" data-v="2d">2D</button><button class="${d3?'on':''}" data-dw="mode" data-v="3d">3D</button></div>
+   <button class="btn g s" data-dw="undo"${DW.hist.length?'':' disabled'} aria-label="Poništi">↶</button><button class="btn g s" data-dw="redo"${DW.redo.length?'':' disabled'} aria-label="Ponovi">↷</button>
+   ${DW.chain?`<button class="btn s" data-dw="done">✓ Gotovo</button>`:''}
+   <button class="btn g s${DW.fs?' on':''}" data-dw="fs" aria-label="Cijeli ekran">${DW.fs?'✕ Izađi':'⛶ Cijeli ekran'}</button>
+   <button class="btn g s" data-dw="fit">Uklopi</button><button class="btn g s${DW.sheet=='tools'?' on':''}" data-dw="sheet" data-v="tools">Alati</button><button class="btn g s${DW.sheet=='qty'?' on':''}" data-dw="sheet" data-v="qty">Σ Količine i trošak</button>
+   <button class="btn s" data-dw="pdf">PDF</button><button class="btn g s${DW.sheet=='proj'?' on':''}" data-dw="sheet" data-v="proj">Postavke</button>`;
+  if(d3){p.innerHTML=`<div><span class="dhint">Povlačenje rotira prikaz · štipanje zumira · dva prsta pomiču</span></div>`;return}
+  const chip=(a,k,n,on,x)=>`<button class="btn g s${on?' on':''}" data-dw="${a}" data-v="${k}">${x||''}${esc(n)}</button>`;let sub='';
+  if(DW.tool=='el')sub=`<div>${DCAT.map(([k,n])=>chip('ecat',k,n,DW.ecat==k)).join('')}</div><div>${Object.entries(DEL).filter(([,e])=>e.c==DW.ecat).map(([k,e])=>chip('ek',k,e.n,DW.ek==k)).join('')}</div>`;
+  else if(DW.tool=='kab')sub=`<div>${Object.entries(DCAB).map(([k,e])=>chip('ck',k,e.n,DW.ck==k,`<i class="dsw" style="background:${e.c}"></i>`)).join('')}</div>`;
+  else if(DW.tool=='it')sub=`<div>${Object.entries(DIT).map(([k,e])=>chip('ik',k,e.n,DW.ik==k)).join('')}</div>`;
+  else if(DW.tool=='krug')sub=`<div class="dkr"><input id="dwkr" data-dwk="1" value="${esc(DW.kr)}" aria-label="Oznaka strujnog kruga" placeholder="F1.1"><button class="btn g s" data-dw="krinc" data-v="1">Sljedeći +1</button><button class="btn g s" data-dw="krinc" data-v="0">Bez oznake</button><span class="dhint">Dodir na simbol dodjeljuje oznaku</span></div>`;
+  else if(DW.tool=='zid'||DW.tool=='soba')sub=`<div>${DWT.map(t=>chip('wt',t,nf(t*100,1).replace(',0','')+' cm',Math.abs(D.t-t)<.001)).join('')}</div>`;
+  else if(DW.tool=='mj')sub=`<div><span class="dhint">Povlačenje između dvije točke prikazuje udaljenost. Mjera se ne sprema u nacrt.</span></div>`;
+  p.innerHTML=sub+`<div>${DTOOLS.map(([k,n,d])=>`<button class="btn g s${DW.tool==k?' on':''}" data-dw="tool" data-v="${k}">${dwIc(d)}${n}</button>`).join('')}</div>`}
+function dwQty(){const D=dwS(),rows=[];let mat=0,min=0;const cnt={};D.els.forEach(e=>{cnt[e.k]=(cnt[e.k]||0)+1});
+  Object.keys(DEL).forEach(k=>{if(!cnt[k])return;const pr=D.price[k]!=null?D.price[k]:DEL[k].pr,t=cnt[k]*pr;mat+=t;min+=cnt[k]*DEL[k].min;rows.push({key:k,n:DEL[k].n,q:cnt[k],u:'kom',pr,t,min:cnt[k]*DEL[k].min})});
+  const cab={};D.cabs.forEach(c=>{let l=0;for(let i=0;i<c.pts.length-1;i++)l+=Math.hypot(c.pts[i+1][0]-c.pts[i][0],c.pts[i+1][1]-c.pts[i][1]);cab[c.k]=(cab[c.k]||0)+l});
+  Object.keys(DCAB).forEach(k=>{if(!cab[k])return;const q=Math.ceil(cab[k]*1.1),pr=D.price[k]!=null?D.price[k]:DCAB[k].pr,t=q*pr;mat+=t;min+=q*(D.pm||4);rows.push({key:k,n:DCAB[k].n,q,u:'m',pr,t,min:q*(D.pm||4)})});
+  let wall=0;D.walls.forEach(w=>wall+=wLen(w));const lab=min/60*(D.rate||0);
+  return{rows,mat,min,lab,tot:mat+lab,wall,wallA:wall*D.h,area:DW.area,rooms:DW.rooms.length,doors:D.ops.filter(o=>o.k=='tuer').length,wins:D.ops.filter(o=>o.k=='fen').length}}
+const eur=v=>nf(v,2)+' €';
+function dwSheet(){const el=$('#dsh');if(!el)return;const D=dwS(),X=`<button class="sh-x" data-dw="shx" aria-label="Zatvori">✕</button>`,f=(l,h)=>`<div><label>${l}</label>${h}</div>`;let h='';
+  if(DW.sheet=='qty'){const q=dwQty();h=`<div class="sh-h"><h3>Količine, vrijeme i trošak<small>3D + vrijeme (4D) + trošak (5D)</small></h3>${X}</div>
+    <div class="dk"><div><span>Zidovi</span><b>${nf(q.wall,1)} m</b></div><div><span>Površina zidova</span><b>${nf(q.wallA,1)} m²</b></div><div><span>Prostorije</span><b>${q.rooms} · ${nf(q.area,1)} m²</b></div><div><span>Vrata / prozori</span><b>${q.doors} / ${q.wins}</b></div></div>
+    ${q.rows.length?`<div class="sc"><table class="t"><thead><tr><th>Stavka</th><th>Kol.</th><th>€/jed.</th><th>Ukupno</th></tr></thead><tbody>${q.rows.map(r=>`<tr><td>${esc(r.n)}</td><td class="num">${r.q} ${r.u}</td><td><input type="number" step="0.01" min="0" data-dwp="${r.key}" value="${r.pr}"></td><td class="num">${eur(r.t)}</td></tr>`).join('')}</tbody></table></div>`:`<p class="mu">Dodaj elektro simbole i kablove da dobiješ popis materijala.</p>`}
+    <div class="f" style="margin-top:10px">${f('Satnica (€/h)',`<input type="number" min="0" data-dwi="rate" value="${D.rate}">`)}${f('Kabel (min/m)',`<input type="number" min="0" step="0.5" data-dwi="pm" value="${D.pm}">`)}</div>
+    <div class="dk big"><div><span>Materijal</span><b>${eur(q.mat)}</b></div><div><span>Vrijeme (4D)</span><b>${nf(q.min/60,1)} h</b></div><div><span>Rad</span><b>${eur(q.lab)}</b></div><div class="hi"><span>Ukupno (5D)</span><b>${eur(q.tot)}</b></div></div>
+    <p class="mu" style="font-size:11.5px;margin:8px 0 0">Cijene i vremena su orijentacijski početni iznosi bez PDV-a. Upiši svoje i izračun se odmah mijenja.</p>`}
+  else if(DW.sheet=='tools'){const L=[['dim','Kote i duljine'],['el','Elektro'],['cab','Kablovi'],['furn','Oprema prostora'],['txt','Tekst']],bg=DW.bg;
+    h=`<div class="sh-h"><h3>Alati<small>automatika, slojevi, podloga, izvoz</small></h3>${X}</div>
+    <div class="sh-sec">Automatika</div><div class="menu"><button class="btn g s" data-dw="autocab">Automatski vodovi</button><button class="btn g s" data-dw="autodim">Vanjske kote</button><button class="btn g s" data-dw="autonum">Numeriraj krugove</button><button class="btn g s" data-dw="clrcab">Ukloni auto-vodove</button></div>
+    <p class="mu" style="font-size:11.5px;margin:6px 0 0">Automatski vodovi polažu trasu od Verteilera do svakog simbola i biraju tip voda prema vrsti potrošača.</p>
+    <div class="sh-sec">Slojevi</div><div class="row">${L.map(([k,n])=>`<button class="btn g s${D.lay[k]!==false?' on':''}" data-dw="lay" data-v="${k}">${n}</button>`).join('')}</div>
+    <div class="sh-sec">Hvatanje na raster</div><div class="row">${[.01,.05,.1,.25,.5].map(v=>`<button class="btn g s${Math.abs((D.snap||.05)-v)<1e-6?' on':''}" data-dw="snap" data-v="${v}">${v*100} cm</button>`).join('')}</div>
+    <div class="sh-sec">Podloga (slika tlocrta)</div>${bg?`<div class="f">${f('Širina slike (m)',`<input type="number" step="0.1" min="0.5" data-dwi="bgw" value="${bg.w}">`)}${f('Prozirnost (%)',`<input type="number" step="5" min="5" max="100" data-dwi="bgo" value="${Math.round(bg.op*100)}">`)}</div><div class="row" style="margin-top:8px"><button class="btn dg s" data-dw="bgdel">Ukloni podlogu</button></div>`:`<div class="row"><button class="btn g s" data-dw="bg">Učitaj sliku</button></div>`}
+    <p class="mu" style="font-size:11.5px;margin:6px 0 0">Fotografija ili sken postojećeg nacrta služi kao predložak za precrtavanje. Podloga se ne sprema s projektom.</p>
+    <div class="sh-sec">Izvoz</div><div class="row"><button class="btn s" data-dw="pdf">PDF u mjerilu</button><button class="btn g s" data-dw="png">Slika PNG</button></div>`}
+  else if(DW.sheet=='proj'){h=`<div class="sh-h"><h3>Postavke crteža</h3>${X}</div><div class="f">${f('Naslov nacrta',`<input data-dwi="title" value="${esc(D.title)}">`)}${f('Visina zidova (m)',`<input type="number" step="0.05" min="2" max="5" data-dwi="h" value="${D.h}">`)}
+     ${f('Format PDF-a',`<select data-dwi="fmt">${sel(Object.keys(PFMT),D.fmt)}</select>`)}</div>
+    <div class="row" style="margin-top:12px"><button class="btn g s${D.auto?' on':''}" data-dw="tg" data-v="auto">Duljine zidova</button><button class="btn g s${D.grid!==false?' on':''}" data-dw="tg" data-v="grid">Raster</button></div>
+    <div class="sh-sec">Podaci</div><div class="row"><button class="btn g s" data-dw="import">Preuzmi kuću iz projekta</button><button class="btn dg s" data-dw="clear">Očisti papir</button></div>
+    <p class="mu" style="font-size:11.5px;margin:8px 0 0">„Preuzmi kuću“ pretvara prostorije i opremu iz 3D kuće u zidove i simbole na papiru. Oba koraka se mogu poništiti s ↶.</p>`}
+  else if(DW.sheet=='sel'&&DW.sel){const s=DW.sel,o=dwGet(s);if(!o){DW.sheet=null;el.hidden=true;return}const del=`<div class="row" style="margin-top:12px"><button class="btn dg s" data-dw="delsel">Obriši</button></div>`;
+    if(s.t=='wall')h=`<div class="sh-h"><h3>Zid<small>${nf(wLen(o))} m · ${nf(wLen(o)*D.h,1)} m²</small></h3>${X}</div><div class="f">${f('Duljina (m)',`<input type="number" step="0.05" min="0.1" data-dwi="len" value="${+wLen(o).toFixed(3)}">`)}${f('Debljina',`<select data-dwi="wt">${sel(DWT.map(t=>[t,nf(t*100,1)+' cm']),DWT.find(t=>Math.abs(t-o.t)<.001)||o.t)}</select>`)}</div>${del}`;
+    else if(s.t=='op')h=`<div class="sh-h"><h3>${o.k=='tuer'?'Vrata':'Prozor'}</h3>${X}</div><div class="f">${f('Širina (m)',`<input type="number" step="0.05" min="0.4" max="4" data-dwi="wd" value="${o.wd}">`)}</div><div class="row" style="margin-top:12px">${o.k=='tuer'?`<button class="btn g s" data-dw="flip">Okreni smjer otvaranja</button>`:''}<button class="btn dg s" data-dw="delsel">Obriši</button></div>`;
+    else if(s.t=='el'){const E=DEL[o.k];h=`<div class="sh-h"><h3>${esc(E.n)}<small>${E.m=='wall'?(o.w?'na zidu':'slobodno'):'strop'}</small></h3>${X}</div><div class="f">${f('Vrsta',`<select data-dwi="k">${sel(Object.entries(DEL).filter(([,e])=>e.m==E.m&&e.c==E.c).map(([k,e])=>[k,e.n]),o.k)}</select>`)}${E.m=='wall'?f('Visina (cm)',`<input type="number" step="5" min="5" max="400" data-dwi="hcm" value="${Math.round((o.h||E.h)*100)}">`):''}${f('Strujni krug / oznaka',`<input data-dwi="c" placeholder="npr. F1.2" value="${esc(o.c||'')}">`)}</div><div class="row" style="margin-top:12px">${E.m=='wall'&&!o.w?`<button class="btn g s" data-dw="rot">Zarotiraj 90°</button>`:''}<button class="btn g s" data-dw="dup">Dupliciraj</button><button class="btn dg s" data-dw="delsel">Obriši</button></div>`}
+    else if(s.t=='it'){const E=DIT[o.k]||DIT.tisch;h=`<div class="sh-h"><h3>${esc(E.n)}<small>oprema prostora</small></h3>${X}</div><div class="f">${f('Širina (cm)',`<input type="number" step="5" min="10" data-dwi="iw" value="${Math.round(o.w*100)}">`)}${f('Dubina (cm)',`<input type="number" step="5" min="5" data-dwi="id" value="${Math.round(o.d*100)}">`)}</div><div class="row" style="margin-top:12px"><button class="btn g s" data-dw="rot">Zarotiraj 90°</button><button class="btn g s" data-dw="dup">Dupliciraj</button><button class="btn dg s" data-dw="delsel">Obriši</button></div>`}
+    else if(s.t=='lin')h=`<div class="sh-h"><h3>Pomoćna linija<small>${nf(Math.hypot(o.b[0]-o.a[0],o.b[1]-o.a[1]))} m</small></h3>${X}</div>${del}`;
+    else if(s.t=='dim')h=`<div class="sh-h"><h3>Kota<small>${nf(dwDimG(o).L)} m</small></h3>${X}</div><div class="f">${f('Odmak od linije (m)',`<input type="number" step="0.05" data-dwi="off" value="${o.off}">`)}</div><div class="row" style="margin-top:12px"><button class="btn g s" data-dw="dimflip">Druga strana</button><button class="btn dg s" data-dw="delsel">Obriši</button></div>`;
+    else if(s.t=='txt')h=`<div class="sh-h"><h3>Tekst</h3>${X}</div><div class="f">${f('Natpis',`<input data-dwi="s" value="${esc(o.s||'')}">`)}${f('Veličina (m)',`<input type="number" step="0.05" min="0.1" max="3" data-dwi="sz" value="${o.sz||.25}">`)}</div>${del}`;
+    else if(s.t=='cab'){let l=0;for(let i=0;i<o.pts.length-1;i++)l+=Math.hypot(o.pts[i+1][0]-o.pts[i][0],o.pts[i+1][1]-o.pts[i][1]);h=`<div class="sh-h"><h3>Kabel<small>${nf(l,1)} m u tlocrtu</small></h3>${X}</div><div class="f">${f('Tip',`<select data-dwi="ck">${sel(Object.entries(DCAB).map(([k,e])=>[k,e.n]),o.k)}</select>`)}</div>${del}`}}
+  if(!h){el.hidden=true;el.innerHTML='';return}el.innerHTML=h;el.hidden=false}
+function dwImport(){const D=dwS();if(!S.rooms.length){toast('Projekt nema prostorija.');return}ensureAll();dwPush();D.walls=[];D.ops=[];D.els=[];D.dims=[];D.cabs=[];D.txt=[];
+  S.rooms.forEach(r=>{const G=GEO[r.id];if(!G)return;const c=[[G.x,G.z],[G.x+G.W,G.z],[G.x+G.W,G.z+G.D],[G.x,G.z+G.D]].map(p=>[+p[0].toFixed(3),+p[1].toFixed(3)]);for(let i=0;i<4;i++)dwAddWall(c[i],c[(i+1)%4],.24);
+    D.txt.push({id:D.nid++,x:G.x+G.W/2,z:G.z+G.D/2-.45,s:r.name,sz:.28});
+    (r.objs||[]).forEach(o=>{const p=place(r,o);let k=null;if(o.t=='steck')k='steck'+cl(o.g||1,1,3);else if(o.t=='schalter')k={wechsel:'wechsel',serie:'serie',taster:'taster'}[o.sub]||'schalter';else if(o.t=='licht')k=o.sub=='spot'?'spot':'licht';else if(o.t=='verteiler')k='vert';else if(o.key=='herd')k='herd';if(!k)return;
+      if(p.mt=='wall'&&p.F)D.els.push({id:D.nid++,k,x:+(p.x+p.F.nx*.12).toFixed(3),z:+(p.z+p.F.nz*.12).toFixed(3),nx:p.F.nx,nz:p.F.nz,w:null,h:o.h||DEL[k].h});
+      else D.els.push({id:D.nid++,k,x:+p.x.toFixed(3),z:+p.z.toFixed(3),nx:0,nz:1,w:null,h:DEL[k].h})})});
+  DW.sel=null;DW.sheet=null;DW.fitted=false;if(DW.mode=='2d'&&DW.W)dwFit();dwCommit();toast('Kuća preuzeta na papir.')}
+function dwAct(a,v){const D=dwS();
+  if(a=='tool'){if(DW.chain)dwEndChain();DW.tool=v;DW.box=null;DW.meas=null;if(v!='sel'){DW.sel=null;if(DW.sheet=='sel')DW.sheet=null}dwBars();dwSheet();dwReq();return}
+  if(a=='ek'){DW.ek=v;dwBars();return}if(a=='ecat'){DW.ecat=v;const f=Object.keys(DEL).find(k=>DEL[k].c==v);if(f&&DEL[DW.ek].c!=v)DW.ek=f;dwBars();return}if(a=='ik'){DW.ik=v;dwBars();return}
+  if(a=='krinc'){if(v=='0')DW.kr='';else{const m=/^(.*?)(\d+)$/.exec(DW.kr||'F1.0');DW.kr=m?m[1]+(+m[2]+1):(DW.kr||'F')+'1'}dwBars();return}
+  if(a=='fs'){DW.fs=!DW.fs;document.body.classList.toggle('dwfs',DW.fs);try{if(DW.fs){const r=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(()=>{})}else if(document.fullscreenElement){const r=document.exitFullscreen();if(r&&r.catch)r.catch(()=>{})}}catch(e){}dwBars();if(V3&&V3.fit)setTimeout(()=>V3&&V3.fit&&V3.fit(),60);return}
+  if(a=='lay'){D.lay[v]=D.lay[v]===false;dwCommit();return}
+  if(a=='snap'){D.snap=+v||.05;save();dwSheet();return}
+  if(a=='bg'){const i=$('#dwbg');if(i)i.click();return}
+  if(a=='bgdel'){DW.bg=null;dwSheet();dwReq();return}
+  if(a=='png'){dwPNG();return}
+  if(a=='clrcab'){if(!D.cabs.some(c=>c.auto)){toast('Nema automatskih vodova.');return}dwPush();D.cabs=D.cabs.filter(c=>!c.auto);dwCommit();return}
+  if(a=='autocab'){const vt=D.els.find(e=>e.k=='vert')||D.els.find(e=>e.k=='zaehl');if(!vt){toast('Najprije postavi Verteiler (Elektro → Razvod).');return}dwPush();D.cabs=D.cabs.filter(c=>!c.auto);let n=0,tot=0;
+    D.els.forEach(e=>{if(e===vt||['ve'].includes(DEL[e.k].c))return;const E=DEL[e.k],ck=E.c=='ne'||e.k=='kam'?(e.k=='tv'?'koax':e.k=='tel'||e.k=='sprech'||e.k=='gong'?'tel':'cat'):['herd','dle','wb','wp','cee','backofen'].includes(e.k)?'n525':E.c=='st'||E.c=='ge'?'n25':'n15';
+      const pts=[[vt.x,vt.z]];if(Math.abs(e.x-vt.x)>.03&&Math.abs(e.z-vt.z)>.03)pts.push([e.x,vt.z]);pts.push([e.x,e.z]);D.cabs.push({id:D.nid++,k:ck,pts,auto:true});n++;tot+=Math.abs(e.x-vt.x)+Math.abs(e.z-vt.z)});
+    dwCommit();toast(n?`Položeno ${n} vodova, ukupno oko ${nf(tot,0)} m u tlocrtu.`:'Nema simbola za spajanje.');return}
+  if(a=='autodim'){if(!D.walls.length){toast('Nema zidova za kotiranje.');return}dwPush();let x0=1e9,z0=1e9,x1=-1e9,z1=-1e9;D.walls.forEach(w=>[w.a,w.b].forEach(p=>{x0=Math.min(x0,p[0]);z0=Math.min(z0,p[1]);x1=Math.max(x1,p[0]);z1=Math.max(z1,p[1])}));
+    D.dims=D.dims.filter(d=>!d.auto);D.dims.push({id:D.nid++,a:[x0,z1],b:[x1,z1],off:1,auto:true},{id:D.nid++,a:[x0,z0],b:[x0,z1],off:1,auto:true});
+    const xs=[...new Set(D.walls.flatMap(w=>[w.a[0],w.b[0]]).map(v=>+v.toFixed(2)))].sort((p,q)=>p-q),zs=[...new Set(D.walls.flatMap(w=>[w.a[1],w.b[1]]).map(v=>+v.toFixed(2)))].sort((p,q)=>p-q);
+    if(xs.length>2)for(let i=0;i<xs.length-1;i++)D.dims.push({id:D.nid++,a:[xs[i],z0],b:[xs[i+1],z0],off:-.6,auto:true});if(zs.length>2)for(let i=0;i<zs.length-1;i++)D.dims.push({id:D.nid++,a:[x1,zs[i]],b:[x1,zs[i+1]],off:-.6,auto:true});
+    dwCommit();toast('Vanjske kote su postavljene.');return}
+  if(a=='autonum'){const L=D.els.filter(e=>!['ve'].includes(DEL[e.k].c));if(!L.length){toast('Nema simbola za numeriranje.');return}dwPush();const grp={li:1,sw:1,st:2,ge:3,ne:4,si:4},cnt={};L.forEach(e=>{const E=DEL[e.k],g=grp[E.c]||2;if(E.c=='ge'||['herd','cee'].includes(e.k)){cnt[3]=(cnt[3]||0)+1;e.c='F3.'+cnt[3]}else{cnt[g]=cnt[g]||0;const per=g==2?8:10,idx=Math.floor(cnt[g]/per)+1;cnt[g]++;e.c='F'+g+'.'+idx}});dwCommit();toast('Krugovi su numerirani: F1 rasvjeta, F2 utičnice, F3 uređaji, F4 mreža i sigurnost.');return}if(a=='ck'){DW.ck=v;dwBars();return}if(a=='wt'){D.t=+v;save();dwBars();return}
+  if(a=='mode'){if(DW.chain)dwEndChain();DW.mode=v=='3d'?'3d':'2d';FLY=DW.mode=='3d';render();return}
+  if(a=='done'){dwEndChain();return}
+  if(a=='undo'||a=='redo'){const from=a=='undo'?DW.hist:DW.redo,to=a=='undo'?DW.redo:DW.hist,h=from.pop();if(!h)return;to.push(JSON.stringify(D));S.dw=JSON.parse(h);DW.sel=null;DW.chain=null;if(DW.sheet=='sel')DW.sheet=null;dwCommit();return}
+  if(a=='fit'){if(DW.mode=='3d'){DW.cam=null;render()}else{dwFit();dwReq()}return}
+  if(a=='sheet'){DW.sheet=DW.sheet==v?null:v;dwBars();dwSheet();return}
+  if(a=='shx'){DW.sheet=null;dwBars();dwSheet();return}
+  if(a=='pdf'){dwPDF();return}
+  if(a=='tg'){dwPush();D[v]=v=='grid'?D.grid===false:!D.auto;dwCommit();return}
+  if(a=='clear'){dwPush();Object.assign(D,{walls:[],ops:[],els:[],dims:[],cabs:[],txt:[]});DW.sel=null;DW.sheet=null;dwCommit();toast('Papir je prazan. ↶ vraća crtež.');return}
+  if(a=='import'){dwImport();return}
+  const o=dwGet(DW.sel);
+  if(a=='delsel'){if(!o)return;dwPush();dwDel(DW.sel);DW.sel=null;DW.sheet=null;dwCommit();return}
+  if(!o)return;
+  if(a=='flip'){dwPush();o.flip=((o.flip|0)+1)%4;dwCommit();return}
+  if(a=='rot'){dwPush();if(DW.sel.t=='it')o.ry=((o.ry|0)+1)%4;else{const nx=o.nx;o.nx=-o.nz;o.nz=nx}dwCommit();return}
+  if(a=='dup'){dwPush();const n=JSON.parse(JSON.stringify(o));n.id=D.nid++;n.x=+(n.x+.5).toFixed(3);n.z=+(n.z+.5).toFixed(3);if(DW.sel.t=='el'){n.w=null;D.els.push(n)}else D.its.push(n);DW.sel={t:DW.sel.t,id:n.id};dwCommit();return}
+  if(a=='dimflip'){dwPush();o.off=-o.off;dwCommit();return}}
+function dwInput(t){const D=dwS(),ds=t.dataset;
+  if(ds.dwp){const v=cnum(t.value);D.price[ds.dwp]=Math.max(0,v);save();dwSheet();return}
+  const k=ds.dwi,v=t.value;
+  if(k=='title'){D.title=v;save();return}if(k=='fmt'){D.fmt=PFMT[v]?v:'A3';save();return}
+  if(k=='rate'){D.rate=Math.max(0,cnum(v));save();dwSheet();return}if(k=='pm'){D.pm=Math.max(0,cnum(v));save();dwSheet();return}
+  if(k=='h'){dwPush();D.h=cl(cnum(v)||2.5,2,5);dwCommit();return}
+  if(k=='bgw'){if(DW.bg)DW.bg.w=Math.max(.5,cnum(v)||10);dwReq();return}if(k=='bgo'){if(DW.bg)DW.bg.op=cl((cnum(v)||40)/100,.05,1);dwReq();return}
+  const o=dwGet(DW.sel);if(!o)return;dwPush();
+  if(k=='iw')o.w=cl(cnum(v)/100,.1,20);else if(k=='id')o.d=cl(cnum(v)/100,.05,20);else
+  if(k=='len'){const L=Math.max(.1,cnum(v)),f=wFrame(o),nb=[+(o.a[0]+f.dx*L).toFixed(3),+(o.a[1]+f.dz*L).toFixed(3)];dwNodes(o.b).forEach(n=>{n.w[n.e]=[nb[0],nb[1]]});D.ops.forEach(op=>{if(op.w==o.id)op.u=cl(op.u,op.wd/2,Math.max(op.wd/2,L-op.wd/2))})}
+  else if(k=='wt')o.t=+v||.24;else if(k=='wd'){const w=dwWall(o.w);o.wd=cl(cnum(v)||.9,.4,Math.max(.4,(w?wLen(w):4)-.1));if(w)o.u=cl(o.u,o.wd/2,Math.max(o.wd/2,wLen(w)-o.wd/2))}
+  else if(k=='k'){if(DEL[v])o.k=v}else if(k=='hcm')o.h=cl(cnum(v)/100,.05,4);else if(k=='c')o.c=v.trim().slice(0,14);
+  else if(k=='off')o.off=cnum(v)||.5;else if(k=='s')o.s=v.slice(0,80);else if(k=='sz')o.sz=cl(cnum(v)||.25,.1,3);else if(k=='ck'){if(DCAB[v])o.k=v}
+  dwCommit()}
+/* ---- 2D: pokazivač ---- */
+function mountCrtac(){const cv=$('#dcv');if(!cv)return;dwS();dwRooms();if(DW.mode=='3d'){dwMount3D(cv);return}
+  const ctx=cv.getContext('2d');DW.cv=cv;DW.ctx=ctx;DW.chain=null;DW.cur=null;DW.box=null;
+  const fit=()=>{const b=cv.getBoundingClientRect(),dpr=S.ui.hq===false?1:Math.min(2,window.devicePixelRatio||1);DW.W=Math.max(10,b.width);DW.H=Math.max(10,b.height);cv.width=Math.round(DW.W*dpr);cv.height=Math.round(DW.H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);if(!DW.fitted)dwFit();dwPaint()};
+  const v=V3={kind:'dw',dirty:false,fit};if(window.ResizeObserver){v.ro=new ResizeObserver(fit);v.ro.observe(cv)}
+  v.stop=()=>{if(DW.raf){cancelAnimationFrame(DW.raf);DW.raf=0}DW.ctx=null;DW.chain=null};
+  fit();dwBars();dwSheet();
+  const P=new Map();let g=null,pd=0,pc=null;const pos=e=>{const b=cv.getBoundingClientRect();return[e.clientX-b.left,e.clientY-b.top]};
+  const cancel=()=>{if(g&&g.snap&&g.moved){S.dw=JSON.parse(g.snap)}g=null;DW.box=null};
+  const ptTool=t=>t=='zid'||t=='kab'||t=='kota'||t=='lin';
+  const snapFor=(x,z)=>{const c=DW.chain,from=c?c.pts[c.pts.length-1]:null;return dwSnapPt(x,z,from,DW.tool!='zid')};
+  const addPt=(s)=>{const c=DW.chain,D=dwS(),last=c.pts[c.pts.length-1],d=Math.hypot(s.p[0]-last[0],s.p[1]-last[1]);
+    if(d<.05){dwEndChain();return}
+    if(DW.tool=='zid'){dwPush();const w=dwAddWall(last,s.p);if(!w){DW.hist.pop();toast('Zid je prekratak ili već postoji.');return}c.pts=[s.p];DW.cur=null;if(s.end){DW.chain=null}dwCommit()}
+    else if(DW.tool=='lin'){dwPush();D.lines.push({id:D.nid++,a:[last[0],last[1]],b:[s.p[0],s.p[1]]});DW.chain=null;DW.cur=null;dwCommit()}
+    else if(DW.tool=='kota'){dwPush();D.dims.push({id:D.nid++,a:[last[0],last[1]],b:[s.p[0],s.p[1]],off:-.6});DW.chain=null;DW.cur=null;dwCommit()}
+    else{c.pts.push(s.p);DW.cur=null;dwBars();dwReq()}};
+  cv.addEventListener('pointerdown',e=>{if(e.pointerType=='mouse'&&e.button>2)return;try{cv.setPointerCapture(e.pointerId)}catch(x){}const p=pos(e);P.set(e.pointerId,p);
+    if(P.size==2){cancel();DW.cur=null;const[a,b]=[...P.values()];pd=Math.hypot(a[0]-b[0],a[1]-b[1]);pc=[(a[0]+b[0])/2,(a[1]+b[1])/2];g={t:'pinch'};dwReq();return}
+    if(P.size>2)return;
+    const[x,z]=dwInv(p[0],p[1]),D=dwS(),tool=(e.button==1||e.button==2)?'pan':DW.tool;g={t:tool,p0:p,last:p,w0:[x,z],moved:false};
+    if(tool=='sel'){const s=DW.sel;if(s&&s.t=='wall'){const w=dwWall(s.id),T=dwT();if(w)for(const en of['a','b']){const q=T(w[en][0],w[en][1]);if(Math.hypot(q[0]-p[0],q[1]-p[1])<18){g.t='node';g.nodes=dwNodes(w[en]);g.base=[w[en][0],w[en][1]];g.snap=JSON.stringify(D);break}}}
+      if(g.t=='sel'){const h=dwPick(p[0],p[1]);g.hit=h;if(h){g.t='move';g.snap=JSON.stringify(D);DW.sel=h;const o=dwGet(h);if(h.t=='wall'){g.nodes=dwNodes(o.a).concat(dwNodes(o.b))}else if(h.t=='cab')g.pts=o.pts.map(q=>[q[0],q[1]]);else if(h.t=='txt'||h.t=='it')g.o0=[o.x,o.z];else if(h.t=='lin')g.pts=[[o.a[0],o.a[1]],[o.b[0],o.b[1]]];dwReq()}else g.t='pan'}}
+    else if(ptTool(tool)){if(!DW.chain){DW.chain={pts:[dwSnapPt(x,z,null,tool!='zid').p]};g.first=true;dwBars()}DW.cur=snapFor(x,z).p;dwReq()}
+    else if(tool=='soba'){g.a=[dsn(x),dsn(z)]}
+    else if(tool=='mj'){const s0=dwSnapPt(x,z,null,true).p;DW.meas={a:s0,b:s0};dwReq()}});
+  cv.addEventListener('pointermove',e=>{const p=pos(e);
+    if(!P.has(e.pointerId)){if(DW.chain&&e.pointerType=='mouse'){const[x,z]=dwInv(p[0],p[1]);DW.cur=snapFor(x,z).p;dwReq()}return}
+    P.set(e.pointerId,p);
+    if(P.size>=2){const[a,b]=[...P.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),c=[(a[0]+b[0])/2,(a[1]+b[1])/2];if(pd>0&&d>0){const w=dwInv(c[0],c[1]);DW.zm=cl(DW.zm*d/pd,6,500);DW.vx=w[0]-(c[0]-DW.W/2)/DW.zm;DW.vz=w[1]-(c[1]-DW.H/2)/DW.zm}
+      DW.vx-=(c[0]-pc[0])/DW.zm;DW.vz-=(c[1]-pc[1])/DW.zm;pd=d;pc=c;dwReq();return}
+    if(!g)return;if(!g.moved&&Math.hypot(p[0]-g.p0[0],p[1]-g.p0[1])>7)g.moved=true;if(!g.moved)return;
+    const[x,z]=dwInv(p[0],p[1]),D=dwS();
+    if(g.t=='pan'||g.t=='tuer'||g.t=='fen'||g.t=='el'||g.t=='txt'||g.t=='del'||g.t=='it'||g.t=='krug'){DW.vx-=(p[0]-g.last[0])/DW.zm;DW.vz-=(p[1]-g.last[1])/DW.zm}
+    else if(g.t=='node'){const s=dwSnapPt(x,z,null,false);let np=s.p;if(s.end&&g.nodes.some(n=>dwSame(n.w[n.e],np)))np=[dsn(x),dsn(z)];g.nodes.forEach(n=>{n.w[n.e]=[np[0],np[1]]})}
+    else if(g.t=='move'){const o=dwGet(DW.sel),dx=dsn(x-g.w0[0]),dz=dsn(z-g.w0[1]);if(!o)return;
+      if(DW.sel.t=='el'){const n=dwElAt(o.k,x,z);Object.assign(o,{x:n.x,z:n.z,nx:n.nx,nz:n.nz,w:n.w})}
+      else if(DW.sel.t=='lin'){o.a=[+(g.pts[0][0]+dx).toFixed(3),+(g.pts[0][1]+dz).toFixed(3)];o.b=[+(g.pts[1][0]+dx).toFixed(3),+(g.pts[1][1]+dz).toFixed(3)]}
+      else if(DW.sel.t=='txt'||DW.sel.t=='it'){o.x=+(g.o0[0]+dx).toFixed(3);o.z=+(g.o0[1]+dz).toFixed(3)}
+      else if(DW.sel.t=='op'){const n=nearW(x,z,1.2);if(n&&n.f.L>=o.wd+.1){o.w=n.w.id;o.u=cl(dsn(n.u),o.wd/2+.02,n.f.L-o.wd/2-.02)}}
+      else if(DW.sel.t=='dim'){const f=dwDimG(o),off=dsn((x-o.a[0])*f.nx+(z-o.a[1])*f.nz);o.off=Math.abs(off)<.15?(off<0?-.15:.15):off}
+      else if(DW.sel.t=='cab'){o.pts=g.pts.map(q=>[+(q[0]+dx).toFixed(3),+(q[1]+dz).toFixed(3)])}
+      else if(DW.sel.t=='wall'){g.nodes.forEach(n=>{n.w[n.e]=[+(n.p[0]+dx).toFixed(3),+(n.p[1]+dz).toFixed(3)]})}}
+    else if(ptTool(g.t)){DW.cur=snapFor(x,z).p}
+    else if(g.t=='soba'){DW.box={a:g.a,b:[dsn(x),dsn(z)]}}
+    else if(g.t=='mj'&&DW.meas){DW.meas.b=dwSnapPt(x,z,null,true).p}
+    g.last=p;dwReq()});
+  const up=e=>{if(!P.has(e.pointerId))return;const p=pos(e);P.delete(e.pointerId);if(P.size>0){if(P.size==1)g=null;return}
+    const G=g;g=null;if(!G||G.t=='pinch')return;const[x,z]=dwInv(p[0],p[1]),D=dwS();
+    if(G.t=='pan'){if(!G.moved&&DW.tool=='sel'){DW.sel=null;if(DW.sheet=='sel')DW.sheet=null;dwSheet();dwReq()}return}
+    if(G.t=='node'||G.t=='move'){if(G.moved){D.walls=D.walls.filter(w=>wLen(w)>=.05);DW.hist.push(G.snap);if(DW.hist.length>80)DW.hist.shift();DW.redo=[];if(!dwGet(DW.sel))DW.sel=null;dwCommit()}else if(G.t=='move'){DW.sheet='sel';dwBars();dwSheet();dwReq()}return}
+    if(ptTool(G.t)){if(!DW.chain)return;if(G.first&&!G.moved){DW.cur=null;dwReq();return}addPt(snapFor(x,z));return}
+    if(G.t=='soba'){const b=DW.box;DW.box=null;if(b&&Math.abs(b.b[0]-b.a[0])>=.5&&Math.abs(b.b[1]-b.a[1])>=.5){dwPush();const x0=Math.min(b.a[0],b.b[0]),x1=Math.max(b.a[0],b.b[0]),z0=Math.min(b.a[1],b.b[1]),z1=Math.max(b.a[1],b.b[1]),c=[[x0,z0],[x1,z0],[x1,z1],[x0,z1]];for(let i=0;i<4;i++)dwAddWall(c[i],c[(i+1)%4]);dwCommit()}else{if(!G.moved)toast('Povuci prstom da nacrtaš sobu.');dwReq()}return}
+    if(G.t=='mj'){if(!G.moved)DW.meas=null;dwReq();return}
+    if(G.moved)return;
+    if(G.t=='it'){dwPush();const E=DIT[DW.ik]||DIT.tisch,it={id:D.nid++,k:DW.ik,x:dsn(x),z:dsn(z),w:E.w,d:E.d,ry:0};D.its.push(it);dwCommit();return}
+    if(G.t=='krug'){const h=dwPick(p[0],p[1]);if(h&&h.t=='el'){dwPush();const e=dwGet(h);e.c=DW.kr;dwCommit()}else toast('Dodirni elektro simbol.');return}
+    if(G.t=='tuer'||G.t=='fen'){const n=nearW(x,z,.7),wd=G.t=='tuer'?.9:1.2;if(!n){toast('Dodirni zid na koji ide '+(G.t=='tuer'?'vrata':'prozor')+'.');return}if(n.f.L<wd+.1){toast('Zid je prekratak za ovaj otvor.');return}
+      dwPush();D.ops.push({id:D.nid++,k:G.t,w:n.w.id,u:cl(dsn(n.u),wd/2+.02,n.f.L-wd/2-.02),wd,flip:n.side>0?0:2});dwCommit();return}
+    if(G.t=='el'){dwPush();const n=dwElAt(DW.ek,x,z);n.id=D.nid++;D.els.push(n);dwCommit();return}
+    if(G.t=='txt'){dwPush();const t={id:D.nid++,x:dsn(x),z:dsn(z),s:'Tekst',sz:.25};D.txt.push(t);DW.sel={t:'txt',id:t.id};DW.sheet='sel';DW.tool='sel';dwCommit();const i=$('#dsh [data-dwi="s"]');if(i){i.focus();i.select()}return}
+    if(G.t=='del'){const h=dwPick(p[0],p[1]);if(h){dwPush();dwDel(h);dwCommit()}return}};
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>{cancel();P.delete(e.pointerId);dwReq()});
+  cv.addEventListener('wheel',e=>{e.preventDefault();const p=pos(e),w=dwInv(p[0],p[1]);DW.zm=cl(DW.zm*Math.exp(-e.deltaY*.0015),6,500);DW.vx=w[0]-(p[0]-DW.W/2)/DW.zm;DW.vz=w[1]-(p[1]-DW.H/2)/DW.zm;dwReq()},{passive:false});
+  cv.addEventListener('contextmenu',e=>e.preventDefault());cv.addEventListener('dblclick',()=>{if(DW.chain)dwEndChain()})}
+/* ---- 3D ---- */
+function dwBuild3D(){const sc=new Sc(),D=dwS(),H=D.h,bb=dwBBox(),m=1.4,P=pal(),WALL=[226,218,206],TOPC=[244,242,236];
+  sc.face([[bb.x0-m,0,bb.z0-m],[bb.x1+m,0,bb.z0-m],[bb.x1+m,0,bb.z1+m],[bb.x0-m,0,bb.z1+m]],[188,186,180],{lay:0,n:[0,1,0],dbl:true});
+  for(let x=Math.ceil(bb.x0-m);x<=bb.x1+m;x++)sc.line([[x,.003,bb.z0-m],[x,.003,bb.z1+m]],'rgba(0,0,0,.08)',1,1);for(let z=Math.ceil(bb.z0-m);z<=bb.z1+m;z++)sc.line([[bb.x0-m,.003,z],[bb.x1+m,.003,z]],'rgba(0,0,0,.08)',1,1);
+  const cnt={},key=p=>Math.round(p[0]*200)+':'+Math.round(p[1]*200);D.walls.forEach(w=>[w.a,w.b].forEach(p=>{cnt[key(p)]=(cnt[key(p)]||0)+1}));
+  D.walls.forEach(w=>{const f=wFrame(w),ry=Math.atan2(-f.dz,f.dx),ea=cnt[key(w.a)]>1?w.t/2:0,eb=cnt[key(w.b)]>1?w.t/2:0;
+    const seg=(u0,u1,y0,y1,col,o)=>{if(u1-u0<.005||y1-y0<.005)return;const u=(u0+u1)/2;sc.box(w.a[0]+f.dx*u,y0,w.a[1]+f.dz*u,u1-u0,y1-y0,w.t,col||WALL,Object.assign({ry,top:TOPC},o||{}))};
+    sc.shadow((w.a[0]+w.b[0])/2,(w.a[1]+w.b[1])/2,f.L,w.t,ry,.3);
+    const ops=D.ops.filter(o=>o.w==w.id).sort((a,b)=>a.u-b.u);let u=-ea;
+    ops.forEach(op=>{const a=op.u-op.wd/2,b=op.u+op.wd/2;seg(u,a,0,H);if(op.k=='tuer'){seg(a,b,Math.min(H,2.01),H)}else{seg(a,b,0,.9);seg(a,b,Math.min(H,2.1),H);const mx=w.a[0]+f.dx*op.u,mz=w.a[1]+f.dz*op.u;sc.box(mx,.9,mz,op.wd,Math.min(H,2.1)-.9,.03,[150,200,235],{ry,a:.38,cull:false});sc.box(mx,.9,mz,op.wd,.04,w.t*.7,[250,250,248],{ry})}u=b});
+    seg(u,f.L+eb,0,H)});
+  D.els.forEach(e=>{const E=DEL[e.k],id='e:'+e.id;if(E.m=='ceil'){if(e.k=='licht'||e.k=='spot'){const r=e.k=='spot'?.05:.17;sc.cyl(e.x,H-.06,e.z,r,.06,[250,246,236],{top:[255,236,190],em:.5},12);sc.glow([e.x,H-.06,e.z],e.k=='spot'?.5:1,WARM,.5);sc.hdisc(e.x,.006,e.z,e.k=='spot'?.8:1.4,WARM,{lay:.6,add:true,a:.1,nn:20,n:[0,1,0]})}
+      else sc.cyl(e.x,H-.05,e.z,.07,.05,[248,248,246],{top:e.k=='rm'?[230,60,60]:[60,60,60]},10);return}
+    const ry=Math.atan2(e.nx,e.nz),h=e.h||E.h,B=(w,hh,d,col,o)=>sc.box(e.x+e.nx*d/2,h-hh/2,e.z+e.nz*d/2,w,hh,d,col,Object.assign({ry},o||{}));
+    if(e.k=='zaehl'){B(.8,1.1,.2,[178,184,180]);sc.box(e.x+e.nx*.205,h-.5,e.z+e.nz*.205,.7,1,.012,[214,220,214],{ry})}
+    else if(e.k=='vert'){B(.5,.7,.13,[172,180,174]);sc.box(e.x+e.nx*.135,h-.3,e.z+e.nz*.135,.42,.56,.012,[212,218,212],{ry});sc.glow([e.x+e.nx*.16,h+.28,e.z+e.nz*.16],.14,P.ac,.6)}
+    else if(e.k=='wandl'){B(.12,.2,.1,[250,246,236],{em:.5});sc.glow([e.x+e.nx*.1,h,e.z+e.nz*.1],.7,WARM,.45)}
+    else if(e.k=='abzw'){B(.09,.09,.04,[200,204,200])}
+    else{const g=E.g||1,w=.085*g;B(w+.012,.097,.008,[196,200,194]);sc.box(e.x+e.nx*.013,h-.041,e.z+e.nz*.013,w,.082,.012,[248,248,246],{ry});
+      if(E.g)for(let i=0;i<g;i++){const o=(i-(g-1)/2)*.085;sc.box(e.x+e.nx*.021-e.nz*o,h-.027,e.z+e.nz*.021+e.nx*o,.054,.054,.004,[58,62,60],{ry})}
+      else sc.box(e.x+e.nx*.021,h-.03,e.z+e.nz*.021,.056,.06,.006,e.k=='thermo'?[40,44,48]:[232,234,230],{ry})}});
+  D.its.forEach(it=>{const E=DIT[it.k]||DIT.tisch,hh=E.h||H,ry=-((it.ry|0)%4)*Math.PI/2;sc.shadow(it.x,it.z,it.w,it.d,ry,.3);sc.box(it.x,0,it.z,it.w,hh,it.d,E.col,{ry});
+    if(it.k=='bett'||it.k=='ebett')sc.box(it.x,hh,it.z,it.w*.96,.12,it.d*.96,[236,238,240],{ry});if(it.k=='treppe')for(let i=1;i<5;i++)sc.box(it.x,hh*i/5,it.z,it.w*.98,.02,it.d*(1-i/5),[214,206,192],{ry})});
+  D.cabs.forEach(c=>sc.line(c.pts.map(p=>[p[0],H-.05,p[1]]),(DCAB[c.k]||DCAB.n15).c,2.2,.95));
+  D.txt.forEach(t=>sc.text([t.x,.03,t.z],t.s||'',{px:11,col:P.ink,bg:P.inkbg,min:8,mono:false,b:1}));
+  DW.rooms.forEach(r=>sc.text([r.x,.03,r.z],nf(r.a,1)+' m²',{px:10,col:P.ink,bg:P.inkbg,min:8}));
+  return sc}
+function dwMount3D(cv){const bb=dwBBox(),W=bb.x1-bb.x0,Dp=bb.z1-bb.z0;if(!DW.cam)DW.cam={yaw:.62,pitch:.72,dist:Math.max(W,Dp*1.3)*1.25+4,t:[(bb.x0+bb.x1)/2,.8,(bb.z0+bb.z1)/2],fov:.8,near:.1,min:2,max:120};const cam=DW.cam;
+  const v=V3={kind:'dw3',cv,cam,dirty:true,st:null},cvs=[{cv,ctx:cv.getContext('2d'),W:0,H:0}];let sc=null,ver=null;
+  v.draw=()=>{const c=cvs[0],sig=DW.hist.length+':'+JSON.stringify(dwS()).length+':'+themeName();if(!sc||sig!=ver){sc=dwBuild3D();ver=sig}v.st=drawScene(c.ctx,c.W,c.H,cam,sc,{})};
+  Ctl(cv,cam,{request:()=>{v.dirty=true},state:()=>v.st,pick:()=>null,tap(){},freeOrbit:true});
+  startV(v,cvs);dwBars();dwSheet()}
+/* ---- PDF ---- */
+async function dwPDF(){const D=dwS();if(dwEmpty()){toast('Papir je prazan, nema se što ispisati.');return}dwRooms();
+  const F=PFMT[D.fmt]||PFMT.A3,W=Math.max(F[0],F[1]),H=Math.min(F[0],F[1]),mg=10,tbH=26,bb=dwBBox(),pad=.9,bw=bb.x1-bb.x0+2*pad,bh=bb.z1-bb.z0+2*pad,aw=W-2*mg-8,ah=H-2*mg-tbH-8;
+  const den=PDENS.find(d=>bw*1000/d<=aw&&bh*1000/d<=ah)||Math.ceil(Math.max(bw*1000/aw,bh*1000/ah)/100)*100,k=1000/den,ox=mg+4+(aw-bw*k)/2,oy=mg+4+(ah-bh*k)/2,T=(x,z)=>[ox+(x-bb.x0+pad)*k,oy+(z-bb.z0+pad)*k];
+  const pdf=new MiniPDF(W,H);pdf.poly([[mg,mg],[W-mg,mg],[W-mg,H-mg],[mg,H-mg]],null,'#000000',.5);
+  dwDraw(pdf,T,k,{minT:1.9,minR:1.5,lw:Math.max(.18,k*.012)});
+  /* Schriftfeld */
+  const y0=H-mg-tbH,q=dwQty(),p=S.p||{};pdf.line([[mg,y0],[W-mg,y0]],.5,'#000000');const cw=(W-2*mg)/4;[1,2,3].forEach(i=>pdf.line([[mg+cw*i,y0],[mg+cw*i,H-mg]],.25,'#000000'));
+  const cell=(i,l,v,v2)=>{const x=mg+cw*i+3;pdf.text(x,y0+5,l,2.4,{al:'l',col:'#555555'});pdf.text(x,y0+12,v,4.2,{al:'l',b:1});if(v2)pdf.text(x,y0+19,v2,2.8,{al:'l',col:'#333333'})};
+  cell(0,'Nacrt / Plan',D.title||'Baustelle',(p.name||'')+(p.addr?' · '+p.addr:''));cell(1,'Mjerilo · Format','1:'+den+' · '+D.fmt,'Datum: '+today());
+  cell(2,'Količine',q.rows.filter(r=>r.u=='kom').reduce((s,r)=>s+r.q,0)+' elemenata · '+nf(q.rows.filter(r=>r.u=='m').reduce((s,r)=>s+r.q,0),0)+' m kabela','Zidovi '+nf(q.wall,1)+' m · površina '+nf(q.area,1)+' m²');
+  cell(3,'Firma / potpis',p.firma||'','bash-electro · Crtač 5D');
+  /* legenda */
+  const used=[...new Set(D.els.map(e=>e.k))];if(used.length){const lx=mg+4,lh=used.length>14?3.9:5.2,ly=y0-4-used.length*lh;pdf.poly([[lx-2,ly-6],[lx+58,ly-6],[lx+58,y0-2],[lx-2,y0-2]],'#ffffff','#888888',.2);pdf.text(lx,ly-2.5,'Legenda',2.8,{al:'l',b:1});
+    used.forEach((kk,i)=>{const yy=ly+i*lh+1.2;dwSym(pdf,[lx+4,yy+(DEL[kk].m=='wall'?-1.6:0)],1.25,{k:kk,nx:0,nz:1},'#d0101a',.22);pdf.text(lx+10,yy,DEL[kk].n+'  ('+D.els.filter(e=>e.k==kk).length+')',2.5,{al:'l'})})}
+  const blob=pdf.blob((D.title||'Baustelle')+' 1:'+den);window.__lastDwPDF=blob;
+  try{const dl=await DL.get();await dl.save({filename:`Nacrt_${(D.title||'Baustelle').replace(/[^\w-]+/g,'_')}_${D.fmt}_M1-${den}.pdf`,data:blob});toast(`PDF spreman: ${D.fmt}, mjerilo 1:${den}.`)}catch(e){toast(e&&e.code=='declined'?'Spremanje otkazano.':'PDF nije spremljen: '+((e&&(e.message||e.code))||e))}
+  return blob}
+async function dwPNG(){if(DW.mode!='2d'||!DW.cv){toast('Slika se izvozi iz 2D prikaza.');return}const s0=DW.sel;DW.sel=null;DW.meas=null;dwPaint();
+  const blob=await new Promise(r=>DW.cv.toBlob(r,'image/png'));DW.sel=s0;dwPaint();if(!blob){toast('Slika nije izrađena.');return}
+  try{const dl=await DL.get();await dl.save({filename:`Nacrt_${(dwS().title||'Baustelle').replace(/[^\w-]+/g,'_')}.png`,data:blob});toast('Slika je spremljena.')}catch(e){toast(e&&e.code=='declined'?'Spremanje otkazano.':'Slika nije spremljena.')}}
+document.addEventListener('change',e=>{const t=e.target;if(t.id!='dwbg')return;const f=t.files&&t.files[0];t.value='';if(!f)return;const u=URL.createObjectURL(f),img=new Image();
+  img.onload=()=>{const bb=dwBBox(),w=Math.max(6,bb.x1-bb.x0);DW.bg={img,w:+w.toFixed(1),x:bb.x0,z:bb.z0,op:.45};DW.fitted=false;if(DW.W)dwFit();dwSheet();dwReq();toast('Podloga je učitana. Širinu slike u metrima postavi u Alatima.')};img.onerror=()=>toast('Slika se ne može učitati.');img.src=u});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.dwk)DW.kr=t.value.trim().slice(0,14)});
+/* ---- događaji ---- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-dw]');if(b){e.preventDefault();dwAct(b.dataset.dw,b.dataset.v);return}
+  const vb=e.target.closest('[data-vid]');if(vb&&V3&&V3.vid){e.preventDefault();V3.vid(vb.dataset.vid)}});
+document.addEventListener('change',e=>{const t=e.target;if(route=='crtac'&&t.dataset&&(t.dataset.dwi||t.dataset.dwp))dwInput(t)});
+document.addEventListener('keydown',e=>{if(route!='crtac'||DW.mode!='2d'||/INPUT|SELECT|TEXTAREA/.test((e.target&&e.target.tagName)||''))return;
+  if(e.key=='Escape'){if(DW.chain)dwEndChain();else{DW.sel=null;if(DW.sheet=='sel')DW.sheet=null;dwSheet();dwReq()}}
+  else if((e.key=='Delete'||e.key=='Backspace')&&DW.sel){e.preventDefault();dwAct('delsel')}
+  else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='z'){e.preventDefault();dwAct(e.shiftKey?'redo':'undo')}
+  else if(e.key=='Enter'&&DW.chain)dwEndChain()});
+/* ---- uvodni ekran: električni krug, impulsi struje i udar munje ---- */
+function introRun(){const el=$('#intro');if(!el)return;let seen=false;try{seen=sessionStorage.getItem('be_intro')=='1';sessionStorage.setItem('be_intro','1')}catch(e){}
+  if(seen||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  el.hidden=false;const cv=$('#ivc'),ctx=cv.getContext('2d'),tx=$('#ivt'),pc=$('#ivp'),MSG=['Inicijalizacija','Učitavanje normi i tablica','Priprema 3D prikaza','Spremno'],
+    A=hexc(getComputedStyle(document.documentElement).getPropertyValue('--ac').trim()||'#95d600'),ac=a=>`rgba(${A[0]},${A[1]},${A[2]},${a})`,rnd=(a,b)=>a+Math.random()*(b-a);
+  let W=0,H=0,cx=0,cy=0,R=0,TR=[],SP=[],done=false,raf=0,bolt=null,flash=0,endAt=0;
+  const build=()=>{const d=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);
+    cx=W/2;cy=H/2;R=cl(Math.min(W,H)*.36,140,240);TR=[];const n=Math.round(cl((W+H)/38,24,52)),far=Math.hypot(W,H)*.62;
+    for(let i=0;i<n;i++){const a=(i+rnd(-.3,.3))/n*Math.PI*2,sx=cx+Math.cos(a)*far,sy=cy+Math.sin(a)*far,ex=cx+Math.cos(a)*(R+10),ey=cy+Math.sin(a)*(R+10),
+      dx=ex-sx,dy=ey-sy,ax=Math.abs(dx),ay=Math.abs(dy),m=Math.min(ax,ay),k=rnd(.2,.7),X=Math.sign(dx),Y=Math.sign(dy);
+      const pts=ax>ay?[[sx,sy],[sx+X*(ax-m)*k,sy],[sx+X*((ax-m)*k+m),ey],[ex,ey]]:[[sx,sy],[sx,sy+Y*(ay-m)*k],[ex,sy+Y*((ay-m)*k+m)],[ex,ey]];
+      const seg=[];let L=0;for(let j=0;j<3;j++){const l=Math.hypot(pts[j+1][0]-pts[j][0],pts[j+1][1]-pts[j][1]);seg.push(l);L+=l}
+      TR.push({pts,seg,L,d:rnd(0,.4),sp:rnd(.5,1.1),ph:Math.random(),hit:false})}};
+  const at=(t,s)=>{s=cl(s,0,t.L);for(let j=0;j<3;j++){if(s<=t.seg[j]||j==2){const f=t.seg[j]?Math.min(1,s/t.seg[j]):0,p=t.pts[j],q=t.pts[j+1];return[p[0]+(q[0]-p[0])*f,p[1]+(q[1]-p[1])*f]}s-=t.seg[j]}};
+  const part=(t,s0,s1)=>{const a0=at(t,s0);ctx.moveTo(a0[0],a0[1]);let acc=0;for(let j=0;j<3;j++){acc+=t.seg[j];if(acc>s0&&acc<s1){const q=t.pts[j+1];ctx.lineTo(q[0],q[1])}}const b=at(t,s1);ctx.lineTo(b[0],b[1])};
+  const zig=(x0,y0,x1,y1,dis,dep,out)=>{if(!dep){out.push([x1,y1]);return}const mx=(x0+x1)/2+rnd(-dis,dis),my=(y0+y1)/2+rnd(-dis,dis);zig(x0,y0,mx,my,dis/2,dep-1,out);zig(mx,my,x1,y1,dis/2,dep-1,out)};
+  const bl=(x0,y0,x1,y1,dis,dep)=>{const o=[[x0,y0]];zig(x0,y0,x1,y1,dis,dep,o);return o};
+  const sp=(p,w,c)=>{ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++)ctx.lineTo(p[i][0],p[i][1]);ctx.lineWidth=w;ctx.strokeStyle=c;ctx.stroke()};
+  const glow=(x,y,r,a)=>{const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(245,255,230,${a})`);g.addColorStop(.35,ac(a*.6));g.addColorStop(1,ac(0));ctx.fillStyle=g;ctx.fillRect(x-r,y-r,2*r,2*r)};
+  build();addEventListener('resize',build);
+  const T=2.7,t0=performance.now();
+  const end=()=>{if(done)return;done=true;el.classList.add('out');setTimeout(()=>{cancelAnimationFrame(raf);removeEventListener('resize',build);el.hidden=true;el.classList.remove('out','hit');if(V3)V3.dirty=true},950)};
+  el.addEventListener('click',end);
+  const tick=now=>{raf=requestAnimationFrame(tick);const t=(now-t0)/1000,p=cl(t/T,0,1),e=1-Math.pow(1-p,2.2);
+    ctx.clearRect(0,0,W,H);ctx.lineCap='round';ctx.lineJoin='round';ctx.globalCompositeOperation='source-over';
+    ctx.beginPath();TR.forEach(r=>{ctx.moveTo(r.pts[0][0],r.pts[0][1]);for(let j=1;j<4;j++)ctx.lineTo(r.pts[j][0],r.pts[j][1])});ctx.lineWidth=1.2;ctx.strokeStyle=ac(.1);ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.lineWidth=2;ctx.strokeStyle=ac(.16);ctx.stroke();
+    ctx.globalCompositeOperation='lighter';
+    ctx.beginPath();TR.forEach(r=>{const q=cl((e*1.3-r.d)/.9,0,1);if(q>0)part(r,0,q*r.L)});ctx.lineWidth=1.6;ctx.strokeStyle=ac(.42);ctx.stroke();
+    TR.forEach(r=>{const q=cl((e*1.3-r.d)/.9,0,1),ep=r.pts[3];
+      if(q>0&&q<1){const s=q*r.L,h=at(r,s);ctx.beginPath();part(r,Math.max(0,s-64),s);ctx.lineWidth=3;ctx.strokeStyle=ac(.9);ctx.stroke();glow(h[0],h[1],11,1)}
+      if(q>=1){if(!r.hit){r.hit=true;for(let i=0;i<7;i++)SP.push({x:ep[0],y:ep[1],vx:rnd(-2.4,2.4),vy:rnd(-2.4,2.4),l:1})}
+        const s=((t*r.sp*.55+r.ph)%1)*r.L;ctx.beginPath();part(r,Math.max(0,s-34),s);ctx.lineWidth=2;ctx.strokeStyle=ac(.7);ctx.stroke();
+        ctx.fillStyle=ac(.9);ctx.beginPath();ctx.arc(ep[0],ep[1],2.4,0,7);ctx.fill()}});
+    const a0=-Math.PI/2,a1=a0+e*Math.PI*2;ctx.beginPath();ctx.arc(cx,cy,R,a0,a1);ctx.lineWidth=9;ctx.strokeStyle=ac(.12);ctx.stroke();ctx.lineWidth=2.6;ctx.strokeStyle=ac(1);ctx.stroke();glow(cx+Math.cos(a1)*R,cy+Math.sin(a1)*R,18,1);
+    ctx.beginPath();for(let i=0;i<60;i++){const a=i/60*Math.PI*2+t*.25,r0=R-12,r1=R-(i%5?16:23);ctx.moveTo(cx+Math.cos(a)*r0,cy+Math.sin(a)*r0);ctx.lineTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1)}ctx.lineWidth=1;ctx.strokeStyle=ac(.24);ctx.stroke();
+    const nA=p<1?(Math.random()<.55?1:0)+(Math.random()<.25?1:0):0;for(let i=0;i<nA;i++){const a=rnd(a0,Math.max(a0+.3,a1)),b=a+rnd(.25,.7),pts=[];for(let k=0;k<=12;k++){const aa=a+(b-a)*k/12,rr=R+(k%12?rnd(-10,10):0);pts.push([cx+Math.cos(aa)*rr,cy+Math.sin(aa)*rr])}sp(pts,3.2,ac(.25));sp(pts,1.2,'rgba(240,255,220,.9)')}
+    SP=SP.filter(s=>(s.l-=.04)>0);ctx.beginPath();SP.forEach(s=>{ctx.moveTo(s.x,s.y);s.x+=s.vx;s.y+=s.vy;s.vy+=.08;ctx.lineTo(s.x,s.y)});ctx.lineWidth=1.4;ctx.strokeStyle='rgba(240,255,220,.85)';ctx.stroke();
+    if(p>=1&&!bolt){bolt={t,main:bl(cx+rnd(-W*.15,W*.15),-20,cx,cy-R,90,7),br:[]};for(let i=0;i<3;i++){const q=bolt.main[Math.floor(rnd(.2,.7)*bolt.main.length)];bolt.br.push(bl(q[0],q[1],q[0]+rnd(-120,120),q[1]+rnd(40,140),40,5))}flash=1;el.classList.add('hit');endAt=t+.55}
+    if(bolt){const k=cl(1-(t-bolt.t)/.5,0,1),fl=Math.random()<.7?1:.4;[bolt.main,...bolt.br].forEach((b,i)=>{sp(b,i?5:12,ac(.2*k*fl));sp(b,i?1.4:3.2,`rgba(245,255,230,${k*fl})`)});glow(cx,cy-R,60*k,k)}
+    ctx.globalCompositeOperation='source-over';if(flash>0){ctx.fillStyle=ac(flash*.28);ctx.fillRect(0,0,W,H);flash=Math.max(0,flash-.06)}
+    if(!done){pc.textContent=Math.round(e*100)+' %';tx.textContent=MSG[Math.min(3,Math.floor(p*3.999))]}
+    if(endAt&&t>=endAt)end()};
+  raf=requestAnimationFrame(tick)}
+
 /* ---------- start ---------- */
 S=load();if(!S)sample();
 S.v=3;S.ui=S.ui||{theme:'amoled'};if(!S.ui.theme||S.ui.theme=='dark')S.ui.theme='amoled';S.p.brands=S.p.brands||{ls:'Hager',fi:'Hager',kab:'Nexans',sw:'Gira',geh:'Hager'};S.tm=S.tm||{pruefer:'',geraet:'',serial:''};S.test=S.test||{};
 const h0=location.hash.slice(1);ensureAll();commit(true);route=VIEWS[h0]?h0:(S.ui.seen?'pregled':'start');
-render();
-window.__be={model,calc,size,gen,sample,get S(){return S},set S(v){S=v},getModel,buildCab,planPage,renderSheet,MiniPDF,planCfg,PL,pact,plCommit,planPDF,mact,mCheck,mState,MT,mSetDev,mDevs,roomOps,uToAbs,dimsOf,mountOf,SIM,simReset,simEval,commit,ensureAll,members,runTests,xact,shortTest,fiTest,place,go,CAM,get V3(){return V3},get GEO(){return GEO},get sel(){return selO},set sel(v){selO=v},set mode(v){hMode=v},addObjAt,findObj,get cur(){return curRoom},set cur(v){curRoom=v},quick,CFG};
+function loadProject(o,cloudId){if(!o||(o.v!=2&&o.v!=3)||!Array.isArray(o.c)||!Array.isArray(o.rooms))throw new Error('format');snap('Projekt otvoren');const ui=S.ui;S=o;S.v=3;S.ui=ui||{theme:'amoled'};S.cloudId=cloudId||null;S.p.brands=S.p.brands||{ls:'Hager',fi:'Hager',kab:'Nexans',sw:'Gira',geh:'Hager'};S.tm=S.tm||{pruefer:'',geraet:'',serial:''};S.test=S.test||{};CAM.h=null;CAM.c=null;simReset();ensureAll();commit(true);render()}
+render();introRun();ctInit();
+window.__be={toast,esc,copyTxt,getRoute:()=>route,render,chrome,loadProject,CT,contactSubmit,get QS(){return QS},drawScene,buildHouse,dwS,dwAct,dwCommit,dwQty,dwPDF,model,calc,size,gen,sample,get S(){return S},set S(v){S=v},getModel,buildCab,planPage,renderSheet,MiniPDF,planCfg,PL,pact,plCommit,planPDF,mact,mCheck,mState,MT,mSetDev,mDevs,roomOps,uToAbs,dimsOf,mountOf,SIM,simReset,simEval,commit,ensureAll,members,runTests,xact,shortTest,fiTest,place,go,CAM,get V3(){return V3},get GEO(){return GEO},get sel(){return selO},set sel(v){selO=v},set mode(v){hMode=v},addObjAt,findObj,get cur(){return curRoom},set cur(v){curRoom=v},quick,CFG};
 })();
 </script>
+<script type="module" src="js/cloud.js"></script>
+
 
 </body></html>
