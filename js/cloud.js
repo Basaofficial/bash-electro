@@ -11,7 +11,7 @@ import {
 import {
   initializeFirestore, persistentLocalCache, persistentMultipleTabManager, memoryLocalCache,
   doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, query, orderBy, limit,
-  onSnapshot, serverTimestamp
+  onSnapshot, serverTimestamp, getDocs
 } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
 const B = window.__be;
@@ -59,12 +59,24 @@ const ERR = {
   'auth/popup-closed-by-user': 'Prozor za Google prijavu je zatvoren.',
   'auth/cancelled-popup-request': 'Prijava je prekinuta.',
   'auth/unauthorized-domain': 'Ova domena nije dopuštena u Firebase Authentication (Settings → Authorized domains).',
-  'auth/operation-not-allowed': 'Ovaj način prijave nije uključen u Firebase konzoli.',
+  'auth/operation-not-allowed': 'Ovaj način prijave nije uključen. Firebase konzola → Authentication → Sign-in method → uključi Email/Password i Google.',
+  'auth/configuration-not-found': 'Firebase Authentication nije pokrenut. Firebase konzola → Authentication → Get started, pa uključi Email/Password i Google.',
+  'auth/admin-restricted-operation': 'Registracija je zabranjena u Firebase postavkama (Authentication → Settings → User actions → uključi „Enable create (sign-up)“).',
+  'auth/invalid-api-key': 'API ključ nije ispravan – provjeri js/firebase-config.js.',
+  'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'API ključ nije ispravan – provjeri js/firebase-config.js.',
+  'auth/requests-from-referer-are-blocked': 'API ključ je ograničen i ne dopušta ovu stranicu. Google Cloud → Credentials → Browser key → dodaj basaofficial.github.io/*.',
+  'auth/internal-error': 'Interna greška prijave (često: Authentication nije uključen ili je API ključ ograničen).',
+  'auth/popup-blocked': 'Preglednik je blokirao prozor za Google prijavu. Dopusti popup prozore ili pokušaj ponovo.',
+  'auth/web-storage-unsupported': 'Preglednik blokira spremanje podataka (privatni način ili kolačići isključeni).',
   'native-google-missing': 'Google prijava u APK-u traži dodatak @capacitor-firebase/authentication (vidi README). Koristi prijavu e-mailom.',
   'permission-denied': 'Nemaš dopuštenje za ovu radnju.',
   'unavailable': 'Server trenutno nije dostupan. Provjeri vezu.'
 };
-const msgOf = e => ERR[e && e.code] || (e && e.message) || 'Nepoznata greška.';
+const msgOf = e => { const c = e && e.code || '';
+  const k = Object.keys(ERR).find(x => c === x || (c.startsWith('auth/requests-from-referer') && x === 'auth/requests-from-referer-are-blocked') || (c.startsWith('auth/api-key-not-valid') && x.startsWith('auth/api-key-not-valid')));
+  const t = k ? ERR[k] : ((e && e.message) || 'Nepoznata greška.').replace(/^Firebase:\s*/, '');
+  return c ? t + ' [' + c + ']' : t; };
+const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|Snapchat|; wv\)/i.test(navigator.userAgent) && !NATIVE;
 const fmtTime = ts => { const d = ts && ts.toDate ? ts.toDate() : (ts ? new Date(ts) : null); if (!d) return '…';
   const now = new Date(), same = d.toDateString() === now.toDateString();
   return same ? d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }); };
@@ -83,8 +95,12 @@ function needLogin(what) {
 /* ---------- prijava ---------- */
 onAuthStateChanged(auth, async u => {
   if (st.profUnsub) { st.profUnsub(); st.profUnsub = null; }
-  st.user = u; st.prof = null; st.isAdmin = false;
-  if (u) {
+  st.user = u; st.prof = null; st.isAdmin = false; st.dbErr = '';
+  st.ready = true; rerender();
+  if (u) loadProfile(u);
+});
+async function loadProfile(u) {
+    const tm = setTimeout(() => { if (st.user === u && !st.prof && !st.dbErr) { st.dbErr = 'Baza (Firestore) ne odgovara. Provjeri da je baza kreirana u Firebase konzoli.'; rerender(); } }, 8000);
     try {
       const ref = doc(db, 'users', u.uid), s = await getDoc(ref);
       if (!s.exists()) {
@@ -96,11 +112,17 @@ onAuthStateChanged(auth, async u => {
         const was = st.isAdmin, wasBan = banned();
         st.prof = d.data() || null; st.isAdmin = !!(st.prof && st.prof.role === 'admin');
         if (was !== st.isAdmin || wasBan !== banned()) rerender(); else B.chrome();
-      }, () => {});
-    } catch (e) { console.warn('profil', e); }
-  }
-  st.ready = true; rerender();
-});
+      }, e => { st.dbErr = dbMsg(e); rerender(); });
+    } catch (e) { console.warn('profil', e); st.dbErr = dbMsg(e); rerender(); }
+    clearTimeout(tm);
+}
+function dbMsg(e) {
+  const c = e && e.code;
+  if (c === 'permission-denied') return 'Baza odbija pristup – sigurnosna pravila (firestore.rules) nisu objavljena. Firebase konzola → Firestore Database → Rules → zalijepi pravila → Publish.';
+  if (c === 'not-found' || /database .*does not exist|NOT_FOUND/i.test((e && e.message) || '')) return 'Firestore baza nije kreirana. Firebase konzola → Firestore Database → Create database.';
+  if (c === 'unavailable' || /offline/i.test((e && e.message) || '')) return 'Baza ne odgovara (nema veze ili baza nije kreirana).';
+  return 'Greška baze: ' + ((e && (e.code || e.message)) || 'nepoznato');
+}
 if (!NATIVE) getRedirectResult(auth).catch(e => { st.authErr = msgOf(e); rerender(); });
 
 async function googleLogin() {
@@ -126,7 +148,7 @@ function vNalog() {
   if (st.user) {
     const u = st.user, p = st.prof || {};
     const pwd = u.providerData.some(x => x.providerId === 'password');
-    return `<div class="head"><h2>Nalog</h2></div><div class="grid">
+    return `<div class="head"><h2>Nalog</h2></div>${st.dbErr ? `<p class="cl-err" style="margin:0 0 14px">Prijavljen si, ali: ${esc(st.dbErr)}</p>` : ''}<div class="grid">
     <section class="panel"><div class="cl-me"><div class="cl-av">${u.photoURL ? `<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">` : esc(initials(myName()))}</div>
       <div><b>${esc(myName())}</b><small class="mu">${esc(u.email || '')}</small>
       <div class="row" style="margin-top:6px"><span class="chip ${st.isAdmin ? 'ok' : 'mu'}">${st.isAdmin ? 'Administrator' : 'Korisnik'}</span>${p.banned ? '<span class="chip er">Blokiran u chatu</span>' : ''}${pwd ? (u.emailVerified ? '<span class="chip ok">E-mail potvrđen</span>' : '<span class="chip wa">E-mail nije potvrđen</span>') : '<span class="chip mu">Google</span>'}</div></div></div>
@@ -134,9 +156,10 @@ function vNalog() {
       <div class="row"><button class="btn g" type="submit">Spremi ime</button></div></form>
       <div class="row" style="margin-top:14px">${pwd && !u.emailVerified ? '<button class="btn g" data-cl="verify">Pošalji potvrdu e-maila</button>' : ''}${pwd ? '<button class="btn g" data-cl="resetme">Promijeni lozinku</button>' : ''}<button class="btn dg" data-cl="logout">Odjava</button></div></section>
     <section class="panel"><h2>Što ti nalog donosi</h2><ul class="ctl2"><li><b>Moji projekti</b> – projekti spremljeni u oblak, dostupni na svakom uređaju.</li><li><b>Chat</b> – globalni chat i privatni kanali sa šifrom.</li><li>Kontakt poruke vezane uz tvoj nalog.</li></ul>
-      <div class="row" style="margin-top:12px"><button class="btn" data-a="go" data-v="projekti">Moji projekti</button><button class="btn g" data-a="go" data-v="chat">Chat</button></div></section></div>`;
+      <div class="row" style="margin-top:12px"><button class="btn" data-a="go" data-v="projekti">Moji projekti</button><button class="btn g" data-a="go" data-v="chat">Chat</button></div></section>${diagBox()}</div>`;
   }
   const m = st.authMode, err = st.authErr ? `<p class="cl-err">${esc(st.authErr)}</p>` : '';
+  const inapp = INAPP ? '<p class="cl-err">Otvoreno si u ugrađenom pregledniku (npr. Instagram). Google prijava ovdje ne radi – otvori stranicu u Chrome ili Safari (⋮ → Otvori u pregledniku).</p>' : '';
   const seg = `<div class="seg" style="margin-bottom:14px"><button class="${m === 'login' ? 'on' : ''}" data-cl="mode" data-v="login">Prijava</button><button class="${m === 'reg' ? 'on' : ''}" data-cl="mode" data-v="reg">Registracija</button></div>`;
   let form;
   if (m === 'reset') form = `<h2>Nova lozinka</h2><p class="mu">Pošaljemo ti link za postavljanje nove lozinke.</p><form data-clf="reset" class="cl-form">
@@ -151,12 +174,15 @@ function vNalog() {
     ${m === 'login' ? '<button class="btn g s cl-link" type="button" data-cl="mode" data-v="reset">Zaboravljena lozinka?</button>' : ''}</form>
     <div class="cl-or"><span>ili</span></div>
     <button class="btn g lg cl-google" data-cl="google" ${st.busy ? 'disabled' : ''}><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Nastavi s Google nalogom</button>`;
-  return `<div class="cl-auth"><section class="panel"><div class="brand" style="padding:0 0 12px"><b>#</b>bash-electro<small>Nalog za oblak, projekte i chat</small></div>${form}</section>
+  return `<div class="cl-auth"><section class="panel"><div class="brand" style="padding:0 0 12px"><b>#</b>bash-electro<small>Nalog za oblak, projekte i chat</small></div>${inapp}${form}</section>
+    ${diagBox()}
     <p class="mu cl-note">Planer radi i bez naloga – podaci ostaju u ovom pregledniku. Nalog treba za spremanje u oblak i chat.</p></div>`;
 }
 
+function diagBox() { return `<section class="panel" style="margin-top:var(--pad)"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Dijagnostika veze</h2><button class="btn g s" data-cl="diag">Provjeri</button></div><div id="cldiag"><p class="mu" style="margin:8px 0 0;font-size:12px">Ako prijava ne radi, klikni Provjeri – pokazat će tačno šta treba podesiti u Firebaseu.</p></div></section>`; }
 async function authSubmit(kind, f) {
   const v = id => (f.querySelector('#' + id) || {}).value || '';
+  st.keep = { cle: v('cle'), cln: v('cln') };
   st.authErr = ''; st.busy = true; rerender();
   try {
     if (kind === 'login') await signInWithEmailAndPassword(auth, v('cle').trim(), v('clp'));
@@ -175,7 +201,35 @@ async function authSubmit(kind, f) {
     }
   } catch (e) { st.authErr = msgOf(e); st.pendingName = ''; }
   st.busy = false; rerender();
+  if (st.authErr && st.keep) for (const [id, val] of Object.entries(st.keep)) { const el = document.getElementById(id); if (el && val) el.value = val; }
 }
+
+/* ---------- dijagnostika ---------- */
+async function diagnose() {
+  const out = $('#cldiag'); if (!out) return;
+  const R = [], row = (ok, t) => R.push(`<div class="res"><i class="${ok === true ? 'ok' : ok === false ? 'er' : 'wa'}">${ok === true ? 'OK' : ok === false ? 'GREŠKA' : 'INFO'}</i><span>${t}</span></div>`);
+  out.innerHTML = '<p class="mu">Provjeravam …</p>';
+  row(true, 'Adresa stranice: ' + esc(location.origin));
+  if (INAPP) row(false, 'Otvoreno u ugrađenom pregledniku (Instagram/Facebook/…) – Google prijava tu ne radi. Otvori stranicu u Chrome/Safari.');
+  try {
+    const r = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=' + firebaseConfig.apiKey, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ identifier: 'dijagnostika@example.com', continueUri: location.origin }) });
+    const j = await r.json().catch(() => ({}));
+    const m = (j.error && j.error.message) || '';
+    if (r.ok) row(true, 'Firebase Authentication radi i prihvata ovu stranicu.');
+    else if (/CONFIGURATION_NOT_FOUND/.test(m)) row(false, 'Authentication nije pokrenut: Firebase konzola → Authentication → <b>Get started</b>, zatim uključi Email/Password i Google.');
+    else if (/referer|API_KEY_HTTP_REFERRER_BLOCKED/i.test(m) || /referer/i.test(JSON.stringify(j))) row(false, 'API ključ ne dopušta ovu adresu. Google Cloud → Credentials → Browser key → Website restrictions → dodaj <b>' + esc(location.host) + '/*</b>.');
+    else if (/API key not valid|API_KEY_INVALID/i.test(m)) row(false, 'API ključ nije ispravan (js/firebase-config.js).');
+    else row(false, 'Authentication odgovara greškom: ' + esc(m || r.status));
+  } catch (e) { row(false, 'Ne mogu doći do Firebase Authentication servera (nema veze ili ga blokira mreža/ad-blocker).'); }
+  try {
+    const p = await getDocsNews();
+    row(true, 'Firestore baza postoji i pravila su objavljena' + (p ? '' : '') + '.');
+  } catch (e) { row(false, esc(dbMsg(e))); }
+  if (st.user) row(st.prof ? true : null, st.prof ? 'Profil u bazi je učitan (' + esc(st.prof.role) + ').' : 'Profil u bazi još nije učitan.');
+  row(null, 'Google prijava traži da je <b>' + esc(location.hostname) + '</b> na listi Authentication → Settings → Authorized domains.');
+  out.innerHTML = R.join('');
+}
+async function getDocsNews() { const s = await getDocs(query(collection(db, 'news'), limit(1))); return s.size; }
 
 /* ---------- projekti ---------- */
 function projData() { const S = B.S, o = Object.assign({}, S); delete o.ui; delete o.cloudId; return JSON.stringify(o); }
@@ -351,6 +405,7 @@ document.addEventListener('click', async e => {
   const b = e.target.closest('[data-cl]'); if (!b) return; e.preventDefault();
   const a = b.dataset.cl, v = b.dataset.v;
   try {
+    if (a === 'diag') { diagnose(); return; }
     if (a === 'mode') { st.authMode = v; st.authErr = ''; B.render(); return; }
     if (a === 'google') { st.authErr = ''; st.busy = true; rerender(); try { await googleLogin(); } catch (x) { st.authErr = msgOf(x); } st.busy = false; rerender(); return; }
     if (a === 'logout') { await signOut(auth); toast('Odjavljen si.'); return; }
