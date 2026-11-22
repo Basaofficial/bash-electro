@@ -1,6 +1,6 @@
 /* bash-electro service worker: offline za samu aplikaciju.
    Firebase (Auth/Firestore) ide uvijek direktno na mrežu – ne kešira se. */
-const C='bash-electro-v4';
+const C='bash-electro-v5';
 const CORE=['./','./index.html','./manifest.webmanifest','./css/cloud.css','./js/cloud.js','./js/firebase-config.js','./icons/icon-192.png','./icons/icon-512.png','./vendor/jspdf.umd.min.js','./fonts/fonts.css','./fonts/plex-sans.woff'];
 const CACHE_HOSTS=[location.host,'www.gstatic.com'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.allSettled(CORE.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
